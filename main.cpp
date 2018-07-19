@@ -1,7 +1,15 @@
+/*#include <QApplication>
+
+#include <QQmlEngine>
+
+*/
+#include <QCoreApplication>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include <QSqlDatabase>
+#include <QQmlContext>
 #include <QDebug>
+
+#include "cymbdd.h"
 
 int main(int argc, char *argv[])
 {
@@ -9,20 +17,13 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
 
+    QScopedPointer<CymBDD> cymBdd(new CymBDD);
+
     QQmlApplicationEngine engine;
+    engine.rootContext()->setContextProperty("cymBdd", cymBdd.data());
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
-    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", "psyched-bee-204709:europe-west2:flod-cymbalum"); // VERY IMPORTANT INSERT QODBC3 AND NOT QODBC
-    db.setHostName("35.189.107.44");
-    db.setUserName("root");
-    db.setDatabaseName("Cymbalum_demo");
-    db.setPassword("things2care");
-    if(db.open()){
-        qDebug()<<"Database opened!";
-    }
-    else{
-        qDebug() << "ERROR";//db.lastError().text();
-    }
+
 
     if (engine.rootObjects().isEmpty())
         return -1;

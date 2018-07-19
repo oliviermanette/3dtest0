@@ -18,6 +18,7 @@ Window {
         focus: true
 
         onInitializeGL: {
+            cymBdd.addNewSite("Reims", 51.1, 1.2, "QString strCommentaire");
             GLCode.initializeGL(canvas3d);
         }
 
