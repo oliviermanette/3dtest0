@@ -11,7 +11,6 @@
 #include <qtconcurrentrun.h>
 #include <QThread>
 
-
 class CymBDD : public QObject
 {
     Q_OBJECT
@@ -26,7 +25,6 @@ signals:
 
 public slots:
 
-
 private:
     QSqlDatabase cloudDb = QSqlDatabase::addDatabase("QMYSQL", "psyched-bee-204709:europe-west2:flod-cymbalum");
     QSqlDatabase localDb = QSqlDatabase::addDatabase("QMYSQL", "localhost");
@@ -36,7 +34,6 @@ private:
 
     bool OpenCloudDB();
     bool OpenLocaleDB();
-
 
 };
 

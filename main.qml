@@ -1,95 +1,149 @@
-import QtQuick 2.4
-import QtCanvas3D 1.1
-import QtQuick.Window 2.2
+import QtQuick 2.0
+import QtQuick.Window 2.3
+import QtQuick.Scene3D 2.0
 
-import "glcode.js" as GLCode
+import Qt3D.Core 2.0
+import Qt3D.Extras 2.0
+import Qt3D.Input 2.0
+import Qt3D.Render 2.0
 
-Window {
-    title: qsTr("3dtest0")
-    width: 640
-    height: 360
-    visible: true
+Item {
+    Rectangle {
+        id: scene
+        anchors.fill: parent
+        anchors.margins: 50
+        color: "darkRed"
 
-    Canvas3D {
-        id: canvas3d
-        //anchors.fill: parent
-        width:parent.width/1.2;
-        height: parent.height/1.2;
+        transform: Rotation {
+            id: sceneRotation
+            axis.x: 1
+            axis.y: 0
+            axis.z: 0
+            origin.x: scene.width / 2
+            origin.y: scene.height / 2
+        }
+    Scene3D {
+        anchors.fill: parent
+        anchors.margins: 10
         focus: true
+        aspects: ["input", "logic"]
+        cameraAspectRatioMode: Scene3D.AutomaticAspectRatio
 
-        onInitializeGL: {
-            //cymBdd.addNewSite("Reims", 51.1, 1.2, "QString strCommentaire");
-            GLCode.initializeGL(canvas3d);
-        }
+        Entity {
+            id: sceneRoot
+           /* Camera {
+                id: camera
+                projectionType: CameraLens.PerspectiveProjection
+                fieldOfView: 45
+                aspectRatio: 1820 / 1080
+                nearPlane: 0.1
+                farPlane: 1000.0
+                position: Qt.vector3d(0.014, 0.956, 2.178)
+                upVector: Qt.vector3d(0.0, 1.0, 0.0)
+                viewCenter: Qt.vector3d(0.0, 0.7, 0.0)
+            }*/
+            Camera {
+                id: camera
+                projectionType: CameraLens.PerspectiveProjection
+                fieldOfView: 45
+                nearPlane : 0.1
+                farPlane : 1000.0
+                position: Qt.vector3d( 0.0, 0.0, 40.0 )
+                upVector: Qt.vector3d( 0.0, 1.0, 0.0 )
+                viewCenter: Qt.vector3d( 0.0, 0.0, 0.0 )
+            }
+            FirstPersonCameraController { camera: camera }
 
-        onPaintGL: {
-            GLCode.paintGL(canvas3d);
-        }
-
-        onResizeGL: {
-            GLCode.resizeGL(canvas3d);
-        }
-    }
-
-    PathView {
-        id: pathView
-        x: 5
-        y: 22
-        width: 250
-        height: 316
-        model: ListModel {
-            ListElement {
-                name: "Grey"
-                colorCode: "grey"
+            components: [
+                RenderSettings {
+                    activeFrameGraph: ForwardRenderer {
+                        camera: camera
+                        clearColor: "transparent"
+                    }
+                },
+                InputSettings { }
+            ]
+            PhongMaterial {
+                id: material
             }
 
-            ListElement {
-                name: "Red"
-                colorCode: "red"
+            SphereMesh {
+                id: sphereMesh
+                radius: 3
             }
 
-            ListElement {
-                name: "Blue"
-                colorCode: "blue"
+            Transform {
+                id: sphereTransform
+                property real userAngle: 0.0
+                matrix: {
+                    var m = Qt.matrix4x4();
+                    m.rotate(userAngle, Qt.vector3d(0, 1, 0))
+                    m.translate(Qt.vector3d(20, 0, 0));
+                    return m;
+                }
             }
 
-            ListElement {
-                name: "Green"
-                colorCode: "green"
-            }
-        }
-        path: Path {
-            startX: 120
-            startY: 100
-            PathQuad {
-                x: 120
-                y: 25
-                controlX: 260
-                controlY: 75
+            NumberAnimation {
+                target: sphereTransform
+                property: "userAngle"
+                duration: 10000
+                from: 0
+                to: 360
+
+                loops: Animation.Infinite
+                running: true
             }
 
-            PathQuad {
-                x: 120
-                y: 100
-                controlX: -20
-                controlY: 75
-            }
-        }
-        delegate: Column {
-            Rectangle {
-                width: 40
-                height: 40
-                color: colorCode
-                anchors.horizontalCenter: parent.horizontalCenter
+            Entity {
+                id: sphereEntity
+                components: [ sphereMesh, material, sphereTransform ]
             }
 
-            Text {
-                x: 5
-                text: name
-                anchors.horizontalCenter: parent.horizontalCenter
-                font.bold: true
+
+            Mesh {
+                id: progressMesh
+                source: "https://storage.googleapis.com/cymbalum_files/COSD.stl"
             }
-            spacing: 5
+            Transform {
+                id: progressTransform
+                property real defaultStartAngle: -45
+                property real progressAngle: defaultStartAngle
+                rotationY: progressAngle
+            }
+
+            Entity {
+                property Material progressMaterial: PhongMaterial {
+                    ambient: "#80C342"
+                    diffuse: "black"
+                }
+
+                components: [progressMesh, progressMaterial]
+            }
+
         }
     }
 }
+/*
+
+
+    Mesh {
+        id: progressMesh
+        source: "file:///Users/oliviermanette/QtApps/build-qt3D0-5_11_1-Debug/table1.stl"
+    }
+    Transform {
+        id: progressTransform
+        property real defaultStartAngle: -90
+        property real progressAngle: defaultStartAngle
+        rotationY: progressAngle
+    }
+
+    Entity {
+        property Material progressMaterial: PhongMaterial {
+            ambient: "#80C342"
+            diffuse: "black"
+        }
+
+        components: [progressMesh, progressMaterial]
+    }*/
+}
+
