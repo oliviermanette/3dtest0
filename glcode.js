@@ -14,12 +14,16 @@ var mvMatrixUniformLoc;
 
 var canvas3d;
 
+var intShift;
+
 
 function initializeGL(canvas) {
     canvas3d = canvas
     try {
         // Get the context object that represents the 3D API
         gl = canvas.getContext("experimental-webgl", {depth:true});
+
+        intShift = 0;
 
         // Setup the OpenGL state
         gl.enable(gl.DEPTH_TEST);
@@ -47,8 +51,9 @@ function resizeGL(canvas) {
     var pixelRatio = canvas.devicePixelRatio;
     canvas.pixelSize = Qt.size(canvas.width * pixelRatio,
                                canvas.height * pixelRatio);
+    intShift++;
     if (gl) {
-        gl.viewport(0, 0,
+        gl.viewport(intShift, 0,
                     canvas.width * canvas.devicePixelRatio,
                     canvas.height * canvas.devicePixelRatio);
     }
@@ -75,7 +80,9 @@ function paintGL(canvas) {
     gl.vertexAttribPointer(vertexPositionAttrLoc, 3, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndexBuffer);
-    gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0);
+    //gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0);
+    gl.drawElements(gl.LINES, 36, gl.UNSIGNED_SHORT, 0);
+
 }
 
 function initBuffers() {
