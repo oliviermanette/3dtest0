@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     */
     QQuickView view;
 
-    view.resize(640, 480);
+    view.resize(1280, 768);
     view.rootContext()->setContextProperty("cymBdd", cymBdd.data());
     view.setResizeMode(QQuickView::SizeRootObjectToView);
     view.setSource(QUrl("qrc:/main.qml"));

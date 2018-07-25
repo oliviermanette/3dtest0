@@ -1,7 +1,6 @@
-<!DOCTYPE RCC>
-<RCC version="1.0">
+<RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>glcode.js</file>
+        <file>StlShow.qml</file>
     </qresource>
 </RCC>
