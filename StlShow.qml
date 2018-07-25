@@ -54,7 +54,6 @@ import Qt3D.Render 2.0
                 duration: 10000
                 from: 0
                 to: 360
-
                 loops: Animation.Infinite
                 running: true
             }

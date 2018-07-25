@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>StlShow.qml</file>
+        <file>marker.png</file>
     </qresource>
 </RCC>
