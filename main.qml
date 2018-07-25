@@ -16,7 +16,7 @@ Item {
             color: "#998f8f"
             Location {
                 id:startLocation
-                coordinate: QtPositioning.coordinate(-27.5, 153.1)
+                coordinate: QtPositioning.coordinate(48.856614, 2.3522219)
             }
 
             Plugin {
@@ -44,9 +44,21 @@ Item {
                 id: map
                 anchors.fill: parent
                 plugin: myPlugin;
-                center: QtPositioning.coordinate(-27.5, 153.1)
+                center: QtPositioning.coordinate(48.856614, 2.3522219)
                 zoomLevel: 13
 
+                MouseArea {
+                                id: selectSiteMouseArea
+                                anchors.fill: parent
+                                hoverEnabled: false
+                                //property variant lastCoordinate
+
+                                onPressed : {
+
+                                    map.center = map.toCoordinate(Qt.point(mouse.x, mouse.y))
+                                }
+                }
+/*
                 MapItemView {
                     model: searchModel
                     delegate: MapQuickItem {
@@ -56,11 +68,11 @@ Item {
                         anchorPoint.y: image.height
 
                         sourceItem: Column {
-                            Image { id: image; source: "marker.png" }
+                            Image { id: image; source: "marker.png";}
                             Text { text: title; font.bold: true }
                         }
                     }
-                }
+                }*/
             }
 
         }
