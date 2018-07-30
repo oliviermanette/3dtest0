@@ -1,7 +1,9 @@
 import QtQuick 2.0
-import QtQuick.Controls 1.6
+import QtQuick.Controls 1.4
 
 Item {
+    property double dblLatitude: 0
+    property double dblLongitude: 0
     width: 320
     height: 240
     Rectangle {
@@ -64,6 +66,9 @@ Item {
             y: 194
             text: qsTr("Cancel")
             tooltip: ""
+            onClicked: {
+                popup.close();
+            }
         }
 
         Button {
@@ -73,6 +78,11 @@ Item {
             text: qsTr("OK")
             tooltip: "Add a new site"
             isDefault: true
+            onClicked: {
+                //QString strNom, double dblLatitude, double dblLongitude, QString strCommentaire
+                cymBdd.addNewSite(txtNewSiteName.text, dblLatitude,dblLongitude, txtNewSiteDescription.text);
+                popup.close();
+            }
         }
     }
 

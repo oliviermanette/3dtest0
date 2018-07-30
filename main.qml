@@ -1,20 +1,59 @@
 import QtQuick 2.0
 import QtLocation 5.11
 import QtPositioning 5.8
+import QtQuick.Controls 2.4
+import QtQuick.Controls 1.4
 
 Item {
+    //property alias popAddNewSite: popAddNewSite
     Row{
+        id: row
+
+
+
         Rectangle{
             width: 350
             height: 700
-            color: "#7272e4"
+            color: "#111125"
+            TreeView {
+                x: 8
+                y: 8
+                width: 334
+                height: 453
+                TableViewColumn {
+                    title: "Name"
+                    role: "fileName"
+                    width: 150
+                }
+                TableViewColumn {
+                    title: "Permissions"
+                    role: "filePermissions"
+                    width: 100
+                }
+                model: fruitModel
+            }
+            Popup {
+                    id: popup
+                    x: 100
+                    y: 300
+                    width: 345
+                    height: 265
+                    modal: true
+                    focus: true
+                    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+
+                    PopAddNewSite{
+                        id:winAddNewSite
+
+                    }
+                }
         }
         Rectangle{
             id: mapArea
             width: 600
             height: 700
             color: "#998f8f"
-            Location {
+              Location {
                 id:startLocation
                 coordinate: QtPositioning.coordinate(48.856614, 2.3522219)
             }
@@ -32,21 +71,21 @@ Item {
                     id: fruitModel
                     property string language: "en"
                     ListElement {
-                        name: "Apple"
-                        cost: 2.45
+                        fileName: "Apple"
+                        filePermissions: 2.45
                         refLat:45
                         refLong:2.3
                     }
                     ListElement {
-                        name: "Orange"
-                        cost: 3.25
+                        fileName: "Orange"
+                        filePermissions: 3.25
                         refLat:46.5
                         refLong:2.4
                         //pos: QtPositioning.coordinate(, 2.4)
                     }
                     ListElement {
-                        name: "Banana"
-                        cost: 1.95
+                        fileName: "Banana"
+                        filePermissions: 1.95
                         refLat:49
                         refLong:2.5
                         //pos: QtPositioning.coordinate(49, 2.5)
@@ -88,6 +127,10 @@ Item {
                         map.center = map.toCoordinate(Qt.point(mouse.x, mouse.y));
                         marker.coordinate = map.center;
                         map.addMapItem(marker);
+                        winAddNewSite.dblLongitude = map.toCoordinate(Qt.point(mouse.x, mouse.y)).longitude;
+                        winAddNewSite.dblLatitude = map.toCoordinate(Qt.point(mouse.x, mouse.y)).latitude;
+
+                        popup.open()
                     }
                 }
  // Permet d'ajouter des marqueurs aux endroits choisis, ça va m'être utile pour visualiser les différents sites.
@@ -114,8 +157,8 @@ Item {
                             Image { id: image; source: "marker.png";}
                             Text { text: name; font.bold: true }
                         }
-                    }//*/
-                }//*/
+                    }*/
+                }
             }
 
         }
@@ -127,9 +170,9 @@ Item {
             id: scene
             width: 600
             height: 700
-            anchors.margins: 50
+            //anchors.margins: 50
             color: "#e1eef3"
-
+            /*
             transform: Rotation {
                 id: sceneRotation
                 axis.x: 1
@@ -141,8 +184,22 @@ Item {
             StlShow{
 
 
-            }
+            } */
         }
+
+        Rectangle {
+            id: rctContextInfo
+            width: 281
+            height: 700
+            color: "#ffffff"
+        }
+
+
     }
 }
 
+
+/*##^## Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+ ##^##*/
