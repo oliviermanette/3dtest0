@@ -1,4 +1,4 @@
-import QtQuick 2.11
+import QtQuick 2.0
 import QtLocation 5.11
 import QtPositioning 5.8
 
@@ -28,16 +28,48 @@ Item {
                 //...
             }
 
+            ListModel {
+                    id: fruitModel
+                    property string language: "en"
+                    ListElement {
+                        name: "Apple"
+                        cost: 2.45
+                        refLat:45
+                        refLong:2.3
+                    }
+                    ListElement {
+                        name: "Orange"
+                        cost: 3.25
+                        refLat:46.5
+                        refLong:2.4
+                        //pos: QtPositioning.coordinate(, 2.4)
+                    }
+                    ListElement {
+                        name: "Banana"
+                        cost: 1.95
+                        refLat:49
+                        refLong:2.5
+                        //pos: QtPositioning.coordinate(49, 2.5)
+                    }
+                }
+
             PlaceSearchModel {
                 id: searchModel
 
                 plugin: myPlugin
-
                 searchTerm: "pizza"
                 searchArea: QtPositioning.circle(startLocation);
-
                 Component.onCompleted: update()
+            }
+            MapQuickItem {
+                id: marker
+                anchorPoint.x: image.width/2
+                anchorPoint.y: image.height
 
+                sourceItem: Image {
+                    id: image
+                    source: "marker.png";
+                }
             }
 
             Map {
@@ -48,31 +80,42 @@ Item {
                 zoomLevel: 13
 
                 MouseArea {
-                                id: selectSiteMouseArea
-                                anchors.fill: parent
-                                hoverEnabled: false
-                                //property variant lastCoordinate
+                    id: selectSiteMouseArea
+                    anchors.fill: parent
+                    hoverEnabled: false
 
-                                onPressed : {
-
-                                    map.center = map.toCoordinate(Qt.point(mouse.x, mouse.y))
-                                }
+                    onClicked: {
+                        map.center = map.toCoordinate(Qt.point(mouse.x, mouse.y));
+                        marker.coordinate = map.center;
+                        map.addMapItem(marker);
+                    }
                 }
-/*
+ // Permet d'ajouter des marqueurs aux endroits choisis, ça va m'être utile pour visualiser les différents sites.
+                Component {
+                        id: circleDelegate
+                        MapCircle {
+                            radius: 3000
+                            color: "green"
+                            center {
+                                latitude: refLat
+                                longitude: refLong
+                            }
+                        }
+                    }
                 MapItemView {
-                    model: searchModel
-                    delegate: MapQuickItem {
-                        coordinate: place.location.coordinate
+                    model: fruitModel
+                    delegate: circleDelegate/*MapQuickItem {
+                        coordinate: pos
 
                         anchorPoint.x: image.width * 0.5
                         anchorPoint.y: image.height
 
                         sourceItem: Column {
                             Image { id: image; source: "marker.png";}
-                            Text { text: title; font.bold: true }
+                            Text { text: name; font.bold: true }
                         }
-                    }
-                }*/
+                    }//*/
+                }//*/
             }
 
         }

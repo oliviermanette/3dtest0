@@ -3,5 +3,6 @@
         <file>main.qml</file>
         <file>StlShow.qml</file>
         <file>marker.png</file>
+        <file>PopAddNewSite.qml</file>
     </qresource>
 </RCC>
