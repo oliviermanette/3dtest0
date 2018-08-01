@@ -4,5 +4,10 @@
         <file>StlShow.qml</file>
         <file>marker.png</file>
         <file>PopAddNewSite.qml</file>
+        <file>MapShow.qml</file>
+        <file>IconSite.qml</file>
+        <file>map-marker.png</file>
+        <file>map.ico</file>
+        <file>marker128.png</file>
     </qresource>
 </RCC>

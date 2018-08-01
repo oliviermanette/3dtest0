@@ -219,4 +219,150 @@ bool CymBDD::addNewRecording(unsigned int uintSensorRefID, QString strDateTime, 
         return false;
 }
 
+int CymBDD::getNbSites(int intOwner)
+{
+    QString lstQuery = "SELECT count(*) FROM sites where sites.owner="+QString::number(intOwner);
+    if ((!isCloudDbOpened)&&isLocalDbOpened){
+        QSqlQuery nquery(localDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"request correctly executed";
+            if (nquery.first())
+            {
+                return nquery.value(0).toInt();
+            }
+        }
+        else {
+            qDebug()<<"an error occured while executing the request";
+            return false;
+        }
+    }
+    else if (isCloudDbOpened){
+        QSqlQuery nquery(cloudDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"request correctly executed";
+            //qDebug()<< lstQuery;
+            if (nquery.first())
+            {
+                return nquery.value(0).toInt();
+            }
+        }
+        else{
+            qDebug()<<"an error occured while executing the request";
+            return false;
+        }
+    }
+    else
+        return false;
+    return false;
+}
+
+QString CymBDD::getSiteName(int intIndex, int intOwner)
+{
+    //SELECT nom FROM sites limit 1,1;
+    QString lstQuery = "SELECT nom FROM sites where sites.owner="+QString::number(intOwner)+" limit "+QString::number(intIndex)+",1";
+    if ((!isCloudDbOpened)&&isLocalDbOpened){
+        QSqlQuery nquery(localDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"request correctly executed";
+            if (nquery.first())
+            {
+                return nquery.value(0).toString();
+            }
+        }
+        else {
+            qDebug()<<"an error occured while executing the request";
+            return "false";
+        }
+    }
+    else if (isCloudDbOpened){
+        QSqlQuery nquery(cloudDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"request correctly executed";
+            if (nquery.first())
+            {
+                return nquery.value(0).toString();
+            }
+        }
+        else{
+            qDebug()<<"an error occured while executing the request";
+            return "false";
+        }
+    }
+    else
+        return "false";
+    return "false";
+}
+
+double CymBDD::getSiteLatitude(int intIndex, int intOwner)
+{
+    QString lstQuery = "SELECT latitude FROM sites where sites.owner="+QString::number(intOwner)+" limit "+QString::number(intIndex)+",1";
+    if ((!isCloudDbOpened)&&isLocalDbOpened){
+        QSqlQuery nquery(localDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"request correctly executed";
+            if (nquery.first())
+            {
+                return nquery.value(0).toDouble();
+            }
+        }
+        else {
+            qDebug()<<"an error occured while executing the request";
+            return false;
+        }
+    }
+    else if (isCloudDbOpened){
+        QSqlQuery nquery(cloudDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"request correctly executed";
+            if (nquery.first())
+            {
+                return nquery.value(0).toDouble();
+            }
+        }
+        else{
+            qDebug()<<"an error occured while executing the request";
+            return false;
+        }
+    }
+    else
+        return false;
+    return false;
+}
+
+double CymBDD::getSiteLongitude(int intIndex, int intOwner)
+{
+    QString lstQuery = "SELECT longitude FROM sites where sites.owner="+QString::number(intOwner)+" limit "+QString::number(intIndex)+",1";
+    if ((!isCloudDbOpened)&&isLocalDbOpened){
+        QSqlQuery nquery(localDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"request correctly executed";
+            if (nquery.first())
+            {
+                return nquery.value(0).toDouble();
+            }
+        }
+        else {
+            qDebug()<<"an error occured while executing the request";
+            return false;
+        }
+    }
+    else if (isCloudDbOpened){
+        QSqlQuery nquery(cloudDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"request correctly executed";
+            if (nquery.first())
+            {
+                return nquery.value(0).toDouble();
+            }
+        }
+        else{
+            qDebug()<<"an error occured while executing the request";
+            return false;
+        }
+    }
+    else
+        return false;
+    return false;
+}
+
 
