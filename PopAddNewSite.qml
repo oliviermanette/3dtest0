@@ -1,11 +1,12 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.4
+import QtPositioning 5.8
 
 Item {
     property double dblLatitude: 0
     property double dblLongitude: 0
     width: 320
-    height: 240
+    height: 320
     Rectangle {
         id: rectangle
         color: "#5b659b"
@@ -62,9 +63,12 @@ Item {
 
         Button {
             id: btnCancelANSite
-            x: 8
-            y: 194
+            y: 256
             text: qsTr("Cancel")
+            anchors.left: parent.left
+            anchors.leftMargin: 8
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 18
             tooltip: ""
             onClicked: {
                 popup.close();
@@ -74,21 +78,76 @@ Item {
         Button {
             id: btnOkAddNewSite
             x: 258
-            y: 194
+            y: 256
             text: qsTr("OK")
+            transformOrigin: Item.Center
+            anchors.right: parent.right
+            anchors.rightMargin: 8
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 18
             tooltip: "Add a new site"
             isDefault: true
             onClicked: {
                 //QString strNom, double dblLatitude, double dblLongitude, QString strCommentaire
+
                 cymBdd.addNewSite(txtNewSiteName.text, dblLatitude,dblLongitude, txtNewSiteDescription.text);
+
+                var lclChaine = {"siteIntegrity": 5.95, "siteName":"Pizza", "SiteLatitude":48, "SiteLongitude":1.5};
+                var lintNbSites = cymBdd.getNbSites();
+                console.log(lintNbSites);
+                siteModel.clear();
+                for (var i=0;i<lintNbSites;i++){
+                    lclChaine.siteIntegrity = "100%";
+                    lclChaine.siteName = cymBdd.getSiteName(i);//"Hambourg";
+                    lclChaine.SiteLatitude = cymBdd.getSiteLatitude(i);
+                    lclChaine.SiteLongitude = cymBdd.getSiteLongitude(i);
+                    siteModel.append(lclChaine);
+                }
+
+
+                //showerMap.mapCenter = QtPositioning.coordinate(siteModel.get(0).SiteLatitude, siteModel.get(0).SiteLongitude);
                 popup.close();
             }
+        }
+
+        Text {
+            id: text4
+            x: 8
+            y: 183
+            text: qsTr("Latitude:")
+            font.pixelSize: 16
+        }
+
+        Text {
+            id: text5
+            x: 8
+            y: 221
+            text: qsTr("Longitude:")
+            font.pixelSize: 16
+        }
+
+        TextField {
+            id: txtLatitude
+            x: 111
+            y: 183
+            width: 147
+            height: 22
+            placeholderText: qsTr("Text Field")
+        }
+
+        TextField {
+            id: txtLongitude
+            x: 111
+            y: 221
+            width: 147
+            height: 22
+            placeholderText: qsTr("Text Field")
         }
     }
 
 }
 
 /*##^## Designer {
-    D{i:1;anchors_height:200;anchors_width:200;anchors_x:18;anchors_y:13}
+    D{i:7;anchors_x:8}D{i:1;anchors_height:200;anchors_width:200;anchors_x:18;anchors_y:13}
 }
  ##^##*/

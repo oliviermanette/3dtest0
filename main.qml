@@ -14,14 +14,52 @@ Item {
 
 
         Rectangle{
+            id: rectangle
             width: 350
             height: 700
-            color: "#111125"
+            color: "#b0afb9"
+            border.color: "#2e2e3a"
+            border.width: 4
+            TextField {
+                id: txtFldSiteSearch
+                x: 281
+                y: 0
+                width: 238
+                height: 23
+                text: qsTr("Filter sites")
+                anchors.left: parent.left
+                anchors.leftMargin: 8
+                anchors.top: parent.top
+                anchors.topMargin: 8
+            }
+
+            Button {
+                id: btnSearchSite
+                x: 252
+                y: 4
+                width: 90
+                height: 31
+                text: qsTr("Filter")
+            }
+
+            Button {
+                id: btnAddNewSite
+                x: 225
+                y: 661
+                width: 117
+                height: 31
+                text: qsTr("Add New Site")
+                anchors.right: parent.right
+                anchors.rightMargin: 8
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 8
+            }
+
             TreeView {
                 x: 8
-                y: 8
+                y: 37
                 width: 334
-                height: 453
+                height: 618
                 TableViewColumn {
                     title: "Name"
                     role: "siteName"
@@ -52,8 +90,9 @@ Item {
                     console.log(currentIndex.row);
                     console.log(currentIndex.column);
                     console.log(siteModel.get(currentIndex.row).SiteLatitude);
-                    console.log(siteModel.get(currentIndex.row).SiteLongitude);
+                    console.log(siteModel.get(currentIndex.row).SiteLongitude);/**/
                     showerMap.mapCenter = QtPositioning.coordinate(siteModel.get(currentIndex.row).SiteLatitude, siteModel.get(currentIndex.row).SiteLongitude);
+                    //showerMap.update();
                     //const QModelIndex = index;
 
                 }
@@ -65,16 +104,19 @@ Item {
                 x: 100
                 y: 300
                 width: 345
-                height: 265
+                height: 345
                 modal: true
                 focus: true
                 closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+                //background: "grey"
 
                 PopAddNewSite{
                     id:winAddNewSite
 
                 }
             }
+
+
         }
 
         Rectangle{
@@ -93,18 +135,19 @@ Item {
                 id: searchTextField
                 width: 492
                 height: 33
-                text: qsTr("Search Field")
+                text: qsTr("Search Place")
 
                 MouseArea {
                     id: mouseArea
                     anchors.fill: parent
                     onClicked: {
                         searchTextField.focus = true;
-                        if (searchTextField.text == "Search Field")
+                        if (searchTextField.text == "Search Place")
                             searchTextField.text ="";
 
                     }
                 }
+
 
             }
 
@@ -124,6 +167,7 @@ Item {
                     //showerMap.lstModel = showerMap.searchModel;
                 }
             }
+
         }
 
         Rectangle {
@@ -144,40 +188,48 @@ Item {
 
             ListView {
                 id: listView
+                flickDeceleration: 1494
                 anchors.fill: parent
                 model: showerMap.lstModel//searchModel
-                    delegate: Component {
+                delegate: Component {
 
-                            Row {
-                                spacing: 12
-                                Column{
-                                    Rectangle{ id:kelkonk;height: 10;width: 10;}
-                                    Image {
-                                        id: name
-                                        source: "map-marker.png"
-                                        MouseArea{
-                                            anchors.fill: parent
-                                            onClicked: {
-                                                searchTitle.color="red";
-                                                //console.log(place.location.coordinate);
-                                                showerMap.mapCenter = place.location.coordinate;
-                                            }
-                                        }
+                    Row {
+                        spacing: 12
+                        Column{
+                            Rectangle{ id:kelkonk;height: 10;width: 10;}
+                            Image {
+                                id: name
+                                source: "map-marker.png"
+                                MouseArea{
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        searchTitle.color="red";
+                                        //console.log(place.location.coordinate);
+                                        showerMap.mapCenter = place.location.coordinate;
                                     }
                                 }
-                                Column{
-                                    id:clnSearchedPlace
-                                    spacing: 5
-
-                                    Text{text:"   ";height: 10;}
-                                        Text { id:searchTitle;text: title; font.pointSize: 16; font.bold: true ; verticalAlignment: Text.AlignBottom;}
-                                        Text { text: place.location.address.text ;anchors.right: parent.right;verticalAlignment: Text.AlignTop;anchors.rightMargin: 0; anchors.left: parent.left;anchors.leftMargin: 0}
-
-                                }
-
                             }
+                        }
+                        Column{
+                            id:clnSearchedPlace
+                            spacing: 5
+
+                            Text{text:"   ";height: 10;}
+                            Text { id:searchTitle;text: title; font.pointSize: 16; font.bold: true ; verticalAlignment: Text.AlignBottom;}
+                            Text { text: place.location.address.text ;anchors.right: parent.right;verticalAlignment: Text.AlignTop;anchors.rightMargin: 0; anchors.left: parent.left;anchors.leftMargin: 0}
+
+                        }
+
                     }
+                }
             }
+
         }
+
     }
 }
+
+/*##^## Designer {
+    D{i:0;autoSize:true;height:480;width:640}D{i:28;anchors_x:281;anchors_y:0}
+}
+ ##^##*/

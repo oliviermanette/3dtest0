@@ -67,8 +67,8 @@ Item {
             hoverEnabled: false
 
             onClicked: {
-                map.center = map.toCoordinate(Qt.point(mouse.x, mouse.y));
-                marker.coordinate = map.center;
+                //map.center = map.toCoordinate(Qt.point(mouse.x, mouse.y));
+                marker.coordinate = map.toCoordinate(Qt.point(mouse.x, mouse.y));// map.center;
                 map.addMapItem(marker);
                 winAddNewSite.dblLongitude = map.toCoordinate(Qt.point(mouse.x, mouse.y)).longitude;
                 winAddNewSite.dblLatitude = map.toCoordinate(Qt.point(mouse.x, mouse.y)).latitude;

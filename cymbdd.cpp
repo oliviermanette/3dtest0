@@ -68,7 +68,7 @@ bool CymBDD::addNewSite(QString strNom, double dblLatitude, double dblLongitude,
     if ((!isCloudDbOpened)&&isLocalDbOpened){
         QSqlQuery nquery(localDb);
         if (nquery.exec(lstQuery)){
-            qDebug()<<"request correctly executed";
+            qDebug()<<"request addNewSite correctly executed locally";
             return true;
         }
         else{
@@ -79,7 +79,13 @@ bool CymBDD::addNewSite(QString strNom, double dblLatitude, double dblLongitude,
     else if (isCloudDbOpened){
         QSqlQuery nquery(cloudDb);
         if (nquery.exec(lstQuery)){
-            qDebug()<<"request correctly executed";
+            qDebug()<<"request addNewSite correctly executed on cloud";
+            // Ajout localement également
+            QSqlQuery nquery(localDb);
+            if (nquery.exec(lstQuery)){
+                qDebug()<<"request addNewSite correctly duplicated locally";
+                return true;
+            }
             return true;
         }
         else{
@@ -98,7 +104,7 @@ bool CymBDD::delSite(unsigned int unintSiteRefID)
     if ((!isCloudDbOpened)&&isLocalDbOpened){
         QSqlQuery nquery(localDb);
         if (nquery.exec(lstQuery)){
-            qDebug()<<"request correctly executed";
+            qDebug()<<"request delSite correctly executed locally";
             return true;
         }
         else{
@@ -109,7 +115,7 @@ bool CymBDD::delSite(unsigned int unintSiteRefID)
     else if (isCloudDbOpened){
         QSqlQuery nquery(cloudDb);
         if (nquery.exec(lstQuery)){
-            qDebug()<<"request correctly executed";
+            qDebug()<<"request delSite correctly executed on cloud";
             return true;
         }
         else{
@@ -130,7 +136,7 @@ bool CymBDD::addNewSurface(QString strNom, unsigned int uintSiteRefID, QString s
     if ((!isCloudDbOpened)&&isLocalDbOpened){
         QSqlQuery nquery(localDb);
         if (nquery.exec(lstQuery)){
-            qDebug()<<"request correctly executed";
+            qDebug()<<"request addNewSurface correctly executed locally";
             return true;
         }
         else{
@@ -141,7 +147,7 @@ bool CymBDD::addNewSurface(QString strNom, unsigned int uintSiteRefID, QString s
     else if (isCloudDbOpened){
         QSqlQuery nquery(cloudDb);
         if (nquery.exec(lstQuery)){
-            qDebug()<<"request correctly executed";
+            qDebug()<<"request addNewSurface correctly executed on cloud";
             return true;
         }
         else{
@@ -163,7 +169,7 @@ bool CymBDD::addNewSensor(QString strPosition, QString strSerialNo, unsigned int
     if ((!isCloudDbOpened)&&isLocalDbOpened){
         QSqlQuery nquery(localDb);
         if (nquery.exec(lstQuery)){
-            qDebug()<<"request correctly executed";
+            qDebug()<<"request addNewSensor correctly executed locally";
             return true;
         }
         else{
@@ -174,7 +180,7 @@ bool CymBDD::addNewSensor(QString strPosition, QString strSerialNo, unsigned int
     else if (isCloudDbOpened){
         QSqlQuery nquery(cloudDb);
         if (nquery.exec(lstQuery)){
-            qDebug()<<"request correctly executed";
+            qDebug()<<"request addNewSensor correctly executed on cloud";
             return true;
         }
         else{
@@ -196,7 +202,7 @@ bool CymBDD::addNewRecording(unsigned int uintSensorRefID, QString strDateTime, 
     if ((!isCloudDbOpened)&&isLocalDbOpened){
         QSqlQuery nquery(localDb);
         if (nquery.exec(lstQuery)){
-            qDebug()<<"request correctly executed";
+            qDebug()<<"request 'addNewRecording' correctly executed locally";
             return true;
         }
         else{
@@ -207,7 +213,7 @@ bool CymBDD::addNewRecording(unsigned int uintSensorRefID, QString strDateTime, 
     else if (isCloudDbOpened){
         QSqlQuery nquery(cloudDb);
         if (nquery.exec(lstQuery)){
-            qDebug()<<"request correctly executed";
+            qDebug()<<"request 'addNewRecording' correctly executed on cloud";
             return true;
         }
         else{
@@ -225,7 +231,7 @@ int CymBDD::getNbSites(int intOwner)
     if ((!isCloudDbOpened)&&isLocalDbOpened){
         QSqlQuery nquery(localDb);
         if (nquery.exec(lstQuery)){
-            qDebug()<<"request correctly executed";
+            qDebug()<<"request 'get Nb Sites' correctly executed locally";
             if (nquery.first())
             {
                 return nquery.value(0).toInt();
@@ -239,7 +245,7 @@ int CymBDD::getNbSites(int intOwner)
     else if (isCloudDbOpened){
         QSqlQuery nquery(cloudDb);
         if (nquery.exec(lstQuery)){
-            qDebug()<<"request correctly executed";
+            qDebug()<<"request 'get Nb Sites' correctly executed on cloud";
             //qDebug()<< lstQuery;
             if (nquery.first())
             {
@@ -263,7 +269,7 @@ QString CymBDD::getSiteName(int intIndex, int intOwner)
     if ((!isCloudDbOpened)&&isLocalDbOpened){
         QSqlQuery nquery(localDb);
         if (nquery.exec(lstQuery)){
-            qDebug()<<"request correctly executed";
+            qDebug()<<"request 'get site name' correctly executed locally";
             if (nquery.first())
             {
                 return nquery.value(0).toString();
@@ -277,7 +283,7 @@ QString CymBDD::getSiteName(int intIndex, int intOwner)
     else if (isCloudDbOpened){
         QSqlQuery nquery(cloudDb);
         if (nquery.exec(lstQuery)){
-            qDebug()<<"request correctly executed";
+            qDebug()<<"request 'get site name' correctly executed on cloud";
             if (nquery.first())
             {
                 return nquery.value(0).toString();
@@ -299,7 +305,7 @@ double CymBDD::getSiteLatitude(int intIndex, int intOwner)
     if ((!isCloudDbOpened)&&isLocalDbOpened){
         QSqlQuery nquery(localDb);
         if (nquery.exec(lstQuery)){
-            qDebug()<<"request correctly executed";
+            qDebug()<<"request getSiteLatitude correctly executed locally";
             if (nquery.first())
             {
                 return nquery.value(0).toDouble();
@@ -313,7 +319,7 @@ double CymBDD::getSiteLatitude(int intIndex, int intOwner)
     else if (isCloudDbOpened){
         QSqlQuery nquery(cloudDb);
         if (nquery.exec(lstQuery)){
-            qDebug()<<"request correctly executed";
+            qDebug()<<"request getSiteLatitude correctly executed on cloud";
             if (nquery.first())
             {
                 return nquery.value(0).toDouble();
@@ -335,7 +341,7 @@ double CymBDD::getSiteLongitude(int intIndex, int intOwner)
     if ((!isCloudDbOpened)&&isLocalDbOpened){
         QSqlQuery nquery(localDb);
         if (nquery.exec(lstQuery)){
-            qDebug()<<"request correctly executed";
+            qDebug()<<"request getSiteLongitude correctly executed locally";
             if (nquery.first())
             {
                 return nquery.value(0).toDouble();
@@ -349,7 +355,7 @@ double CymBDD::getSiteLongitude(int intIndex, int intOwner)
     else if (isCloudDbOpened){
         QSqlQuery nquery(cloudDb);
         if (nquery.exec(lstQuery)){
-            qDebug()<<"request correctly executed";
+            qDebug()<<"request getSiteLongitude correctly executed on cloud";
             if (nquery.first())
             {
                 return nquery.value(0).toDouble();
