@@ -89,6 +89,8 @@ Item {
             isDefault: true
             onClicked: {
                 //QString strNom, double dblLatitude, double dblLongitude, QString strCommentaire
+                dblLatitude = Number(txtLatitude.text);
+                dblLongitude = Number(txtLongitude.text);
 
                 cymBdd.addNewSite(txtNewSiteName.text, dblLatitude,dblLongitude, txtNewSiteDescription.text);
 
@@ -132,7 +134,8 @@ Item {
             y: 183
             width: 147
             height: 22
-            placeholderText: qsTr("Text Field")
+            //placeholderText: dblLatitude.toString()
+            text: dblLatitude.toString()
         }
 
         TextField {
@@ -141,7 +144,8 @@ Item {
             y: 221
             width: 147
             height: 22
-            placeholderText: qsTr("Text Field")
+            //placeholderText: dblLongitude.toString()
+            text:dblLongitude.toString()
         }
     }
 

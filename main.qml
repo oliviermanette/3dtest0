@@ -53,6 +53,9 @@ Item {
                 anchors.rightMargin: 8
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 8
+                onClicked: {
+                    popup.open();
+                }
             }
 
             TreeView {
