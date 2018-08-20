@@ -10,6 +10,7 @@ bool CymBDD::OpenCloudDB()
     if(cloudDb.open()){
         qDebug()<<"Google Cloud Database Opened!";
         isCloudDbOpened = true;
+        uintSiteOwner = getOwnerIDByLogin("FLOD","Finger1nZeNose");
         UpdateSitesFromCloud();
         return true;
     }
@@ -79,7 +80,7 @@ CymBDD::CymBDD(QObject *parent) : QObject(parent)
 {
     isCloudDbOpened = false;
     isLocalDbOpened = false;
-    uintSiteOwner = 1; // IMPORTANT TODO CREATE A LOGIN PROCESS to UPDATE THIS VALUE; The normal value should be 0 after the login process is done
+
     uintGNbSites = 0;
 #ifndef QT_NO_CONCURRENT
         QFuture<bool> cloudDbThread = QtConcurrent::run(this, &CymBDD::OpenCloudDB);
@@ -286,22 +287,7 @@ unsigned int CymBDD::getNbSites(int intOwner)
     else if (isCloudDbOpened){
         if (uintGNbSites)
             return uintGNbSites;
-        QSqlQuery nquery(cloudDb);
-        if (nquery.exec(lstQuery)){
-            qDebug()<<"request 'get Nb Sites' correctly executed on cloud";
-            //qDebug()<< lstQuery;
-            if (nquery.first())
-            {
-                return nquery.value(0).toUInt();
-            }
         }
-        else{
-            qDebug()<<"an error occured while executing the request";
-            return false;
-        }
-    }
-    else
-        return false;
     return false;
 }
 
@@ -326,21 +312,7 @@ QString CymBDD::getSiteName(int intIndex, int intOwner)
     else if (isCloudDbOpened){
         if (uintGNbSites)
             return dataSite[intIndex].m_strNomSite;
-        QSqlQuery nquery(cloudDb);
-        if (nquery.exec(lstQuery)){
-            qDebug()<<"request 'get site name' correctly executed on cloud";
-            if (nquery.first())
-            {
-                return nquery.value(0).toString();
-            }
-        }
-        else{
-            qDebug()<<"an error occured while executing the request";
-            return "false";
-        }
     }
-    else
-        return "false";
     return "false";
 }
 
@@ -364,21 +336,7 @@ double CymBDD::getSiteLatitude(int intIndex, int intOwner)
     else if (isCloudDbOpened){
         if (uintGNbSites)
             return dataSite[intIndex].m_dblLatitude;
-        QSqlQuery nquery(cloudDb);
-        if (nquery.exec(lstQuery)){
-            qDebug()<<"request getSiteLatitude correctly executed on cloud";
-            if (nquery.first())
-            {
-                return nquery.value(0).toDouble();
-            }
-        }
-        else{
-            qDebug()<<"an error occured while executing the request";
-            return false;
-        }
     }
-    else
-        return false;
     return false;
 }
 
@@ -401,28 +359,35 @@ double CymBDD::getSiteLongitude(int intIndex, int intOwner)
     }
     else if (isCloudDbOpened){
         if (uintGNbSites)
-            return dataSite[intIndex].m_dblLongitude;
-        QSqlQuery nquery(cloudDb);
-        if (nquery.exec(lstQuery)){
-            qDebug()<<"request getSiteLongitude correctly executed on cloud";
-            if (nquery.first())
-            {
-                return nquery.value(0).toDouble();
-            }
-        }
-        else{
-            qDebug()<<"an error occured while executing the request";
-            return false;
-        }
+            return dataSite[intIndex].m_dblLongitude;        
     }
-    else
-        return false;
     return false;
 }
 
 bool CymBDD::filterSitesByND(QString strToken)
 {
     return UpdateSitesFromCloud(strToken);
+}
+
+unsigned int CymBDD::getOwnerIDByLogin(QString strLoginOrEMail, QString strPasswd)
+{
+    if (isCloudDbOpened){
+        QString lstQuery = "SELECT idowner FROM Cymbalum_demo.owners where (OwnerName='"+strLoginOrEMail+
+                "' or email='"+strLoginOrEMail+"') and pass=SHA1('"+strPasswd+"')";
+        qDebug()<<lstQuery;
+        QSqlQuery nquery(cloudDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"request 'login' correctly executed on cloud";
+            //qDebug()<< lstQuery;
+            if (nquery.first())
+                return nquery.value(0).toUInt();
+        }
+        else{
+            qDebug()<<"an error occured while executing the login request";
+            return 0;
+        }
+    }
+    return 0;
 }
 
 

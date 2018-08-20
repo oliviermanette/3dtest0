@@ -37,6 +37,8 @@ public:
 
     Q_INVOKABLE bool filterSitesByND(QString strToken);
 
+    Q_INVOKABLE unsigned int getOwnerIDByLogin(QString strLoginOrEMail, QString strPasswd);
+
 
     //Structure accessible depuis QML pour éviter de faire trop de requêtes sql et réseaux compte tenu du cloud
     struct strDataSite {
