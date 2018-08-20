@@ -26,7 +26,7 @@ Item {
                 y: 0
                 width: 238
                 height: 23
-                text: qsTr("Filter sites")
+                placeholderText: qsTr("Filter sites")
                 anchors.left: parent.left
                 anchors.leftMargin: 8
                 anchors.top: parent.top
@@ -40,6 +40,9 @@ Item {
                 width: 90
                 height: 31
                 text: qsTr("Filter")
+                onClicked: {
+
+                }
             }
 
             Button {
