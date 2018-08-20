@@ -9,5 +9,6 @@
         <file>map-marker.png</file>
         <file>map.ico</file>
         <file>marker128.png</file>
+        <file>PopLogin.qml</file>
     </qresource>
 </RCC>
