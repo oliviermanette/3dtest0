@@ -37,10 +37,15 @@ bool CymBDD::OpenLocaleDB()
     }
 }
 
-bool CymBDD::UpdateSitesFromCloud()
+bool CymBDD::UpdateSitesFromCloud(QString strSearchKey)
 {
     // Charge tous les sites de la base de donnée dans la limite de MAXSITES_LM
-    QString lstQuery = "SELECT idsites, nom, latitude, longitude, description FROM sites where sites.owner="+QString::number(uintSiteOwner);
+    QString lstQuery = "";
+    if (strSearchKey.length()==0)
+        lstQuery = "SELECT idsites, nom, latitude, longitude, description FROM sites where sites.owner="+QString::number(uintSiteOwner);
+    else
+        lstQuery = "SELECT idsites, nom, latitude, longitude, description FROM sites where sites.owner="+QString::number(uintSiteOwner) +
+                " and (description like '%"+strSearchKey+"%' or nom like '%"+strSearchKey+"%')";
     if (isCloudDbOpened){
         QSqlQuery nquery(cloudDb);
         if (nquery.exec(lstQuery)){
@@ -413,6 +418,11 @@ double CymBDD::getSiteLongitude(int intIndex, int intOwner)
     else
         return false;
     return false;
+}
+
+bool CymBDD::filterSitesByND(QString strToken)
+{
+    return UpdateSitesFromCloud(strToken);
 }
 
 

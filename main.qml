@@ -41,7 +41,19 @@ Item {
                 height: 31
                 text: qsTr("Filter")
                 onClicked: {
-
+                    if (cymBdd.filterSitesByND(txtFldSiteSearch.text)){
+                        var lclChaine = {"siteIntegrity": 5.95, "siteName":"Pizza", "SiteLatitude":48, "SiteLongitude":1.5};
+                        var lintNbSites = cymBdd.getNbSites();
+                        console.log(lintNbSites);
+                        siteModel.clear();
+                        for (var i=0;i<lintNbSites;i++){
+                            lclChaine.siteIntegrity = "100%";
+                            lclChaine.siteName = cymBdd.getSiteName(i);//"Hambourg";
+                            lclChaine.SiteLatitude = cymBdd.getSiteLatitude(i);
+                            lclChaine.SiteLongitude = cymBdd.getSiteLongitude(i);
+                            siteModel.append(lclChaine);
+                        }
+                    }
                 }
             }
 
@@ -78,10 +90,10 @@ Item {
                 }
                 model: siteModel
                 Component.onCompleted: {
-                    console.log('started here ! Thanks !');
+                    //console.log('started here ! Thanks !');
                     var lclChaine = {"siteIntegrity": 5.95, "siteName":"Pizza", "SiteLatitude":48, "SiteLongitude":1.5};
                     var lintNbSites = cymBdd.getNbSites();
-                    console.log(lintNbSites);
+                    //console.log(lintNbSites);
                     for (var i=0;i<lintNbSites;i++){
                         lclChaine.siteIntegrity = "100%";
                         lclChaine.siteName = cymBdd.getSiteName(i);//"Hambourg";

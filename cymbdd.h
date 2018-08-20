@@ -35,6 +35,8 @@ public:
     Q_INVOKABLE double getSiteLatitude(int intIndex, int intOwner=1);
     Q_INVOKABLE double getSiteLongitude(int intIndex, int intOwner=1);
 
+    Q_INVOKABLE bool filterSitesByND(QString strToken);
+
 
     //Structure accessible depuis QML pour éviter de faire trop de requêtes sql et réseaux compte tenu du cloud
     struct strDataSite {
@@ -60,7 +62,7 @@ private:
 
     bool OpenCloudDB();
     bool OpenLocaleDB();
-    bool UpdateSitesFromCloud();
+    bool UpdateSitesFromCloud(QString strSearchKey="");
 
     unsigned int uintSiteOwner;
 
