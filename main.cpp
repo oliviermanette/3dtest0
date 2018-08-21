@@ -6,8 +6,8 @@
 //#include <QQmlEngine>
 
 #include <QCoreApplication>
-#include <QGuiApplication>
-//#include <QQmlApplicationEngine>
+#include <QApplication>
+#include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QDebug>
 #include <QQuickView>
@@ -18,14 +18,14 @@ int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     QScopedPointer<CymBDD> cymBdd(new CymBDD);
-
-    /*QQmlApplicationEngine engine;
+/*
+    QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("cymBdd", cymBdd.data());
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
-    */
+*/
     QQuickView view;
 
     view.resize(1280, 768);

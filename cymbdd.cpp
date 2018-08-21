@@ -10,8 +10,11 @@ bool CymBDD::OpenCloudDB()
     if(cloudDb.open()){
         qDebug()<<"Google Cloud Database Opened!";
         isCloudDbOpened = true;
-        uintSiteOwner = getOwnerIDByLogin("FLOD","Finger1nZeNose");
-        UpdateSitesFromCloud();
+        // uintSiteOwner = getOwnerIDByLogin("FLOD","Finger1nZeNose");
+        uintSiteOwner = 0; // initialize at 0 ==> no user
+        //qDebug()<<"should emit the signal just here";
+        emit loginRequired();
+        // UpdateSitesFromCloud(); // TODO just after user signed in
         return true;
     }
     else{
@@ -267,8 +270,15 @@ bool CymBDD::addNewRecording(unsigned int uintSensorRefID, QString strDateTime, 
         return false;
 }
 
-unsigned int CymBDD::getNbSites(int intOwner)
+unsigned int CymBDD::getNbSites(unsigned int intOwner)
 {
+    intOwner = uintSiteOwner;
+    if (!intOwner){
+        qDebug()<<"emit here again !"; //uintSiteOwner
+        emit loginRequired();
+        return 0;
+    }
+
     QString lstQuery = "SELECT count(*) FROM sites where sites.owner="+QString::number(intOwner);
     if ((!isCloudDbOpened)&&isLocalDbOpened){
         QSqlQuery nquery(localDb);
@@ -291,7 +301,7 @@ unsigned int CymBDD::getNbSites(int intOwner)
     return false;
 }
 
-QString CymBDD::getSiteName(int intIndex, int intOwner)
+QString CymBDD::getSiteName(int intIndex, unsigned int intOwner)
 {
     //SELECT nom FROM sites limit 1,1;
     QString lstQuery = "SELECT nom FROM sites where sites.owner="+QString::number(intOwner)+" limit "+QString::number(intIndex)+",1";
@@ -316,7 +326,7 @@ QString CymBDD::getSiteName(int intIndex, int intOwner)
     return "false";
 }
 
-double CymBDD::getSiteLatitude(int intIndex, int intOwner)
+double CymBDD::getSiteLatitude(int intIndex, unsigned int intOwner)
 {
     QString lstQuery = "SELECT latitude FROM sites where sites.owner="+QString::number(intOwner)+" limit "+QString::number(intIndex)+",1";
     if ((!isCloudDbOpened)&&isLocalDbOpened){
@@ -340,7 +350,7 @@ double CymBDD::getSiteLatitude(int intIndex, int intOwner)
     return false;
 }
 
-double CymBDD::getSiteLongitude(int intIndex, int intOwner)
+double CymBDD::getSiteLongitude(int intIndex, unsigned int intOwner)
 {
     QString lstQuery = "SELECT longitude FROM sites where sites.owner="+QString::number(intOwner)+" limit "+QString::number(intIndex)+",1";
     if ((!isCloudDbOpened)&&isLocalDbOpened){
@@ -379,8 +389,11 @@ unsigned int CymBDD::getOwnerIDByLogin(QString strLoginOrEMail, QString strPassw
         if (nquery.exec(lstQuery)){
             qDebug()<<"request 'login' correctly executed on cloud";
             //qDebug()<< lstQuery;
-            if (nquery.first())
-                return nquery.value(0).toUInt();
+            if (nquery.first()){
+                uintSiteOwner = nquery.value(0).toUInt();
+                UpdateSitesFromCloud();
+                return uintSiteOwner;
+            }
         }
         else{
             qDebug()<<"an error occured while executing the login request";
@@ -388,6 +401,11 @@ unsigned int CymBDD::getOwnerIDByLogin(QString strLoginOrEMail, QString strPassw
         }
     }
     return 0;
+}
+
+void CymBDD::toto()
+{
+    emit loginRequired();
 }
 
 

@@ -1,10 +1,49 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.4
+import QtQuick 2.11
+import QtQuick.Controls 2.2
 import QtQuick.Controls 1.4
 import QtPositioning 5.8
 
+
 Item {
     //property alias popAddNewSite: popAddNewSite
+    Popup {
+        id: popup
+        x: 100
+        y: 300
+        width: 345
+        height: 345
+        modal: true
+        focus: true
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+        //background: "grey"
+
+        PopAddNewSite{
+            id:winAddNewSite
+
+        }
+    }
+    Popup{
+        id: popAskLogin
+        width: 345
+        height: 345
+        x: (parent.width -width)/2
+        y: (parent.height - height)/2
+
+        modal: true
+        focus: true
+        closePolicy: Popup.NoAutoClose
+        PopLogin{
+            id:winSignIn
+        }
+        Connections {
+            target: cymBdd
+            onLoginRequired: {
+                console.log('should open the popup now or never');
+                popAskLogin.open();
+            }
+        }
+    }
+
     Row{
         id: row
 
@@ -58,6 +97,25 @@ Item {
             }
 
             Button {
+                id: btnSignIn
+                x: 102
+                y: 661
+                width: 117
+                height: 31
+                text: qsTr("Sign In")
+                anchors.right: parent.right
+                anchors.rightMargin: 131
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 8
+
+
+                onClicked: {
+                    //popup.open();
+                    //popAskLogin.open();
+                    cymBdd.toto();
+                }
+            }
+            Button {
                 id: btnAddNewSite
                 x: 225
                 y: 661
@@ -68,8 +126,12 @@ Item {
                 anchors.rightMargin: 8
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 8
+
+
                 onClicked: {
-                    popup.open();
+                    //popup.open();
+                    popAskLogin.open();
+                    //cymBdd.toto();
                 }
             }
 
@@ -115,26 +177,6 @@ Item {
 
                 }
             }
-
-
-            Popup {
-                id: popup
-                x: 100
-                y: 300
-                width: 345
-                height: 345
-                modal: true
-                focus: true
-                closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
-                //background: "grey"
-
-                PopAddNewSite{
-                    id:winAddNewSite
-
-                }
-            }
-
-
         }
 
         Rectangle{
@@ -209,6 +251,7 @@ Item {
                 flickDeceleration: 1494
                 anchors.fill: parent
                 model: showerMap.lstModel//searchModel
+                //Component.onCompleted: cymBdd.toto();
                 delegate: Component {
 
                     Row {
@@ -235,6 +278,7 @@ Item {
                             Text{text:"   ";height: 10;}
                             Text { id:searchTitle;text: title; font.pointSize: 16; font.bold: true ; verticalAlignment: Text.AlignBottom;}
                             Text { text: place.location.address.text ;anchors.right: parent.right;verticalAlignment: Text.AlignTop;anchors.rightMargin: 0; anchors.left: parent.left;anchors.leftMargin: 0}
+
 
                         }
 

@@ -30,14 +30,16 @@ public:
     //INSERT INTO enregistrements (enregistrements.capteur, enregistrements.dateHeure, enregistrements.duration, enregistrements.freqMoyenne, enregistrements.puissanceMoyenne) values (1, '2018-12-24 13:32:48', 300000,50.1,12.3);
     Q_INVOKABLE bool addNewRecording(unsigned int uintSensorRefID, QString strDateTime, unsigned int uintDuration, double fltFreqMoy, double fltPuissMoy); //YYYY-MM-DD HH:mm:SS.
 
-    Q_INVOKABLE unsigned int getNbSites(int intOwner=1);
-    Q_INVOKABLE QString getSiteName(int intIndex, int intOwner=1);
-    Q_INVOKABLE double getSiteLatitude(int intIndex, int intOwner=1);
-    Q_INVOKABLE double getSiteLongitude(int intIndex, int intOwner=1);
+    Q_INVOKABLE unsigned int getNbSites(unsigned int intOwner=0);
+    Q_INVOKABLE QString getSiteName(int intIndex, unsigned int intOwner=0);
+    Q_INVOKABLE double getSiteLatitude(int intIndex, unsigned int intOwner=0);
+    Q_INVOKABLE double getSiteLongitude(int intIndex, unsigned int intOwner=0);
 
     Q_INVOKABLE bool filterSitesByND(QString strToken);
 
     Q_INVOKABLE unsigned int getOwnerIDByLogin(QString strLoginOrEMail, QString strPasswd);
+
+    Q_INVOKABLE void toto();
 
 
     //Structure accessible depuis QML pour éviter de faire trop de requêtes sql et réseaux compte tenu du cloud
@@ -52,6 +54,7 @@ public:
     unsigned int uintGNbSites;
 
 signals:
+    void loginRequired();
 
 public slots:
 

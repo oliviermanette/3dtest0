@@ -1,11 +1,10 @@
-import QtQuick 2.0
+import QtQuick 2.11
 import QtQuick.Controls 2.3
 
 Item {
     Image {
         id: imgFondLogin
-        source: "../../Downloads/40887597_s.jpg"
-        //color: "#174ca0"
+        source: "40887597_s.jpg"
         anchors.fill: parent
 
         Image {
@@ -14,7 +13,7 @@ Item {
             y: 8
             width: 100
             height: 100
-            source: "../../Downloads/logo FLOD.png"
+            source: "logo_FLOD.png"
         }
 
         TextField {
@@ -28,13 +27,13 @@ Item {
         }
 
         TextField {
-            id: textPasswd
+            id: txtPasswd
             x: 30
             y: 229
             width: 261
             height: 40
-            text: qsTr("")
             placeholderText: "Password"
+            echoMode: TextInput.Password
         }
 
         Button {
@@ -44,6 +43,22 @@ Item {
             width: 74
             height: 27
             text: qsTr("Log In")
+            onClicked: {
+
+                cymBdd.getOwnerIDByLogin(txtLogin.text, txtPasswd.text);
+                popAskLogin.close();
+                var lclChaine = {"siteIntegrity": 5.95, "siteName":"Pizza", "SiteLatitude":48, "SiteLongitude":1.5};
+                var lintNbSites = cymBdd.getNbSites();
+                console.log(lintNbSites);
+                siteModel.clear();
+                for (var i=0;i<lintNbSites;i++){
+                    lclChaine.siteIntegrity = "100%";
+                    lclChaine.siteName = cymBdd.getSiteName(i);//"Hambourg";
+                    lclChaine.SiteLatitude = cymBdd.getSiteLatitude(i);
+                    lclChaine.SiteLongitude = cymBdd.getSiteLongitude(i);
+                    siteModel.append(lclChaine);
+                }
+            }
         }
 
         Label {
