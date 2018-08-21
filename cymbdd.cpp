@@ -403,6 +403,17 @@ unsigned int CymBDD::getOwnerIDByLogin(QString strLoginOrEMail, QString strPassw
     return 0;
 }
 
+unsigned int CymBDD::getOwnerID()
+{
+    return uintSiteOwner;
+}
+
+bool CymBDD::signOut()
+{
+    uintSiteOwner = 0;
+    return true;
+}
+
 void CymBDD::toto()
 {
     emit loginRequired();

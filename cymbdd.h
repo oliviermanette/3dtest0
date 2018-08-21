@@ -38,6 +38,8 @@ public:
     Q_INVOKABLE bool filterSitesByND(QString strToken);
 
     Q_INVOKABLE unsigned int getOwnerIDByLogin(QString strLoginOrEMail, QString strPasswd);
+    Q_INVOKABLE unsigned int getOwnerID();
+    Q_INVOKABLE bool signOut();
 
     Q_INVOKABLE void toto();
 

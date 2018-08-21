@@ -111,8 +111,17 @@ Item {
 
                 onClicked: {
                     //popup.open();
-                    //popAskLogin.open();
-                    cymBdd.toto();
+                    if (cymBdd.getOwnerID()){
+                        //sign out
+                        cymBdd.signOut();
+
+                        siteModel.clear();
+
+                        btnSignIn.text = "Sign In";
+                    }
+                    else
+                        popAskLogin.open();
+                    //cymBdd.toto();
                 }
             }
             Button {
@@ -129,8 +138,8 @@ Item {
 
 
                 onClicked: {
-                    //popup.open();
-                    popAskLogin.open();
+                    popup.open();
+                    //popAskLogin.open();
                     //cymBdd.toto();
                 }
             }
