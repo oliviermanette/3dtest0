@@ -5,7 +5,9 @@ Item {
     Image {
         id: imgFondLogin
         source: "40887597_s.jpg"
-        anchors.fill: parent
+        width:320
+        height: 320
+        //anchors.fill: parent
 
         Image {
             id: image
@@ -46,6 +48,7 @@ Item {
             onClicked: {
 
                 cymBdd.getOwnerIDByLogin(txtLogin.text, txtPasswd.text);
+                txtPasswd.text="";
 
                 if (cymBdd.getOwnerID()){
                     popAskLogin.close();
