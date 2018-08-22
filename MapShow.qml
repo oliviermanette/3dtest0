@@ -2,7 +2,9 @@ import QtQuick 2.11
 import QtLocation 5.11
 import QtPositioning 5.8
 
-Item {
+Rectangle {
+    border.color: "#2e2e3a"
+    border.width: 4
 
     property string strSearchField: ""
     property var lstModel: searchModel//siteModel
@@ -54,6 +56,9 @@ Item {
         }
     }
 
+    //Rectangle{
+
+        //anchors.fill: parent
     Map {
         id: map
         anchors.fill: parent
@@ -137,4 +142,7 @@ Item {
             delegate: sitesDelegate
         }
     }
+   // }
+
+
 }

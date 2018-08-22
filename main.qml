@@ -3,7 +3,6 @@ import QtQuick.Controls 2.2
 import QtQuick.Controls 1.4
 import QtPositioning 5.8
 
-
 Item {
     //property alias popAddNewSite: popAddNewSite
     Popup {
@@ -97,34 +96,6 @@ Item {
             }
 
             Button {
-                id: btnSignIn
-                x: 102
-                y: 661
-                width: 117
-                height: 31
-                text: qsTr("Sign In")
-                anchors.right: parent.right
-                anchors.rightMargin: 131
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 8
-
-
-                onClicked: {
-                    //popup.open();
-                    if (cymBdd.getOwnerID()){
-                        //sign out
-                        cymBdd.signOut();
-
-                        siteModel.clear();
-
-                        btnSignIn.text = "Sign In";
-                    }
-                    else
-                        popAskLogin.open();
-                    //cymBdd.toto();
-                }
-            }
-            Button {
                 id: btnAddNewSite
                 x: 225
                 y: 661
@@ -139,8 +110,6 @@ Item {
 
                 onClicked: {
                     popup.open();
-                    //popAskLogin.open();
-                    //cymBdd.toto();
                 }
             }
 
@@ -179,7 +148,7 @@ Item {
                     console.log(currentIndex.row);
                     console.log(currentIndex.column);
                     console.log(siteModel.get(currentIndex.row).SiteLatitude);
-                    console.log(siteModel.get(currentIndex.row).SiteLongitude);/**/
+                    console.log(siteModel.get(currentIndex.row).SiteLongitude);
                     showerMap.mapCenter = QtPositioning.coordinate(siteModel.get(currentIndex.row).SiteLatitude, siteModel.get(currentIndex.row).SiteLongitude);
                     //showerMap.update();
                     //const QModelIndex = index;
@@ -192,22 +161,28 @@ Item {
             id: mapArea
             width: 600
             height: 700
-            color: "#998f8f"
+            color: "#2e2e3a"
 
             MapShow{
                 id:showerMap
-                anchors.topMargin: 34
+                anchors.rightMargin: 3
+                anchors.leftMargin: 1
+                anchors.bottomMargin: 4
+                anchors.topMargin: 37
                 anchors.fill: parent
             }
 
             TextField {
                 id: searchTextField
+                y: 2
                 width: 492
-                height: 33
+                height: 28
                 text: qsTr("Search Place")
 
                 MouseArea {
                     id: mouseArea
+                    height: 24
+                    anchors.topMargin: 0
                     anchors.fill: parent
                     onClicked: {
                         searchTextField.focus = true;
@@ -227,8 +202,8 @@ Item {
                 width: 106
                 height: 33
                 text: qsTr("Search")
-                isDefault: true
-                activeFocusOnPress: true
+                //isDefault: true
+                //activeFocusOnPress: true
 
                 onClicked: {
 
@@ -253,44 +228,50 @@ Item {
             id: rctContextInfo
             width: 281
             height: 700
-            color: "#ffffff"
+            color: "#b0afb9"
+            border.color: "#2e2e3a"
+            border.width: 1
+            Button {
+                id: btnSignIn
+                x: 10
+                y: 1
+                width: 117
+                height: 31
+                text: qsTr("Sign In")
+                anchors.right: parent.right
+                anchors.rightMargin: 4
+
+
+                onClicked: {
+                    //popup.open();
+                    if (cymBdd.getOwnerID()){
+                        //sign out
+                        cymBdd.signOut();
+
+                        siteModel.clear();
+
+                        btnSignIn.text = "Sign In";
+                    }
+                    else
+                        popAskLogin.open();
+                }
+            }
 
             ListView {
                 id: listView
+                anchors.bottomMargin: 89
+                anchors.topMargin: 128
                 flickDeceleration: 1494
+                //visible: false
                 anchors.fill: parent
                 model: showerMap.lstModel//searchModel
                 //Component.onCompleted: cymBdd.toto();
                 delegate: Component {
 
-                    Row {
-                        spacing: 12
-                        Column{
-                            Rectangle{ id:kelkonk;height: 10;width: 10;}
-                            Image {
-                                id: name
-                                source: "map-marker.png"
-                                MouseArea{
-                                    anchors.fill: parent
-                                    onClicked: {
-                                        searchTitle.color="red";
-                                        //console.log(place.location.coordinate);
-                                        showerMap.mapCenter = place.location.coordinate;
-                                    }
-                                }
-                            }
+
+                        LineSearch{
+                            id: titi
                         }
-                        Column{
-                            id:clnSearchedPlace
-                            spacing: 5
-
-                            Text{text:"   ";height: 10;}
-                            Text { id:searchTitle;text: title; font.pointSize: 16; font.bold: true ; verticalAlignment: Text.AlignBottom;}
-                            Text { text: place.location.address.text ;anchors.right: parent.right;verticalAlignment: Text.AlignTop;anchors.rightMargin: 0; anchors.left: parent.left;anchors.leftMargin: 0}
-
-
-                        }
-
                     }
                 }
             }
@@ -298,9 +279,8 @@ Item {
         }
 
     }
-}
 
 /*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}D{i:28;anchors_x:281;anchors_y:0}
+    D{i:0;autoSize:true;height:480;width:640}
 }
  ##^##*/
