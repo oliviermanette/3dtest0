@@ -52,7 +52,7 @@ Item {
 
                 if (cymBdd.getOwnerID()){
                     popAskLogin.close();
-                    var lclChaine = {"siteIntegrity": 5.95, "siteName":"Pizza", "SiteLatitude":48, "SiteLongitude":1.5, "siteDescription":"My Description"};
+                    var lclChaine = {"siteIntegrity": 5.95, "siteName":"Pizza", "SiteLatitude":48, "SiteLongitude":1.5, "siteDescription":"My Description", "siteID":0};
                     var lintNbSites = cymBdd.getNbSites();
                     console.log(lintNbSites);
                     siteModel.clear();
@@ -62,6 +62,7 @@ Item {
                         lclChaine.SiteLatitude = cymBdd.getSiteLatitude(i);
                         lclChaine.SiteLongitude = cymBdd.getSiteLongitude(i);
                         lclChaine.siteDescription = cymBdd.getSiteDescription(i);
+                        lclChaine.siteID = cymBdd.getSiteID(i);
                         siteModel.append(lclChaine);
                     }
                     btnSignIn.text = "Sign Out";

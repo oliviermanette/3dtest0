@@ -6,6 +6,8 @@ Item {
     property string siteDescription: ""
     property double siteLatitude: 0
     property double siteLongitude: 0
+    property int siteID: 0
+    property string btnUpdate: "Update"
     width: 334
     height: 296
     Rectangle {
@@ -71,8 +73,9 @@ Item {
             y: 92
             width: 307
             height: 116
-            text: qsTr(siteDescription)
-            textFormat: Text.RichText
+            text: siteDescription
+            placeholderText: "Description"
+            textFormat: Text.PlainText
             wrapMode: Text.WordWrap
             background: Rectangle { color: "#f7f7dd"
             radius: 3}
@@ -134,9 +137,32 @@ Item {
             y: 255
             width: 105
             height: 26
-            text: qsTr("Update")
+            text: btnUpdate
             font.capitalization: Font.AllUppercase
             font.bold: true
+            onClicked: {
+                if (cymBdd.setUpdateSite(siteID, txtEdtSiteName.text, txtEdtSitesDescription.text, txtEdtSiteLatitude.text, txtEdtSiteLongitude.text))
+                {
+                    btnUpdate="Updated !";
+                    if (cymBdd.filterSitesByND("")){
+                        var lclChaine = {"siteIntegrity": 5.95, "siteName":"Pizza", "SiteLatitude":48, "SiteLongitude":1.5, "siteDescription":"My Description", "siteID":0};
+                        var lintNbSites = cymBdd.getNbSites();
+                        console.log(lintNbSites);
+                        siteModel.clear();
+                        for (var i=0;i<lintNbSites;i++){
+                            lclChaine.siteIntegrity = "100%";
+                            lclChaine.siteName = cymBdd.getSiteName(i);//"Hambourg";
+                            lclChaine.SiteLatitude = cymBdd.getSiteLatitude(i);
+                            lclChaine.SiteLongitude = cymBdd.getSiteLongitude(i);
+                            lclChaine.siteDescription = cymBdd.getSiteDescription(i);
+                            lclChaine.siteID = cymBdd.getSiteID(i);
+                            siteModel.append(lclChaine);
+                        }
+                    }
+                }
+                else
+                    btnUpdate="try later";
+            }
         }
     }
 

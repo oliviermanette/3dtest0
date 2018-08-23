@@ -374,6 +374,31 @@ double CymBDD::getSiteLatitude(int intIndex, unsigned int intOwner)
     return false;
 }
 
+unsigned int CymBDD::getSiteID(int intIndex, unsigned int intOwner)
+{
+    QString lstQuery = "SELECT idsites FROM sites where sites.owner="+QString::number(intOwner)+" limit "+QString::number(intIndex)+",1";
+    if ((!isCloudDbOpened)&&isLocalDbOpened){
+        QSqlQuery nquery(localDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"request getSiteLatitude correctly executed locally";
+            if (nquery.first())
+            {
+                return nquery.value(0).toDouble();
+            }
+        }
+        else {
+            qDebug()<<"an error occured while executing the request";
+            return false;
+        }
+    }
+    else if (isCloudDbOpened){
+        if (uintGNbSites)
+            return dataSite[intIndex].m_uintIdSite;
+    }
+    return false;
+
+}
+
 double CymBDD::getSiteLongitude(int intIndex, unsigned int intOwner)
 {
     QString lstQuery = "SELECT longitude FROM sites where sites.owner="+QString::number(intOwner)+" limit "+QString::number(intIndex)+",1";
@@ -394,6 +419,48 @@ double CymBDD::getSiteLongitude(int intIndex, unsigned int intOwner)
     else if (isCloudDbOpened){
         if (uintGNbSites)
             return dataSite[intIndex].m_dblLongitude;        
+    }
+    return false;
+}
+
+bool CymBDD::setUpdateSite(unsigned int uintSiteID, QString strName, QString strDescription, QString dblLatitude, QString dblLongitude)
+{
+    //UPDATE `Cymbalum_demo`.`sites` SET `description`='Pendant 2 an, nous y étions' WHERE `idsites`='4';
+    QString lstQuery = "UPDATE `Cymbalum_demo`.`sites` SET `description`='"+
+            strDescription+
+            "', nom='"+
+            strName+
+            "', latitude="+
+            dblLatitude+
+            ", longitude="+
+            dblLongitude +
+            " WHERE idsites="+
+            QString::number(uintSiteID)+
+            " AND owner="+QString::number(uintSiteOwner);
+    if ((!isCloudDbOpened)&&isLocalDbOpened){
+        QSqlQuery nquery(localDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"update site correctly executed locally";
+            return true;
+        }
+        else {
+            qDebug()<<"an error occured while executing the request locally";
+            return false;
+        }
+    }
+    else if (isCloudDbOpened){
+        QSqlQuery nquery(cloudDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"update site correctly executed on cloud";
+            qDebug()<<lstQuery;
+            UpdateSitesFromCloud();
+            return true;
+        }
+        else {
+            qDebug()<<"an error occured while executing the request on the cloud";
+            qDebug()<<lstQuery;
+        }
+
     }
     return false;
 }

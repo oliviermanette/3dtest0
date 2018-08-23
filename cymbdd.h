@@ -34,7 +34,10 @@ public:
     Q_INVOKABLE QString getSiteName(int intIndex, unsigned int intOwner=0);
     Q_INVOKABLE QString getSiteDescription(int intIndex, unsigned int intOwner=0);
     Q_INVOKABLE double getSiteLatitude(int intIndex, unsigned int intOwner=0);
+    Q_INVOKABLE unsigned int getSiteID(int intIndex, unsigned int intOwner=0);
     Q_INVOKABLE double getSiteLongitude(int intIndex, unsigned int intOwner=0);
+
+    Q_INVOKABLE bool setUpdateSite(unsigned int uintSiteID, QString strName, QString strDescription, QString dblLatitude, QString dblLongitude);
 
     Q_INVOKABLE bool filterSitesByND(QString strToken);
 

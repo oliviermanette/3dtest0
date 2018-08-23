@@ -80,7 +80,7 @@ Item {
                 text: qsTr("Filter")
                 onClicked: {
                     if (cymBdd.filterSitesByND(txtFldSiteSearch.text)){
-                        var lclChaine = {"siteIntegrity": 5.95, "siteName":"Pizza", "SiteLatitude":48, "SiteLongitude":1.5, "siteDescription":"My Description"};
+                        var lclChaine = {"siteIntegrity": 5.95, "siteName":"Pizza", "SiteLatitude":48, "SiteLongitude":1.5, "siteDescription":"My Description", "siteID":0};
                         var lintNbSites = cymBdd.getNbSites();
                         console.log(lintNbSites);
                         siteModel.clear();
@@ -132,7 +132,7 @@ Item {
                 model: siteModel
                 Component.onCompleted: {
                     //console.log('started here ! Thanks !');
-                    var lclChaine = {"siteIntegrity": 5.95, "siteName":"Pizza", "SiteLatitude":48, "SiteLongitude":1.5, "siteDescription":"My Description"};
+                    var lclChaine = {"siteIntegrity": 5.95, "siteName":"Pizza", "SiteLatitude":48, "SiteLongitude":1.5, "siteDescription":"My Description", "siteID":0};
                     var lintNbSites = cymBdd.getNbSites();
                     //console.log(lintNbSites);
                     for (var i=0;i<lintNbSites;i++){
@@ -156,6 +156,8 @@ Item {
                     editSites.siteDescription = siteModel.get(currentIndex.row).siteDescription;
                     editSites.siteLatitude = siteModel.get(currentIndex.row).SiteLatitude;
                     editSites.siteLongitude = siteModel.get(currentIndex.row).SiteLongitude;
+                    editSites.siteID = siteModel.get(currentIndex.row).siteID;
+                    editSites.btnUpdate = "Update";
                     //showerMap.update();
                     //const QModelIndex = index;
 
