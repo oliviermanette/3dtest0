@@ -326,6 +326,30 @@ QString CymBDD::getSiteName(int intIndex, unsigned int intOwner)
     return "false";
 }
 
+QString CymBDD::getSiteDescription(int intIndex, unsigned int intOwner)
+{
+    QString lstQuery = "SELECT description FROM sites where sites.owner="+QString::number(intOwner)+" limit "+QString::number(intIndex)+",1";
+    if ((!isCloudDbOpened)&&isLocalDbOpened){
+        QSqlQuery nquery(localDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"request 'get site description' correctly executed locally";
+            if (nquery.first())
+            {
+                return nquery.value(0).toString();
+            }
+        }
+        else {
+            qDebug()<<"an error occured while executing the request";
+            return "false";
+        }
+    }
+    else if (isCloudDbOpened){
+        if (uintGNbSites)
+            return dataSite[intIndex].m_strDescription;
+    }
+    return "false";
+}
+
 double CymBDD::getSiteLatitude(int intIndex, unsigned int intOwner)
 {
     QString lstQuery = "SELECT latitude FROM sites where sites.owner="+QString::number(intOwner)+" limit "+QString::number(intIndex)+",1";

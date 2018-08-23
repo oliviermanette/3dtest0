@@ -13,5 +13,6 @@
         <file>40887597_s.jpg</file>
         <file>logo_FLOD.png</file>
         <file>LineSearch.qml</file>
+        <file>EditSites.qml</file>
     </qresource>
 </RCC>

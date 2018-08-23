@@ -80,7 +80,7 @@ Item {
                 text: qsTr("Filter")
                 onClicked: {
                     if (cymBdd.filterSitesByND(txtFldSiteSearch.text)){
-                        var lclChaine = {"siteIntegrity": 5.95, "siteName":"Pizza", "SiteLatitude":48, "SiteLongitude":1.5};
+                        var lclChaine = {"siteIntegrity": 5.95, "siteName":"Pizza", "SiteLatitude":48, "SiteLongitude":1.5, "siteDescription":"My Description"};
                         var lintNbSites = cymBdd.getNbSites();
                         console.log(lintNbSites);
                         siteModel.clear();
@@ -89,6 +89,7 @@ Item {
                             lclChaine.siteName = cymBdd.getSiteName(i);//"Hambourg";
                             lclChaine.SiteLatitude = cymBdd.getSiteLatitude(i);
                             lclChaine.SiteLongitude = cymBdd.getSiteLongitude(i);
+                            lclChaine.siteDescription = cymBdd.getSiteDescription(i);
                             siteModel.append(lclChaine);
                         }
                     }
@@ -117,7 +118,7 @@ Item {
                 x: 8
                 y: 37
                 width: 334
-                height: 618
+                height: 353
                 TableViewColumn {
                     title: "Name"
                     role: "siteName"
@@ -131,12 +132,13 @@ Item {
                 model: siteModel
                 Component.onCompleted: {
                     //console.log('started here ! Thanks !');
-                    var lclChaine = {"siteIntegrity": 5.95, "siteName":"Pizza", "SiteLatitude":48, "SiteLongitude":1.5};
+                    var lclChaine = {"siteIntegrity": 5.95, "siteName":"Pizza", "SiteLatitude":48, "SiteLongitude":1.5, "siteDescription":"My Description"};
                     var lintNbSites = cymBdd.getNbSites();
                     //console.log(lintNbSites);
                     for (var i=0;i<lintNbSites;i++){
                         lclChaine.siteIntegrity = "100%";
                         lclChaine.siteName = cymBdd.getSiteName(i);//"Hambourg";
+                        lclChaine.siteDescription = cymBdd.getSiteDescription(i);
                         lclChaine.SiteLatitude = cymBdd.getSiteLatitude(i);
                         lclChaine.SiteLongitude = cymBdd.getSiteLongitude(i);
                         siteModel.append(lclChaine);
@@ -144,16 +146,29 @@ Item {
                 }
 
                 onClicked: {
-                    console.log(index);
                     console.log(currentIndex.row);
                     console.log(currentIndex.column);
                     console.log(siteModel.get(currentIndex.row).SiteLatitude);
                     console.log(siteModel.get(currentIndex.row).SiteLongitude);
+                    console.log(siteModel.get(currentIndex.row).siteName)
                     showerMap.mapCenter = QtPositioning.coordinate(siteModel.get(currentIndex.row).SiteLatitude, siteModel.get(currentIndex.row).SiteLongitude);
+                    editSites.siteName = siteModel.get(currentIndex.row).siteName;
+                    editSites.siteDescription = siteModel.get(currentIndex.row).siteDescription;
+                    editSites.siteLatitude = siteModel.get(currentIndex.row).SiteLatitude;
+                    editSites.siteLongitude = siteModel.get(currentIndex.row).SiteLongitude;
                     //showerMap.update();
                     //const QModelIndex = index;
 
                 }
+            }
+
+            EditSites {
+                id: editSites
+                anchors.left: parent.left
+                anchors.leftMargin: 8
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 8
+                visible: false
             }
         }
 
@@ -250,6 +265,8 @@ Item {
 
                         siteModel.clear();
 
+                        editSites.visible = false;
+
                         btnSignIn.text = "Sign In";
                     }
                     else
@@ -269,16 +286,16 @@ Item {
                 delegate: Component {
 
 
-                        LineSearch{
-                            id: titi
-                        }
+                    LineSearch{
+                        id: titi
                     }
                 }
             }
-
         }
 
     }
+
+}
 
 /*##^## Designer {
     D{i:0;autoSize:true;height:480;width:640}

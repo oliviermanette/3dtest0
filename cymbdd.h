@@ -32,6 +32,7 @@ public:
 
     Q_INVOKABLE unsigned int getNbSites(unsigned int intOwner=0);
     Q_INVOKABLE QString getSiteName(int intIndex, unsigned int intOwner=0);
+    Q_INVOKABLE QString getSiteDescription(int intIndex, unsigned int intOwner=0);
     Q_INVOKABLE double getSiteLatitude(int intIndex, unsigned int intOwner=0);
     Q_INVOKABLE double getSiteLongitude(int intIndex, unsigned int intOwner=0);
 
