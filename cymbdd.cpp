@@ -145,7 +145,7 @@ bool CymBDD::addNewSite(QString strNom, double dblLatitude, double dblLongitude,
 bool CymBDD::delSite(unsigned int unintSiteRefID)
 {
     //DELETE FROM sites WHERE idsite=unintSiteRefID;
-    QString lstQuery = "DELETE FROM sites WHERE idsite="+ QString::number(unintSiteRefID);
+    QString lstQuery = "DELETE FROM sites WHERE idsites="+ QString::number(unintSiteRefID)+ " AND owner="+QString::number(uintSiteOwner);
     if ((!isCloudDbOpened)&&isLocalDbOpened){
         QSqlQuery nquery(localDb);
         if (nquery.exec(lstQuery)){
@@ -160,11 +160,13 @@ bool CymBDD::delSite(unsigned int unintSiteRefID)
     else if (isCloudDbOpened){
         QSqlQuery nquery(cloudDb);
         if (nquery.exec(lstQuery)){
-            qDebug()<<"request delSite correctly executed on cloud";
+            qDebug()<<"request delete Site correctly executed on cloud";
+            UpdateSitesFromCloud();
             return true;
         }
         else{
             qDebug()<<"an error occured while executing the request";
+            qDebug()<<lstQuery;
             return false;
         }
     }
@@ -475,11 +477,9 @@ unsigned int CymBDD::getOwnerIDByLogin(QString strLoginOrEMail, QString strPassw
     if (isCloudDbOpened){
         QString lstQuery = "SELECT idowner FROM Cymbalum_demo.owners where (OwnerName='"+strLoginOrEMail+
                 "' or email='"+strLoginOrEMail+"') and pass=SHA1('"+strPasswd+"')";
-        qDebug()<<lstQuery;
         QSqlQuery nquery(cloudDb);
         if (nquery.exec(lstQuery)){
             qDebug()<<"request 'login' correctly executed on cloud";
-            //qDebug()<< lstQuery;
             if (nquery.first()){
                 uintSiteOwner = nquery.value(0).toUInt();
                 UpdateSitesFromCloud();

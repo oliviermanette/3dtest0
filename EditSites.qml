@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.3
+import QtQuick.Controls.Material 2.4
 
 Item {
     property string siteName: ""
@@ -35,6 +36,7 @@ Item {
             text: qsTr("Sites")
             font.bold: true
             font.pixelSize: 18
+
         }
 
         Text {
@@ -162,6 +164,43 @@ Item {
                 }
                 else
                     btnUpdate="try later";
+            }
+        }
+
+        Button {
+            id: btnEdtSitesDelete
+            x: 249
+            y: 8
+            width: 77
+            height: 17
+            text: qsTr("Delete")
+            font.weight: Font.Medium
+            font.bold: true
+            //flat: true
+            font.capitalization: Font.AllUppercase
+            onClicked: {
+                cymBdd.delSite(siteID);
+                if (cymBdd.filterSitesByND("")){
+                    var lclChaine = {"siteIntegrity": 5.95, "siteName":"Pizza", "SiteLatitude":48, "SiteLongitude":1.5, "siteDescription":"My Description", "siteID":0};
+                    var lintNbSites = cymBdd.getNbSites();
+                    console.log(lintNbSites);
+                    siteModel.clear();
+                    for (var i=0;i<lintNbSites;i++){
+                        lclChaine.siteIntegrity = "100%";
+                        lclChaine.siteName = cymBdd.getSiteName(i);//"Hambourg";
+                        lclChaine.SiteLatitude = cymBdd.getSiteLatitude(i);
+                        lclChaine.SiteLongitude = cymBdd.getSiteLongitude(i);
+                        lclChaine.siteDescription = cymBdd.getSiteDescription(i);
+                        lclChaine.siteID = cymBdd.getSiteID(i);
+                        siteModel.append(lclChaine);
+                    }
+                    siteName = "";
+                    siteDescription = "";
+                    siteLatitude = 0;
+                    siteLongitude = 0;
+                    siteID = 0;
+                    btnUpdate = "DELETED !";
+                }
             }
         }
     }
