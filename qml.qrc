@@ -14,5 +14,7 @@
         <file>logo_FLOD.png</file>
         <file>LineSearch.qml</file>
         <file>EditSites.qml</file>
+        <file>LineSites.qml</file>
+        <file>FilterSites.qml</file>
     </qresource>
 </RCC>

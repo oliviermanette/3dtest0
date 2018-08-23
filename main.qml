@@ -14,11 +14,9 @@ Item {
         modal: true
         focus: true
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
-        //background: "grey"
 
         PopAddNewSite{
             id:winAddNewSite
-
         }
     }
     Popup{
@@ -49,8 +47,6 @@ Item {
         ListModel{
             id:siteModel
         }
-
-
         Rectangle{
             id: rectangle
             width: 350
@@ -58,42 +54,8 @@ Item {
             color: "#b0afb9"
             border.color: "#2e2e3a"
             border.width: 4
-            TextField {
-                id: txtFldSiteSearch
-                x: 281
-                y: 0
-                width: 238
-                height: 23
-                placeholderText: qsTr("Filter sites")
-                anchors.left: parent.left
-                anchors.leftMargin: 8
-                anchors.top: parent.top
-                anchors.topMargin: 8
-            }
+            FilterSites{
 
-            Button {
-                id: btnSearchSite
-                x: 252
-                y: 4
-                width: 90
-                height: 31
-                text: qsTr("Filter")
-                onClicked: {
-                    if (cymBdd.filterSitesByND(txtFldSiteSearch.text)){
-                        var lclChaine = {"siteIntegrity": 5.95, "siteName":"Pizza", "SiteLatitude":48, "SiteLongitude":1.5, "siteDescription":"My Description", "siteID":0};
-                        var lintNbSites = cymBdd.getNbSites();
-                        console.log(lintNbSites);
-                        siteModel.clear();
-                        for (var i=0;i<lintNbSites;i++){
-                            lclChaine.siteIntegrity = "100%";
-                            lclChaine.siteName = cymBdd.getSiteName(i);//"Hambourg";
-                            lclChaine.SiteLatitude = cymBdd.getSiteLatitude(i);
-                            lclChaine.SiteLongitude = cymBdd.getSiteLongitude(i);
-                            lclChaine.siteDescription = cymBdd.getSiteDescription(i);
-                            siteModel.append(lclChaine);
-                        }
-                    }
-                }
             }
 
             Button {
@@ -113,54 +75,19 @@ Item {
                     popup.open();
                 }
             }
-
-            TreeView {
-                x: 8
-                y: 37
+            ListView{
+                id:listSites
+                x:8
+                y:37
                 width: 334
                 height: 353
-                TableViewColumn {
-                    title: "Name"
-                    role: "siteName"
-                    width: 150
-                }
-                TableViewColumn {
-                    title: "Integrity"
-                    role: "siteIntegrity"
-                    width: 100
-                }
                 model: siteModel
-                Component.onCompleted: {
-                    //console.log('started here ! Thanks !');
-                    var lclChaine = {"siteIntegrity": 5.95, "siteName":"Pizza", "SiteLatitude":48, "SiteLongitude":1.5, "siteDescription":"My Description", "siteID":0};
-                    var lintNbSites = cymBdd.getNbSites();
-                    //console.log(lintNbSites);
-                    for (var i=0;i<lintNbSites;i++){
-                        lclChaine.siteIntegrity = "100%";
-                        lclChaine.siteName = cymBdd.getSiteName(i);//"Hambourg";
-                        lclChaine.siteDescription = cymBdd.getSiteDescription(i);
-                        lclChaine.SiteLatitude = cymBdd.getSiteLatitude(i);
-                        lclChaine.SiteLongitude = cymBdd.getSiteLongitude(i);
-                        siteModel.append(lclChaine);
+                delegate: Component {
+
+
+                    LineSites{
+                        id: lstListSites
                     }
-                }
-
-                onClicked: {
-                    console.log(currentIndex.row);
-                    console.log(currentIndex.column);
-                    console.log(siteModel.get(currentIndex.row).SiteLatitude);
-                    console.log(siteModel.get(currentIndex.row).SiteLongitude);
-                    console.log(siteModel.get(currentIndex.row).siteName)
-                    showerMap.mapCenter = QtPositioning.coordinate(siteModel.get(currentIndex.row).SiteLatitude, siteModel.get(currentIndex.row).SiteLongitude);
-                    editSites.siteName = siteModel.get(currentIndex.row).siteName;
-                    editSites.siteDescription = siteModel.get(currentIndex.row).siteDescription;
-                    editSites.siteLatitude = siteModel.get(currentIndex.row).SiteLatitude;
-                    editSites.siteLongitude = siteModel.get(currentIndex.row).SiteLongitude;
-                    editSites.siteID = siteModel.get(currentIndex.row).siteID;
-                    editSites.btnUpdate = "Update";
-                    //showerMap.update();
-                    //const QModelIndex = index;
-
                 }
             }
 
