@@ -16,5 +16,6 @@
         <file>EditSites.qml</file>
         <file>LineSites.qml</file>
         <file>FilterSites.qml</file>
+        <file>SiteOpen.qml</file>
     </qresource>
 </RCC>

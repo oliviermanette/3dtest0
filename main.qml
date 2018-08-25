@@ -55,6 +55,7 @@ Item {
             border.color: "#2e2e3a"
             border.width: 4
             FilterSites{
+                z:10
 
             }
 
@@ -106,6 +107,16 @@ Item {
             width: 600
             height: 700
             color: "#2e2e3a"
+            gradient: Gradient {
+                GradientStop {
+                    position: 0.00;
+                    color: "#2e2e3a";
+                }
+                GradientStop {
+                    position: 1.00;
+                    color: "#f9f2f2";
+                }
+            }
 
             MapShow{
                 id:showerMap
@@ -114,6 +125,34 @@ Item {
                 anchors.bottomMargin: 4
                 anchors.topMargin: 37
                 anchors.fill: parent
+                ScaleAnimator {
+                        id:zoomInAnimation
+                        target: showerMap;
+                        from: 1;
+                        to: 2;
+                        duration: 500
+                        running: false
+                        onStopped: {
+                            showerMap.visible = false;
+                            siteOpen1.visible = true;
+                            zoomOutAnimation.start();
+                        }
+                    }
+                ScaleAnimator{
+                    id:zoomOutAnimation
+                    target: showerMap
+                    from: 2
+                    to: 1
+                    duration: 1
+                    running: false
+
+                }
+            }
+            SiteOpen{
+                id:siteOpen1
+                visible: false
+                anchors.top : parent.top
+                anchors.left: parent.left
             }
 
             TextField {
