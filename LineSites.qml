@@ -68,6 +68,8 @@ Item {
                         showDetailSite();
                         zoomInAnimation.start();
                         siteOpen1.txtSiteNameOpen = siteName
+                        siteOpen1.txtSizeX = cymBdd.getSiteSizeX(siteID);
+                        siteOpen1.txtSizeY = cymBdd.getSiteSizeY(siteID);
                     }
 
 

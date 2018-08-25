@@ -425,6 +425,87 @@ double CymBDD::getSiteLongitude(int intIndex, unsigned int intOwner)
     return false;
 }
 
+unsigned int CymBDD::getSiteSizeX(int intIndex)
+{
+    //SELECT ST_AsText(geometrie) from sites where idsites=16;
+    QString lstQuery = "SELECT ST_AsText(geometrie) from sites where idsites="+QString::number(intIndex)+
+            " AND owner="+QString::number(uintSiteOwner);
+    if ((!isCloudDbOpened)&&isLocalDbOpened){
+        QSqlQuery nquery(localDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"request getSiteSizeX correctly executed locally";
+            if (nquery.first())
+            {
+                lstQuery = nquery.value(0).toString();
+            }
+        }
+        else {
+            qDebug()<<"an error occured while executing the request";
+            return false;
+        }
+    }
+    else if (isCloudDbOpened){
+        QSqlQuery nquery(cloudDb);
+        if (nquery.exec(lstQuery)){
+            if (nquery.first())
+            {
+                lstQuery = nquery.value(0).toString();
+            }
+        }
+        else {
+            qDebug()<<"an error occured while executing the request";
+            return false;
+        }
+    }
+    if ((lstQuery.length()==0)||(lstQuery.length()>12))
+        return 0;
+    else{
+        QString lstResult=lstQuery.split('(')[1];
+        return lstResult.split(' ')[0].toUInt();
+    }
+}
+
+unsigned int CymBDD::getSiteSizeY(int intIndex)
+{
+    //SELECT ST_AsText(geometrie) from sites where idsites=16;
+    QString lstQuery = "SELECT ST_AsText(geometrie) from sites where idsites="+QString::number(intIndex)+
+            " AND owner="+QString::number(uintSiteOwner);
+    if ((!isCloudDbOpened)&&isLocalDbOpened){
+        QSqlQuery nquery(localDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"request getSiteSizeX correctly executed locally";
+            if (nquery.first())
+            {
+                lstQuery = nquery.value(0).toString();
+            }
+        }
+        else {
+            qDebug()<<"an error occured while executing the request";
+            return false;
+        }
+    }
+    else if (isCloudDbOpened){
+        QSqlQuery nquery(cloudDb);
+        if (nquery.exec(lstQuery)){
+            if (nquery.first())
+            {
+                lstQuery = nquery.value(0).toString();
+            }
+        }
+        else {
+            qDebug()<<"an error occured while executing the request";
+            return false;
+        }
+    }
+    if ((lstQuery.length()==0)||(lstQuery.length()>12))
+        return 0;
+    else{
+        QString lstResult=lstQuery.split('(')[1];
+        lstResult.remove(')');
+        return lstResult.split(' ')[1].toUInt();
+    }
+}
+
 bool CymBDD::setUpdateSite(unsigned int uintSiteID, QString strName, QString strDescription, QString dblLatitude, QString dblLongitude)
 {
     //UPDATE `Cymbalum_demo`.`sites` SET `description`='Pendant 2 an, nous y étions' WHERE `idsites`='4';

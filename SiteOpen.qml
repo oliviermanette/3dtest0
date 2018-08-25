@@ -4,6 +4,9 @@ Item{
     id: columnOpenSite
     anchors.fill: parent
     property string txtSiteNameOpen: "value"
+    property int siteID: 0
+    property int txtSizeX: 0
+    property int txtSizeY: 0
     Rectangle{
         Text {
             id: lblSiteNameOpen
@@ -19,20 +22,20 @@ Item{
     }
     Grid{
         anchors.topMargin: parent.height/3
-        anchors.leftMargin: parent.width/2.5
+        anchors.leftMargin: parent.width/2
         anchors.fill: parent
-        columns: 3
+        columns: txtSizeX
         transform: [
             Rotation { axis { x: 0; y: 0; z: 1 } angle: 40 },
             Rotation { axis { x: 1; y: 0; z: 0 } angle: 65 }
         ]
 
         Repeater{
-            model: 9
+            model: txtSizeX*txtSizeY
             Rectangle{
                 id:rctArea
-                width: 75
-                height: 75
+                width: 4*77/txtSizeY
+                height: 4*77/txtSizeY
                 color: "#0cea08"
                 border.color: "#eceecd"
                 border.width: 1
@@ -55,6 +58,22 @@ Item{
                 }
             }
         }
+    }
+    Text {
+        id: name
+        text: txtSizeX
+        anchors.leftMargin: 30
+        anchors.topMargin: 60
+        anchors.fill: parent
+        color: "#ebeec3"
+    }
+    Text {
+        id: name2
+        text: txtSizeY
+        anchors.leftMargin: 30
+        anchors.topMargin: 90
+        anchors.fill: parent
+        color: "#ebeec3"
     }
 
 }
