@@ -425,6 +425,40 @@ double CymBDD::getSiteLongitude(int intIndex, unsigned int intOwner)
     return false;
 }
 
+unsigned int CymBDD::getSiteScale(int intIndex)
+{
+    QString lstQuery = "SELECT scale FROM sites where sites.owner="+QString::number(uintSiteOwner)+" AND idsites="+QString::number(intIndex);
+    if ((!isCloudDbOpened)&&isLocalDbOpened){
+        QSqlQuery nquery(localDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"request getSiteScale correctly executed locally";
+            if (nquery.first())
+            {
+                return nquery.value(0).toUInt();
+            }
+        }
+        else {
+            qDebug()<<"an error occured while executing the request";
+            return false;
+        }
+    }
+    else if (isCloudDbOpened){
+        QSqlQuery nquery(cloudDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"request getSiteScale correctly executed locally";
+            if (nquery.first())
+            {
+                return nquery.value(0).toUInt();
+            }
+        }
+        else {
+            qDebug()<<"an error occured while executing the request";
+            return false;
+        }
+    }
+    return false;
+}
+
 unsigned int CymBDD::getSiteSizeX(int intIndex)
 {
     //SELECT ST_AsText(geometrie) from sites where idsites=16;
@@ -504,6 +538,41 @@ unsigned int CymBDD::getSiteSizeY(int intIndex)
         lstResult.remove(')');
         return lstResult.split(' ')[1].toUInt();
     }
+}
+
+bool CymBDD::setSiteSize(int intIndex, QString lintX, QString lintY, QString lintScale)
+{
+    //UPDATE sites SET geometrie=ST_GeomFromText('POINT(3 5)') WHERE idsites=15
+    QString lstQuery = "UPDATE sites SET geometrie=ST_GeomFromText('POINT("+lintX+" "+lintY+
+            ")'), scale="+lintScale
+            +" WHERE idsites="+QString::number(intIndex)+" AND owner="+QString::number(uintSiteOwner);
+    qDebug()<<lstQuery;
+    if ((!isCloudDbOpened)&&isLocalDbOpened){
+        QSqlQuery nquery(localDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"update site correctly executed locally";
+            return true;
+        }
+        else {
+            qDebug()<<"an error occured while executing the request locally";
+            return false;
+        }
+    }
+    else if (isCloudDbOpened){
+        QSqlQuery nquery(cloudDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"update site correctly executed on cloud";
+            qDebug()<<lstQuery;
+            UpdateSitesFromCloud();
+            return true;
+        }
+        else {
+            qDebug()<<"an error occured while executing the request on the cloud";
+            qDebug()<<lstQuery;
+        }
+
+    }
+    return false;
 }
 
 bool CymBDD::setUpdateSite(unsigned int uintSiteID, QString strName, QString strDescription, QString dblLatitude, QString dblLongitude)

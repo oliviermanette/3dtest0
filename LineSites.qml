@@ -70,6 +70,8 @@ Item {
                         siteOpen1.txtSiteNameOpen = siteName
                         siteOpen1.txtSizeX = cymBdd.getSiteSizeX(siteID);
                         siteOpen1.txtSizeY = cymBdd.getSiteSizeY(siteID);
+                        siteOpen1.intScale = cymBdd.getSiteScale(siteID);
+                        siteOpen1.siteID = siteID;
                     }
 
 
