@@ -1,33 +1,28 @@
 import QtQuick 2.11
 import QtQuick.Controls 2.2
 
-Item {
-    width:350
+Rectangle{
+    id: rectangle
+    border.color: "black"
+    width: parent.width
     height: 35
-    Rectangle{
+    color: "#b0afb9"
+    radius: 4
+    Row{
         anchors.fill: parent
-        border.color: "black"
-        border.width: 4
-        color: "#b0afb9"
+        spacing: 0.02*parent.width
+        padding: 0.01*parent.width
         TextField {
             id: txtFldSiteSearch
-            x: 281
-            y: 0
-            width: 238
-            height: 23
+            width: 0.68*parent.width
+            height: parent.height-0.02*parent.width
             placeholderText: qsTr("Filter sites")
-            anchors.left: parent.left
-            anchors.leftMargin: 8
-            anchors.top: parent.top
-            anchors.topMargin: 8
         }
         Button {
             id: btnSearchSite
-            x: 252
-            y: 8
-            width: 90
+            width: 0.28*parent.width
             flat: true
-            height: 25
+            height: parent.height-0.02*parent.width
             text: qsTr("Filter")
             onClicked: {
                 if (cymBdd.filterSitesByND(txtFldSiteSearch.text)){

@@ -23,14 +23,15 @@ Item{
         }
     }
     Grid{
-        anchors.topMargin: parent.height/3
-        anchors.leftMargin: parent.width/2
+        anchors.topMargin: 250//parent.height/3
+        anchors.leftMargin: 30//parent.width/2
         anchors.fill: parent
         columns: txtSizeX
+        /*
         transform: [
             Rotation { axis { x: 0; y: 0; z: 1 } angle: 40 },
             Rotation { axis { x: 1; y: 0; z: 0 } angle: 65 }
-        ]
+        ]*/
 
         Repeater{
             model: txtSizeX*txtSizeY
@@ -38,36 +39,23 @@ Item{
                 id:rctArea
                 width: 4*77/txtSizeY
                 height: 4*77/txtSizeY
-                color: "#0cea08"
+                color: "#2E3561"
                 border.color: "#eceecd"
                 border.width: 1
                 MouseArea{
                     anchors.fill: parent
                     hoverEnabled: true
-                    onEntered: rctArea.color="red";
-                    onExited: rctArea.color="#0cea08";
+                    onEntered: rctArea.color="#0cea08";
+                    onExited: rctArea.color="#2E3561"//"#0cea08";
+                }
+                Image {
+                    id: name
+                    //source: "img/73225988_s.jpg"
+                    anchors.fill: parent
                 }
             }
         }
     }
-    Text {
-        id: name
-        text: txtSizeX
-        anchors.leftMargin: 30
-        anchors.topMargin: 60
-        anchors.fill: parent
-        color: "#ebeec3"
-    }
-    Text {
-        id: name2
-        text: txtSizeY
-        anchors.leftMargin: 30
-        anchors.topMargin: 90
-        anchors.fill: parent
-        color: "#ebeec3"
-    }
-
-
     Item {
         id: editSiteSize
         x: 8

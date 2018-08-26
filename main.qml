@@ -5,6 +5,7 @@ import QtPositioning 5.8
 
 Item {
     //property alias popAddNewSite: popAddNewSite
+    anchors.fill: parent
     Popup {
         id: popup
         x: 100
@@ -43,69 +44,73 @@ Item {
 
     Row{
         id: row
+        anchors.fill: parent
 
         ListModel{
             id:siteModel
         }
         Rectangle{
-            id: rectangle
-            width: 350
-            height: 700
+            id: rctTreeView
+            width: 0.18*parent.width
+            height: parent.height
             color: "#b0afb9"
+            radius: 4
             border.color: "#2e2e3a"
-            border.width: 4
-            FilterSites{
-                z:10
+            border.width: 1
+            Column{
+                anchors.fill: parent
 
-            }
-
-            Button {
-                id: btnAddNewSite
-                x: 225
-                y: 661
-                width: 117
-                height: 31
-                text: qsTr("Add New Site")
-                anchors.right: parent.right
-                anchors.rightMargin: 8
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 8
-
-
-                onClicked: {
-                    popup.open();
+                FilterSites{
+                    z:10
                 }
-            }
-            ListView{
-                id:listSites
-                x:8
-                y:37
-                width: 334
-                height: 353
-                model: siteModel
-                delegate: Component {
 
+                ListView{
+                    id:listSites
+                    width: parent.width
+                    height: 0.8*parent.height
+                    model: siteModel
+                    delegate: Component {
 
-                    LineSites{
-                        id: lstListSites
+                        LineSites{
+                            id: lstListSites
+                        }
                     }
                 }
             }
+        }
+        Rectangle{
+            id:rctEditInfo
+            width: 0.18*parent.width
+            height: parent.height
+            color: "#b0afb9"
+            radius: 4
+            border.color: "#2e2e3a"
+            border.width: 1
+            Column{
+                anchors.fill: parent
+                padding: 2
+                Button {
+                    id: btnAddNewSite
+                    width: 0.4*parent.width
+                    height: 31
+                    text: qsTr("Add New Site")
 
-            EditSites {
-                id: editSites
-                anchors.left: parent.left
-                anchors.leftMargin: 8
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 8
-                visible: false
+                    onClicked: {
+                        popup.open();
+                    }
+                }
+                EditSites {
+                    id: editSites
+                    visible: false
+                }
             }
+
         }
 
         Rectangle{
             id: mapArea
-            width: 600
-            height: 700
+            width: 0.46*parent.width
+            height: parent.height
             color: "#2e2e3a"
             gradient: Gradient {
                 GradientStop {
@@ -117,6 +122,9 @@ Item {
                     color: "#f9f2f2";
                 }
             }
+            radius: 4
+            border.color: "#2e2e3a"
+            border.width: 1
 
             MapShow{
                 id:showerMap
@@ -202,18 +210,22 @@ Item {
             visible: false
 
             id: scene
-            width: 600
-            height: 700
+            width: 0.46*parent.width
+            height: parent.height
             color: "#e1eef3"
+            radius: 4
+            border.color: "#2e2e3a"
+            border.width: 1
         }
 
         Rectangle {
             id: rctContextInfo
-            width: 281
-            height: 700
+            width: 0.18*parent.width
+            height: parent.height
             color: "#b0afb9"
             border.color: "#2e2e3a"
             border.width: 1
+            radius: 4
             Button {
                 id: btnSignIn
                 x: 10

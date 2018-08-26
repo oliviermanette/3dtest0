@@ -18,5 +18,10 @@
         <file>FilterSites.qml</file>
         <file>SiteOpen.qml</file>
         <file>EditSiteSize.qml</file>
+        <file>img/73224419_s.jpg</file>
+        <file>img/73225988_s.jpg</file>
+        <file>cymbdd.cpp</file>
+        <file>cymbdd.h</file>
+        <file>main.cpp</file>
     </qresource>
 </RCC>

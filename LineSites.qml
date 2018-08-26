@@ -4,8 +4,8 @@ import QtQuick.Controls 2.2
 //import QtQml 2.11
 
 Item {
-    width: 334
-    height: 42
+    width: parent.width
+    height: 38
     function showDetailSite()
     {
         editSites.siteName = siteName;
@@ -28,24 +28,23 @@ Item {
             anchors.fill: parent
             spacing: 1
             Rectangle{
-                width: 140
+                width: 0.38*parent.width
                 height: parent.height
                 color: "transparent"
                 Text {
                     id:txtListSiteName;
-                    x: 0
                     text: siteName;
                     horizontalAlignment: Text.AlignLeft
-                    anchors.left: parent.left
-                    anchors.leftMargin: 10
-                    anchors.top: parent.top
-                    anchors.topMargin: 10
-                    font.pointSize: 16;
+                    font.pointSize: 16//0.16*parent.width;
                     font.bold: true ;
-                    verticalAlignment: Text.AlignBottom;
+                    verticalAlignment: Text.AlignVCenter
+                    height: parent.height
+                    width: parent.width
                     MouseArea{
-                        x: 0
                         anchors.fill: parent
+                        hoverEnabled: true
+                        onEntered: txtListSiteName.color="#0cea08";
+                        onExited: txtListSiteName.color="black"
                         onClicked: {
                             showerMap.visible = true;
                             siteOpen1.visible = false;
@@ -57,7 +56,7 @@ Item {
             }
             Rectangle{
                 id:rctOpenSite
-                width: 80
+                width: 0.3*parent.width
                 height: parent.height
                 color: "transparent"
                 Button {
@@ -73,16 +72,14 @@ Item {
                         siteOpen1.intScale = cymBdd.getSiteScale(siteID);
                         siteOpen1.siteID = siteID;
                     }
-
-
                 }
             }
             Rectangle{
-                width: 110
+                width: 0.3*parent.width
                 height: parent.height
                 color: "transparent"
                 Button {
-                    text: "Add Structure"
+                    text: "+ Struct."
                     flat: true
                 }
             }

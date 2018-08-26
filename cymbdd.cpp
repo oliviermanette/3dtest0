@@ -385,7 +385,7 @@ unsigned int CymBDD::getSiteID(int intIndex, unsigned int intOwner)
             qDebug()<<"request getSiteLatitude correctly executed locally";
             if (nquery.first())
             {
-                return nquery.value(0).toDouble();
+                return nquery.value(0).toUInt();
             }
         }
         else {
@@ -445,14 +445,15 @@ unsigned int CymBDD::getSiteScale(int intIndex)
     else if (isCloudDbOpened){
         QSqlQuery nquery(cloudDb);
         if (nquery.exec(lstQuery)){
-            qDebug()<<"request getSiteScale correctly executed locally";
+            //qDebug()<<"request getSiteScale correctly executed on cloud";
             if (nquery.first())
             {
                 return nquery.value(0).toUInt();
             }
         }
         else {
-            qDebug()<<"an error occured while executing the request";
+            qDebug()<<"an error occured while executing the request getSiteScale on cloud";
+            qDebug()<< lstQuery;
             return false;
         }
     }
