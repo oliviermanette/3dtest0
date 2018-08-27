@@ -24,5 +24,6 @@
         <file>cymbdd.h</file>
         <file>main.cpp</file>
         <file>img/logo.icns</file>
+        <file>AddNewStruct.qml</file>
     </qresource>
 </RCC>

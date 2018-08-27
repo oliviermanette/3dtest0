@@ -21,7 +21,6 @@ Column{
         else
             lintWidth = 0.8 * parent.width/txtSizeY;
         return lintWidth;
-
     }
 
     padding: 10
@@ -36,7 +35,6 @@ Column{
         color: "#ebeec3"
         font.pointSize: 24
     }
-
     Grid{
         id:gridSite
         columns: txtSizeX
@@ -59,6 +57,12 @@ Column{
                     hoverEnabled: true
                     onEntered: rctArea.color="#0cea08";
                     onExited: rctArea.color="#2E3561"//"#0cea08";
+                    onClicked: {
+                        formNewStruct.intPosY = Math.floor(index/txtSizeX);
+                        formNewStruct.intPosX = (index/txtSizeX-Math.floor(index/txtSizeX))*txtSizeX;
+                        formNewStruct.visible=true;
+                        gridSite.visible = false;
+                    }
                 }
                 Image {
                     id: name
@@ -67,6 +71,12 @@ Column{
                 }
             }
         }
+    }
+    AddNewStruct{
+        id:formNewStruct
+        width: 0.45*parent.width
+        height: 0.45*parent.width
+        visible: false
     }
 }
 

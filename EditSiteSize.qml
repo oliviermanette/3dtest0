@@ -32,12 +32,13 @@ Item {
             Text {
                 padding: 8
                 id: textSizeTitle
-                color: "#dadfb7"
+                //color: "#dadfb7"
                 text: qsTr("Size of Site")
                 font.underline: true
                 font.family: "Verdana"
                 font.bold: false
                 font.pixelSize: 19
+                color: "#f8f9f4"
             }
             Row{
                 padding: 8
@@ -48,6 +49,7 @@ Item {
                     width: lblWidthRatio * parent.width
                     text: qsTr("Scale (m) :")
                     font.pixelSize: 17
+                    color: "#f8f9f4"
                 }
                 TextField {
                     id: txtEdtSiteScale
@@ -66,6 +68,7 @@ Item {
                     width: lblWidthRatio * parent.width
                     text: qsTr("Columns :")
                     font.pixelSize: 17
+                    color: "#f8f9f4"
                 }
                 TextField {
                     id: txtEdtSiteColumns
@@ -84,6 +87,7 @@ Item {
                     text: qsTr("Rows :")
                     font.pixelSize: 17
                     width: lblWidthRatio * parent.width
+                    color: "#f8f9f4"
                 }
                 TextField {
                     id: txtEdtSiteRows
