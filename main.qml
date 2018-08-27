@@ -1,6 +1,6 @@
 import QtQuick 2.11
 import QtQuick.Controls 2.2
-import QtQuick.Controls 1.4
+//import QtQuick.Controls 1.4
 import QtPositioning 5.8
 
 Item {
@@ -59,6 +59,8 @@ Item {
             border.width: 1
             Column{
                 anchors.fill: parent
+                padding: 2
+                spacing: 3
 
                 FilterSites{
                     z:10
@@ -89,6 +91,7 @@ Item {
             Column{
                 anchors.fill: parent
                 padding: 2
+                spacing: 3
                 Button {
                     id: btnAddNewSite
                     width: 0.4*parent.width
@@ -101,6 +104,10 @@ Item {
                 }
                 EditSites {
                     id: editSites
+                    visible: false
+                }
+                EditSiteSize{
+                    id: edtSiteSize
                     visible: false
                 }
             }
@@ -126,85 +133,80 @@ Item {
             border.color: "#2e2e3a"
             border.width: 1
 
-            MapShow{
-                id:showerMap
-                anchors.rightMargin: 3
-                anchors.leftMargin: 1
-                anchors.bottomMargin: 4
-                anchors.topMargin: 37
-                anchors.fill: parent
-                ScaleAnimator {
-                        id:zoomInAnimation
-                        target: showerMap;
-                        from: 1;
-                        to: 2;
-                        duration: 500
-                        running: false
-                        onStopped: {
-                            showerMap.visible = false;
-                            siteOpen1.visible = true;
-                            zoomOutAnimation.start();
+            Column{
+                anchors.fill : parent
+                padding: 2
+                spacing: 3
+                Row{
+                    spacing: 10
+                    width: parent.width
+                    TextField {
+                        id: searchTextField
+                        width: 0.7*parent.width
+                        height: 28
+                        text: qsTr("Search Place")
+
+                        MouseArea {
+                            id: mouseArea
+                            height: 24
+                            anchors.topMargin: 0
+                            anchors.fill: parent
+                            onClicked: {
+                                searchTextField.focus = true;
+                                if (searchTextField.text == "Search Place")
+                                    searchTextField.text ="";
+                            }
                         }
                     }
-                ScaleAnimator{
-                    id:zoomOutAnimation
-                    target: showerMap
-                    from: 2
-                    to: 1
-                    duration: 1
-                    running: false
+
+                    Button {
+                        id: button
+                        width: 0.2* parent.width
+                        height: 33
+                        text: qsTr("Search")
+
+                        onClicked: {
+                            showerMap.strSearchField = searchTextField.text;
+                        }
+                    }
 
                 }
-            }
-            SiteOpen{
-                id:siteOpen1
-                visible: false
-                anchors.top : parent.top
-                anchors.left: parent.left
-            }
-
-            TextField {
-                id: searchTextField
-                y: 2
-                width: 492
-                height: 28
-                text: qsTr("Search Place")
-
-                MouseArea {
-                    id: mouseArea
-                    height: 24
-                    anchors.topMargin: 0
-                    anchors.fill: parent
-                    onClicked: {
-                        searchTextField.focus = true;
-                        if (searchTextField.text == "Search Place")
-                            searchTextField.text ="";
+                MapShow{
+                    id:showerMap
+                    width: parent.width-2*parent.padding
+                    height: 0.95*parent.height
+                    ScaleAnimator {
+                            id:zoomInAnimation
+                            target: showerMap;
+                            from: 1;
+                            to: 2;
+                            duration: 500
+                            running: false
+                            onStopped: {
+                                showerMap.visible = false;
+                                siteOpen1.visible = true;
+                                zoomOutAnimation.start();
+                            }
+                        }
+                    ScaleAnimator{
+                        id:zoomOutAnimation
+                        target: showerMap
+                        from: 2
+                        to: 1
+                        duration: 1
+                        running: false
 
                     }
                 }
-
-
-            }
-
-            Button {
-                id: button
-                x: 494
-                y: 0
-                width: 106
-                height: 33
-                text: qsTr("Search")
-                //isDefault: true
-                //activeFocusOnPress: true
-
-                onClicked: {
-
-                    showerMap.strSearchField = searchTextField.text;
-                    //showerMap.lstModel = showerMap.searchModel;
+                SiteOpen{
+                    id:siteOpen1
+                    visible: false
+                    width: parent.width-2*parent.padding
+                    height: 0.95*parent.height
                 }
             }
-
         }
-
+/*
         Rectangle {
             enabled: false
             visible: false
@@ -216,7 +218,7 @@ Item {
             radius: 4
             border.color: "#2e2e3a"
             border.width: 1
-        }
+        }*/
 
         Rectangle {
             id: rctContextInfo
@@ -231,6 +233,7 @@ Item {
                 x: 10
                 y: 1
                 width: 117
+                flat: true
                 height: 31
                 text: qsTr("Sign In")
                 anchors.right: parent.right

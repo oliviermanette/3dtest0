@@ -23,5 +23,6 @@
         <file>cymbdd.cpp</file>
         <file>cymbdd.h</file>
         <file>main.cpp</file>
+        <file>img/logo.icns</file>
     </qresource>
 </RCC>

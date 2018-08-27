@@ -29,6 +29,7 @@ int main(int argc, char *argv[])
     QQuickView view;
 
     view.resize(1440, 800);
+    view.setTitle("Cymbalum FLOD - Predictive maintenance with sensors and AI");
     view.rootContext()->setContextProperty("cymBdd", cymBdd.data());
     view.setResizeMode(QQuickView::SizeRootObjectToView);
     view.setSource(QUrl("qrc:/main.qml"));

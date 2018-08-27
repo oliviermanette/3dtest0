@@ -4,7 +4,7 @@ import QtQuick.Controls 2.2
 //import QtQml 2.11
 
 Item {
-    width: parent.width
+    width: parent.width - 0.02*parent.width
     height: 38
     function showDetailSite()
     {
@@ -48,6 +48,7 @@ Item {
                         onClicked: {
                             showerMap.visible = true;
                             siteOpen1.visible = false;
+                            edtSiteSize.visible = false;
                             showerMap.mapCenter = QtPositioning.coordinate(SiteLatitude, SiteLongitude);
                             showDetailSite();
                         }
@@ -71,6 +72,13 @@ Item {
                         siteOpen1.txtSizeY = cymBdd.getSiteSizeY(siteID);
                         siteOpen1.intScale = cymBdd.getSiteScale(siteID);
                         siteOpen1.siteID = siteID;
+
+                        edtSiteSize.visible = true;
+                        edtSiteSize.intScale = siteOpen1.intScale
+                        edtSiteSize.intSizeX = siteOpen1.txtSizeX
+                        edtSiteSize.intSizeY = siteOpen1.txtSizeY
+                        edtSiteSize.siteID = siteID
+
                     }
                 }
             }

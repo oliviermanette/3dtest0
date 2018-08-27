@@ -5,6 +5,7 @@ QT += concurrent
 QT += core gui widgets
 QT += 3dcore 3drender 3dinput 3dlogic 3dextras 3danimation
 #QT += 3dquick
+TARGET=Cymbalum
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -22,6 +23,8 @@ SOURCES += \
     cymbdd.cpp
 
 RESOURCES += qml.qrc
+
+ICON = img/logo.icns
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

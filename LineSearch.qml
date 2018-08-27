@@ -38,6 +38,9 @@ Rectangle{
         onClicked: {
             searchTitle.color="brown";
             showerMap.mapCenter = place.location.coordinate;
+            showerMap.visible = true;
+            siteOpen1.visible = false;
+            edtSiteSize.visible = false;
         }
         hoverEnabled: true
         onEntered: {
