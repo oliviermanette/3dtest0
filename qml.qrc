@@ -25,5 +25,8 @@
         <file>main.cpp</file>
         <file>img/logo.icns</file>
         <file>AddNewStruct.qml</file>
+        <file>AddNewStructType.qml</file>
+        <file>img/png.png</file>
+        <file>img/stl.png</file>
     </qresource>
 </RCC>

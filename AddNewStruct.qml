@@ -130,6 +130,12 @@ Rectangle{
                         hoverEnabled: true
                         onEntered: btnNewStructType.font.bold = true;
                         onExited: btnNewStructType.font.bold = false;
+                        onClicked: {
+
+                            formNewType.visible  = true
+                            animNewType.start();
+                        }
+
                     }
                 }
                 Button{

@@ -72,12 +72,39 @@ Column{
             }
         }
     }
-    AddNewStruct{
-        id:formNewStruct
-        width: 0.45*parent.width
-        height: 0.45*parent.width
-        visible: false
+    Row{
+        width: parent.width
+        height: parent.height
+        spacing: 10
+        AddNewStruct{
+            id:formNewStruct
+            width: 0.45*parent.width
+            height: 0.45*parent.width
+            visible: false
+        }
+        AddNewStructType{
+            id:formNewType
+            width: 0.45*parent.width
+            height: 0.65*parent.width
+            visible: false
+            PropertyAnimation{
+                id:animNewType
+                target: formNewType
+                property: 'width'
+                from:0
+                to:0.5*parent.width
+                duration: 500
+                onStopped: {
+                    //formNewType.child(clnNewType.visible) = true
+                }
+
+
+            }
+
+        }
     }
+
+
 }
 
 /*##^## Designer {
