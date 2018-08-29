@@ -272,6 +272,59 @@ bool CymBDD::addNewRecording(unsigned int uintSensorRefID, QString strDateTime, 
         return false;
 }
 
+unsigned int CymBDD::addNewStructType(QString strName, QString strDescription)
+{
+    //INSERT INTO structuretypes (typename,description,owner) values ('test2','oui oui oui')
+    //SELECT idstype FROM structuretypes WHERE typename=$var and owner=$uintSiteOwner
+        if (!uintSiteOwner){
+            emit loginRequired();
+            return 0;
+        }
+
+    QString lstQuery = "INSERT INTO structuretypes (typename,description,owner) values ('"+strName+"','"+strDescription+"',"+QString::number(uintSiteOwner)+")";
+    if ((!isCloudDbOpened)&&isLocalDbOpened){
+        QSqlQuery nquery(localDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"request 'addNewStructType' correctly executed locally";
+            lstQuery="SELECT idstype FROM structuretypes WHERE typename='"+strName+"' and owner="+QString::number(uintSiteOwner);
+            if(nquery.exec(lstQuery)){
+                qDebug()<<"request 'get type ID' correctly executed on cloud";
+                if (nquery.first())
+                {
+                    return nquery.value(0).toUInt();
+                }
+            }
+            return false;
+        }
+        else{
+            qDebug()<<"an error occured while executing the request";
+            return false;
+        }
+    }
+    else if (isCloudDbOpened){
+        QSqlQuery nquery(cloudDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"request 'addNewStructType' correctly executed on cloud";
+            lstQuery="SELECT idstype FROM structuretypes WHERE typename='"+strName+"' and owner="+QString::number(uintSiteOwner);
+            if(nquery.exec(lstQuery)){
+                qDebug()<<"request 'get type ID' correctly executed on cloud";
+                if (nquery.first())
+                {
+                    return nquery.value(0).toUInt();
+                }
+            }
+
+            return false;
+        }
+        else{
+            qDebug()<<"an error occured while executing the request";
+            return false;
+        }
+    }
+    else
+        return false;
+}
+
 unsigned int CymBDD::getNbSites(unsigned int intOwner)
 {
     intOwner = uintSiteOwner;

@@ -32,6 +32,8 @@ public:
     //INSERT INTO enregistrements (enregistrements.capteur, enregistrements.dateHeure, enregistrements.duration, enregistrements.freqMoyenne, enregistrements.puissanceMoyenne) values (1, '2018-12-24 13:32:48', 300000,50.1,12.3);
     Q_INVOKABLE bool addNewRecording(unsigned int uintSensorRefID, QString strDateTime, unsigned int uintDuration, double fltFreqMoy, double fltPuissMoy); //YYYY-MM-DD HH:mm:SS.
 
+    Q_INVOKABLE unsigned int addNewStructType(QString strName, QString strDescription);
+
     Q_INVOKABLE unsigned int getNbSites(unsigned int intOwner=0);
     Q_INVOKABLE QString getSiteName(int intIndex, unsigned int intOwner=0);
     Q_INVOKABLE QString getSiteDescription(int intIndex, unsigned int intOwner=0);

@@ -49,6 +49,7 @@ Rectangle {
             //width: parent.width - 2* parent.padding
             Text{
                 text:"Add New Type"
+                id:txtTitle
                 font.pointSize: 18
                 font.underline: true
                 font.bold: true
@@ -166,9 +167,16 @@ Rectangle {
                 font.bold: true
                 height: intTxtFldHeight
                 onClicked: {
-                    console.log(cymBdd.sendFileToCloud(lstrIconFile, "structuretypes/icon", 1));
-                    cymBdd.sendFileToCloud(lstrSTLFile, "structuretypes/stl", 1);
-                    formNewType.visible  =false;
+                    var lvrID = cymBdd.addNewStructType(txtTypeName.text, txtTypeDesc.text);
+                    if (lvrID>0){
+                        cymBdd.sendFileToCloud(lstrIconFile, "structuretypes/icon", lvrID);
+                        cymBdd.sendFileToCloud(lstrSTLFile, "structuretypes/stl", lvrID);
+                        formNewType.visible  = false;
+                    }
+                    else{
+                        txtTitle.color="red";
+                        txtTitle.text="Error";
+                    }
                 }
             }
         }
