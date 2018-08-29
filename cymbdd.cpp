@@ -463,14 +463,20 @@ unsigned int CymBDD::getSiteScale(int intIndex)
 int CymBDD::sendFileToCloud(QString strfilename, QString strDestination, int intIndex)
 {
     QString lstrCommand = "gsutil cp " + strfilename + " gs://cymbalum_files/"+strDestination+"/"+QString::number(intIndex);
-    lstrCommand = "gsutil";
+    lstrCommand = "/Users/oliviermanette/google-cloud-sdk/bin/gsutil";
+    //lstrCommand = "/bin/ls";
     qDebug() << lstrCommand;
     QStringList arguments;
-    arguments << "cp " << strfilename << " gs://cymbalum_files/"+strDestination+"/"+QString::number(intIndex);
+    arguments << "cp" << strfilename << "gs://cymbalum_files/"+strDestination+"/"+QString::number(intIndex);
+    //arguments <<"-lah"<<"/Users/oliviermanette";
+    QProcess process;
+    process.setProgram(lstrCommand);
+    process.setArguments(arguments);
 
+    process.startDetached();
     process.waitForFinished(-1);
-
-    emit process.start(lstrCommand,arguments);
+    QString output(process.readAllStandardOutput());
+    qDebug()<<output;
     return 0;
 }
 

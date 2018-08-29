@@ -87,7 +87,7 @@ private:
 
     unsigned int uintSiteOwner;
 
-    QProcess process;
+
 
 };
 
