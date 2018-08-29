@@ -35,7 +35,13 @@ public:
     Q_INVOKABLE unsigned int addNewStructType(QString strName, QString strDescription);
 
     Q_INVOKABLE unsigned int getNbSites(unsigned int intOwner=0);
+    Q_INVOKABLE unsigned int getNbSTypes();
     Q_INVOKABLE QString getSiteName(int intIndex, unsigned int intOwner=0);
+
+    Q_INVOKABLE bool updateSType(QString strSearchKey="");
+    Q_INVOKABLE QString getSTypeName(int intIndex);
+    Q_INVOKABLE QString getSTypeDescription(int intIndex);
+    Q_INVOKABLE unsigned int getSTypeID(int intIndex);
     Q_INVOKABLE QString getSiteDescription(int intIndex, unsigned int intOwner=0);
     Q_INVOKABLE double getSiteLatitude(int intIndex, unsigned int intOwner=0);
     Q_INVOKABLE unsigned int getSiteID(int intIndex, unsigned int intOwner=0);
@@ -59,17 +65,24 @@ public:
 
     Q_INVOKABLE void toto();
 
-
     //Structure accessible depuis QML pour éviter de faire trop de requêtes sql et réseaux compte tenu du cloud
     struct strDataSite {
-        unsigned int m_uintIdSite;
         double m_dblLatitude;
         double m_dblLongitude;
-        QString m_strDescription;
+        unsigned int m_uintIdSite;
         QString m_strNomSite;
+        QString m_strDescription;
     };
     strDataSite dataSite[MAXSITES_LM];
     unsigned int uintGNbSites;
+
+    struct stcSType{
+        QString strName;
+        QString strDescription;
+        unsigned int uintSTypeID;
+    };
+    stcSType dataSType[MAXSITES_LM];
+    unsigned int guintNbSType;
 
 signals:
     void loginRequired();
@@ -86,6 +99,7 @@ private:
     bool OpenCloudDB();
     bool OpenLocaleDB();
     bool UpdateSitesFromCloud(QString strSearchKey="");
+
 
     unsigned int uintSiteOwner;
 

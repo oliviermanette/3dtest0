@@ -151,6 +151,20 @@ Rectangle{
                         hoverEnabled: true
                         onEntered: btnSelectStructType.font.bold = true;
                         onExited: btnSelectStructType.font.bold = false;
+                        onClicked: {
+                            cymBdd.updateSType();
+                            var lintNbSites = cymBdd.getNbSTypes();
+                            console.log(lintNbSites);
+                            var lclChaine = {"sTypeID": 1, "title":"Pizza", "place":"My Description"};
+                            sTypeModel.clear();
+                            for (var i=0;i<lintNbSites;i++){
+                                lclChaine.sTypeID = 1;
+                                lclChaine.title = cymBdd.getSTypeName(i);
+                                lclChaine.place = cymBdd.getSTypeDescription(i);
+                                sTypeModel.append(lclChaine);
+                            }
+                            listView.model = sTypeModel;
+                        }
                     }
                 }
             }

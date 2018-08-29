@@ -172,6 +172,18 @@ Rectangle {
                         cymBdd.sendFileToCloud(lstrIconFile, "structuretypes/icon", lvrID);
                         cymBdd.sendFileToCloud(lstrSTLFile, "structuretypes/stl", lvrID);
                         formNewType.visible  = false;
+                        listView.model = sTypeModel;
+                        cymBdd.updateSType();
+                        var lintNbSites = cymBdd.getNbSTypes();
+                        console.log(lintNbSites);
+                        var lclChaine = {"sTypeID": 1, "title":"Pizza", "place":"My Description"};
+                        sTypeModel.clear();
+                        for (var i=0;i<lintNbSites;i++){
+                            lclChaine.sTypeID = 1;
+                            lclChaine.title = cymBdd.getSTypeName(i);
+                            lclChaine.place = cymBdd.getSTypeDescription(i);
+                            sTypeModel.append(lclChaine);
+                        }
                     }
                     else{
                         txtTitle.color="red";

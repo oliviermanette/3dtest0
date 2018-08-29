@@ -49,6 +49,9 @@ Item {
         ListModel{
             id:siteModel
         }
+        ListModel{
+            id:sTypeModel
+        }
         Rectangle{
             id: rctTreeView
             width: 0.18*parent.width

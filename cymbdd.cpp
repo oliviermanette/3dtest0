@@ -79,11 +79,42 @@ bool CymBDD::UpdateSitesFromCloud(QString strSearchKey)
         return false;
 }
 
+bool CymBDD::updateSType(QString strSearchKey)
+{
+    QString lstQuery = "SELECT idstype, typename, description FROM structuretypes where structuretypes.owner="+QString::number(uintSiteOwner);
+    if (strSearchKey.length()>0)
+        lstQuery = lstQuery +" and (description like '%"+strSearchKey+"%' or typename like '%"+strSearchKey+"%')";
+    if (isCloudDbOpened){
+        QSqlQuery nquery(cloudDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"request 'UpdateSType' correctly executed on cloud";
+            unsigned int lintCurrentValue = 0;
+            while ((nquery.next())  && (lintCurrentValue<MAXSITES_LM))
+            {
+                dataSType[lintCurrentValue].uintSTypeID = nquery.value(0).toUInt();
+                dataSType[lintCurrentValue].strName = nquery.value(1).toString();
+                dataSType[lintCurrentValue].strDescription = nquery.value(2).toString();
+                lintCurrentValue++;
+            }
+            uintGNbSites = lintCurrentValue;
+            qDebug()<<QString::number(lintCurrentValue) + " SType found";
+            return true;
+        }
+        else{
+            qDebug()<<"an error occured while executing the request:";
+            qDebug()<<lstQuery;
+            return false;
+        }
+    }
+    else
+        return false;
+}
+
 CymBDD::CymBDD(QObject *parent) : QObject(parent)
 {
     isCloudDbOpened = false;
     isLocalDbOpened = false;
-
+    guintNbSType = 0;
     uintGNbSites = 0;
 #ifndef QT_NO_CONCURRENT
         QFuture<bool> cloudDbThread = QtConcurrent::run(this, &CymBDD::OpenCloudDB);
@@ -356,6 +387,48 @@ unsigned int CymBDD::getNbSites(unsigned int intOwner)
     return false;
 }
 
+unsigned int CymBDD::getNbSTypes()
+{
+    if (!uintSiteOwner){
+        emit loginRequired();
+        return 0;
+    }
+    QString lstQuery = "SELECT count(*) FROM Cymbalum_demo.structuretypes where owner="+QString::number(uintSiteOwner);
+    if ((!isCloudDbOpened)&&isLocalDbOpened){
+        QSqlQuery nquery(localDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"request 'getNbSTypes' correctly executed locally";
+            if (nquery.first())
+            {
+                guintNbSType = nquery.value(0).toUInt();
+                return guintNbSType;
+            }
+        }
+        else {
+            qDebug()<<"an error occured while executing the request";
+            qDebug()<<lstQuery;
+            return 0;
+        }
+    }
+    else if (isCloudDbOpened){
+        QSqlQuery nquery(cloudDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"request 'getNbSTypes' correctly executed on cloud";
+            if (nquery.first())
+            {
+                guintNbSType = nquery.value(0).toUInt();
+                return guintNbSType;
+            }
+        }
+        else {
+            qDebug()<<"an error occured while executing the request";
+            qDebug()<<lstQuery;
+            return 0;
+        }
+    }
+    return 0;
+}
+
 QString CymBDD::getSiteName(int intIndex, unsigned int intOwner)
 {
     //SELECT nom FROM sites limit 1,1;
@@ -379,6 +452,21 @@ QString CymBDD::getSiteName(int intIndex, unsigned int intOwner)
             return dataSite[intIndex].m_strNomSite;
     }
     return "false";
+}
+
+QString CymBDD::getSTypeName(int intIndex)
+{
+    return dataSType[intIndex].strName;
+}
+
+QString CymBDD::getSTypeDescription(int intIndex)
+{
+    return  dataSType[intIndex].strDescription;
+}
+
+unsigned int CymBDD::getSTypeID(int intIndex)
+{
+    return dataSType[intIndex].uintSTypeID;
 }
 
 QString CymBDD::getSiteDescription(int intIndex, unsigned int intOwner)
@@ -644,7 +732,6 @@ bool CymBDD::setSiteSize(int intIndex, QString lintX, QString lintY, QString lin
             qDebug()<<"an error occured while executing the request on the cloud";
             qDebug()<<lstQuery;
         }
-
     }
     return false;
 }
