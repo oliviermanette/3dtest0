@@ -14,22 +14,30 @@ Rectangle {
     property double ldblWidthRatio: 0.4
     property int intTxtFldHeight: 25
     property string lstrIconFile: "value"
+    property string lstrSTLFile: "value"
+    property bool lblIconOrSTL: false
     Column{
         FileDialog{
             id: fileDialog
                 title: "Please choose a file"
+                //nameFilters: [ "Image files (*.jpg *.png)"]
                 folder: shortcuts.home
                 onAccepted: {
-                    console.log("You chose: " + fileDialog.fileUrls);
-                    lstrIconFile = fileDialog.fileUrl.toString();
-
-                    //Qt.quit()
+                    if (lblIconOrSTL){
+                        //STL Selected
+                        lstrSTLFile = fileDialog.fileUrl.toString();
+                        lstrSTLFile = lstrSTLFile.replace("file://","");
+                    }
+                    else{
+                        //Icon selected
+                        lstrIconFile = fileDialog.fileUrl.toString();
+                        imgIconType.source = lstrIconFile;
+                        lstrIconFile = lstrIconFile.replace("file://","");
+                    }
                 }
                 onRejected: {
                     console.log("Canceled")
-                    //Qt.quit()
                 }
-                //Component.onCompleted: visible = true
         }
         id:clnNewType
         width: parent.width
@@ -106,8 +114,8 @@ Rectangle {
                     MouseArea{
                         anchors.fill: parent
                         onClicked: {
+                            lblIconOrSTL = false;
                             fileDialog.open();
-                            console.log('Clicked');
                         }
                     }
 
@@ -125,6 +133,13 @@ Rectangle {
                     source: "img/stl.png"
                     width: 100
                     height: 100
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: {
+                            lblIconOrSTL = true;
+                            fileDialog.open();
+                        }
+                    }
                 }
             }
         }
@@ -132,7 +147,6 @@ Rectangle {
             anchors.right: parent.right
             spacing: 15
             padding: 15
-
 
             Button{
                 id:btnCanNewType
@@ -152,17 +166,13 @@ Rectangle {
                 font.bold: true
                 height: intTxtFldHeight
                 onClicked: {
-
-                    lstrIconFile = lstrIconFile.replace("file://","");
-                    console.log(lstrIconFile);
                     console.log(cymBdd.sendFileToCloud(lstrIconFile, "structuretypes/icon", 1));
+                    cymBdd.sendFileToCloud(lstrSTLFile, "structuretypes/stl", 1);
                     formNewType.visible  =false;
                 }
             }
         }
     }
-
-
 }
 
 /*##^## Designer {
