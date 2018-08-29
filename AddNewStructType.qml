@@ -1,5 +1,6 @@
 import QtQuick 2.11
 import QtQuick.Controls 2.4
+import QtQuick.Dialogs 1.3
 /*
 Icone
 fichier stl ==> pas dans la base de données
@@ -12,7 +13,24 @@ Rectangle {
     radius: 4
     property double ldblWidthRatio: 0.4
     property int intTxtFldHeight: 25
+    property string lstrIconFile: "value"
     Column{
+        FileDialog{
+            id: fileDialog
+                title: "Please choose a file"
+                folder: shortcuts.home
+                onAccepted: {
+                    console.log("You chose: " + fileDialog.fileUrls);
+                    lstrIconFile = fileDialog.fileUrl.toString();
+
+                    //Qt.quit()
+                }
+                onRejected: {
+                    console.log("Canceled")
+                    //Qt.quit()
+                }
+                //Component.onCompleted: visible = true
+        }
         id:clnNewType
         width: parent.width
         height: parent.height
@@ -85,7 +103,17 @@ Rectangle {
                     //scale: 1
                     width: 100
                     height: 100
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: {
+                            fileDialog.open();
+                            console.log('Clicked');
+                        }
+                    }
+
                 }
+
+
             }
             Column{
                 Label {
@@ -104,6 +132,8 @@ Rectangle {
             anchors.right: parent.right
             spacing: 15
             padding: 15
+
+
             Button{
                 id:btnCanNewType
                 text: "Cancel"
@@ -121,6 +151,13 @@ Rectangle {
                 font.capitalization: Font.AllUppercase
                 font.bold: true
                 height: intTxtFldHeight
+                onClicked: {
+
+                    lstrIconFile = lstrIconFile.replace("file://","");
+                    console.log(lstrIconFile);
+                    console.log(cymBdd.sendFileToCloud(lstrIconFile, "structuretypes/icon", 1));
+                    formNewType.visible  =false;
+                }
             }
         }
     }

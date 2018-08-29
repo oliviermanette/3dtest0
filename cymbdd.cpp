@@ -460,6 +460,20 @@ unsigned int CymBDD::getSiteScale(int intIndex)
     return false;
 }
 
+int CymBDD::sendFileToCloud(QString strfilename, QString strDestination, int intIndex)
+{
+    QString lstrCommand = "gsutil cp " + strfilename + " gs://cymbalum_files/"+strDestination+"/"+QString::number(intIndex);
+    lstrCommand = "gsutil";
+    qDebug() << lstrCommand;
+    QStringList arguments;
+    arguments << "cp " << strfilename << " gs://cymbalum_files/"+strDestination+"/"+QString::number(intIndex);
+
+    process.waitForFinished(-1);
+
+    emit process.start(lstrCommand,arguments);
+    return 0;
+}
+
 unsigned int CymBDD::getSiteSizeX(int intIndex)
 {
     //SELECT ST_AsText(geometrie) from sites where idsites=16;

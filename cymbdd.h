@@ -10,6 +10,8 @@
 #include <QString>
 #include <QDebug>
 
+#include <QProcess>
+
 #include <qtconcurrentrun.h>
 #include <QThread>
 
@@ -37,6 +39,8 @@ public:
     Q_INVOKABLE unsigned int getSiteID(int intIndex, unsigned int intOwner=0);
     Q_INVOKABLE double getSiteLongitude(int intIndex, unsigned int intOwner=0);
     Q_INVOKABLE unsigned int getSiteScale(int intIndex);
+
+    Q_INVOKABLE int sendFileToCloud(QString strfilename, QString strDestination, int intIndex);
 
     Q_INVOKABLE unsigned int getSiteSizeX(int intIndex);
     Q_INVOKABLE unsigned int getSiteSizeY(int intIndex);
@@ -82,6 +86,8 @@ private:
     bool UpdateSitesFromCloud(QString strSearchKey="");
 
     unsigned int uintSiteOwner;
+
+    QProcess process;
 
 };
 
