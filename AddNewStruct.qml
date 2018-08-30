@@ -200,6 +200,7 @@ Rectangle{
                         formNewStruct.visible = false
                         gridSite.visible = true;
                         // TODO : Mettre à jour la liste des structures pour l'afficher dans la grille
+
                     }
                     else
                         name.text = "ERROR";

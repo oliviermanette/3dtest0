@@ -79,6 +79,43 @@ bool CymBDD::UpdateSitesFromCloud(QString strSearchKey)
         return false;
 }
 
+bool CymBDD::updateStructList(int intSiteID)
+{
+    QString lstQuery = "SELECT nom, ST_AsText(position_ref), type FROM Cymbalum_demo.surfaces where site="+QString::number(intSiteID);
+    if (isCloudDbOpened){
+        QSqlQuery nquery(cloudDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"request 'updateStructList' correctly executed on cloud";
+            unsigned int lintCurrentValue = 0;
+            while ((nquery.next())  && (lintCurrentValue<MAXSITES_LM))
+            {
+                dataStructures[lintCurrentValue].strName = nquery.value(0).toString();
+                dataStructures[lintCurrentValue].intSTypeID = nquery.value(2).toInt();
+                qDebug()<<dataStructures[lintCurrentValue].strName;
+                lstQuery = nquery.value(1).toString();
+                lstQuery.remove("POINT(");
+                dataStructures[lintCurrentValue].intPosX = lstQuery.split(" ")[0].toInt();
+                qDebug()<<lstQuery;
+                qDebug()<<dataStructures[lintCurrentValue].intPosX;
+                lstQuery.remove(")");
+                qDebug()<<lstQuery;
+                dataStructures[lintCurrentValue].intPosY = lstQuery.split(" ")[1].toInt();
+                qDebug()<<dataStructures[lintCurrentValue].intPosY;
+                lintCurrentValue++;
+            }
+            guintNbStructures = lintCurrentValue;
+            qDebug()<<QString::number(lintCurrentValue) + " structure found";
+            return true;
+        }
+        else{
+            qDebug()<<"an error occured while executing the request:";
+            qDebug()<<lstQuery;
+            return false;
+        }
+    }
+    return false;
+}
+
 bool CymBDD::updateSType(QString strSearchKey)
 {
     QString lstQuery = "SELECT idstype, typename, description FROM structuretypes where structuretypes.owner="+QString::number(uintSiteOwner);
@@ -365,11 +402,12 @@ bool CymBDD::addNewStruct(QString strName, QString lintX, QString lintY, QString
     //INSERT INTO surfaces(nom,site) VALUES('toto',(SELECT idstype from structuretypes WHERE typename='Cuicui'));
     QString lstQuery = "INSERT INTO surfaces(nom,site,position_ref,type) VALUES('"+
             strName+"',"+QString::number(intSiteID)+", ST_GeomFromText('POINT("+lintX+" "+lintY+")')"
-            +", (SELECT idstype from structuretypes WHERE typename='"+strSType+"'))";
+            +", (SELECT idstype from structuretypes WHERE typename='"+strSType+"' and owner="+QString::number(uintSiteOwner)+"))";
     if (isCloudDbOpened){
         QSqlQuery nquery(cloudDb);
         if (nquery.exec(lstQuery)){
             qDebug()<<"request 'add New Structure' correctly executed on cloud";
+            updateStructList(intSiteID);
             return true;
         }
         else{

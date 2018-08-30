@@ -66,7 +66,25 @@ public:
 
     Q_INVOKABLE void toto();
 
-    //Structure accessible depuis QML pour éviter de faire trop de requêtes sql et réseaux compte tenu du cloud
+signals:
+    void loginRequired();
+
+public slots:
+
+private:
+    QSqlDatabase cloudDb = QSqlDatabase::addDatabase("QMYSQL", "psyched-bee-204709:europe-west2:flod-cymbalum");
+    QSqlDatabase localDb = QSqlDatabase::addDatabase("QMYSQL", "localhost");
+
+    bool isCloudDbOpened;
+    bool isLocalDbOpened;
+
+    bool OpenCloudDB();
+    bool OpenLocaleDB();
+    bool UpdateSitesFromCloud(QString strSearchKey="");
+
+    unsigned int uintSiteOwner;
+
+    //Structure pour éviter de faire trop de requêtes sql et réseaux compte tenu du cloud
     struct strDataSite {
         double m_dblLatitude;
         double m_dblLongitude;
@@ -85,27 +103,17 @@ public:
     stcSType dataSType[MAXSITES_LM];
     unsigned int guintNbSType;
 
-signals:
-    void loginRequired();
+    bool updateStructList(int intSiteID);
 
-public slots:
-
-private:
-    QSqlDatabase cloudDb = QSqlDatabase::addDatabase("QMYSQL", "psyched-bee-204709:europe-west2:flod-cymbalum");
-    QSqlDatabase localDb = QSqlDatabase::addDatabase("QMYSQL", "localhost");
-
-    bool isCloudDbOpened;
-    bool isLocalDbOpened;
-
-    bool OpenCloudDB();
-    bool OpenLocaleDB();
-    bool UpdateSitesFromCloud(QString strSearchKey="");
-
-
-    unsigned int uintSiteOwner;
-
-
-
+    struct stcStructures{
+        QString strName;
+        int intPosX;
+        int intPosY;
+        int intSTypeID;
+        int intSiteID;
+    };
+    stcStructures dataStructures[MAXSITES_LM];
+    unsigned int guintNbStructures;
 };
 
 
