@@ -171,17 +171,21 @@ Rectangle {
                     if (lvrID>0){
                         cymBdd.sendFileToCloud(lstrIconFile, "structuretypes/icon", lvrID);
                         cymBdd.sendFileToCloud(lstrSTLFile, "structuretypes/stl", lvrID);
+                        formNewStruct.strSelectedSType = txtTypeName.text
                         formNewType.visible  = false;
-                        listView.model = sTypeModel;
+                        listView.visible = false//sTypeModel;
+                        listViewSType.visible = true
+                        //listView.delegate
                         cymBdd.updateSType();
                         var lintNbSites = cymBdd.getNbSTypes();
                         console.log(lintNbSites);
-                        var lclChaine = {"sTypeID": 1, "title":"Pizza", "place":"My Description"};
+
+                        var lclChaine = {"sTypeID": 1, "name":"Pizza", "description":"My Description"};
                         sTypeModel.clear();
                         for (var i=0;i<lintNbSites;i++){
                             lclChaine.sTypeID = 1;
-                            lclChaine.title = cymBdd.getSTypeName(i);
-                            lclChaine.place = cymBdd.getSTypeDescription(i);
+                            lclChaine.name = cymBdd.getSTypeName(i);
+                            lclChaine.description = cymBdd.getSTypeDescription(i);
                             sTypeModel.append(lclChaine);
                         }
                     }

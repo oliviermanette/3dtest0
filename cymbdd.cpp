@@ -356,6 +356,31 @@ unsigned int CymBDD::addNewStructType(QString strName, QString strDescription)
         return false;
 }
 
+bool CymBDD::addNewStruct(QString strName, QString lintX, QString lintY, QString strSType, int intSiteID)
+{
+    if (!uintSiteOwner){
+        emit loginRequired();
+        return 0;
+    }
+    //INSERT INTO surfaces(nom,site) VALUES('toto',(SELECT idstype from structuretypes WHERE typename='Cuicui'));
+    QString lstQuery = "INSERT INTO surfaces(nom,site,position_ref,type) VALUES('"+
+            strName+"',"+QString::number(intSiteID)+", ST_GeomFromText('POINT("+lintX+" "+lintY+")')"
+            +", (SELECT idstype from structuretypes WHERE typename='"+strSType+"'))";
+    if (isCloudDbOpened){
+        QSqlQuery nquery(cloudDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"request 'add New Structure' correctly executed on cloud";
+            return true;
+        }
+        else{
+            qDebug()<<"request Add New Structure failed :";
+            qDebug()<<lstQuery;
+            return false;
+        }
+    }
+    return false;
+}
+
 unsigned int CymBDD::getNbSites(unsigned int intOwner)
 {
     intOwner = uintSiteOwner;

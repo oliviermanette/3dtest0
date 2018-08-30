@@ -18,6 +18,7 @@ Rectangle{
     property int intPosY: 0
     property double ldblWidthRatio: 0.4
     property int intTxtFldHeight: 25
+    property string strSelectedSType: " Select Type "
     color: "#eeeef7"
     //anchors.fill: parent
     radius: 4
@@ -141,11 +142,12 @@ Rectangle{
                 Button{
                     id:btnSelectStructType
                     flat: true
-                    text: " Select Type "
+                    text: strSelectedSType
                     font.underline: true
                     font.capitalization: Font.MixedCase
                     font.bold: false
                     width: ldblWidthRatio* parent.width
+                    onTextChanged: font.bold=true;
                     MouseArea{
                         anchors.fill: parent
                         hoverEnabled: true
@@ -155,15 +157,18 @@ Rectangle{
                             cymBdd.updateSType();
                             var lintNbSites = cymBdd.getNbSTypes();
                             console.log(lintNbSites);
-                            var lclChaine = {"sTypeID": 1, "title":"Pizza", "place":"My Description"};
+                            var lclChaine = {"sTypeID": 1, "name":"Pizza", "description":"My Description"};
                             sTypeModel.clear();
                             for (var i=0;i<lintNbSites;i++){
                                 lclChaine.sTypeID = 1;
-                                lclChaine.title = cymBdd.getSTypeName(i);
-                                lclChaine.place = cymBdd.getSTypeDescription(i);
+                                lclChaine.name = cymBdd.getSTypeName(i);
+                                lclChaine.description = cymBdd.getSTypeDescription(i);
                                 sTypeModel.append(lclChaine);
                             }
-                            listView.model = sTypeModel;
+                            listViewSType.model = sTypeModel;
+                            listView.visible = false//sTypeModel;
+                            listViewSType.visible = true
+
                         }
                     }
                 }
@@ -190,6 +195,15 @@ Rectangle{
                 font.capitalization: Font.AllUppercase
                 font.bold: true
                 height: intTxtFldHeight
+                onClicked: {
+                    if (cymBdd.addNewStruct(txtStructName.text, txtStructXPos.text, txtStructYPos.text, strSelectedSType, siteID)){
+                        formNewStruct.visible = false
+                        gridSite.visible = true;
+                        // TODO : Mettre à jour la liste des structures pour l'afficher dans la grille
+                    }
+                    else
+                        name.text = "ERROR";
+                }
             }
         }
     }

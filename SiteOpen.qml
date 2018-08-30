@@ -11,6 +11,7 @@ Column{
     property int txtSizeY: 0
     property int intScale: 0
     property int lintWidth: 0
+    property var name: formNewStruct
     function getBestFit()
     {
        /*
@@ -61,6 +62,8 @@ Column{
                         formNewStruct.intPosY = Math.floor(index/txtSizeX);
                         formNewStruct.intPosX = (index/txtSizeX-Math.floor(index/txtSizeX))*txtSizeX;
                         formNewStruct.visible=true;
+                        formNewStruct.siteID = siteID
+
                         gridSite.visible = false;
                     }
                 }

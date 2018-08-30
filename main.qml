@@ -198,7 +198,6 @@ Item {
                         to: 1
                         duration: 1
                         running: false
-
                     }
                 }
                 SiteOpen{
@@ -231,56 +230,73 @@ Item {
             border.color: "#2e2e3a"
             border.width: 1
             radius: 4
-            Button {
-                id: btnSignIn
-                x: 10
-                y: 1
-                width: 117
-                flat: true
-                height: 31
-                text: qsTr("Sign In")
-                anchors.right: parent.right
-                anchors.rightMargin: 4
+            Column{
+                anchors.fill : parent
+                padding: 2
+                spacing: 3
+                Button {
+                    id: btnSignIn
+                    width: 117
+                    flat: true
+                    height: 31
+                    text: qsTr("Sign In")
 
 
-                onClicked: {
-                    //popup.open();
-                    if (cymBdd.getOwnerID()){
-                        //sign out
-                        cymBdd.signOut();
 
-                        siteModel.clear();
+                    onClicked: {
+                        //popup.open();
+                        if (cymBdd.getOwnerID()){
+                            //sign out
+                            cymBdd.signOut();
 
-                        editSites.visible = false;
+                            siteModel.clear();
 
-                        btnSignIn.text = "Sign In";
+                            editSites.visible = false;
+
+                            btnSignIn.text = "Sign In";
+                        }
+                        else
+                            popAskLogin.open();
                     }
-                    else
-                        popAskLogin.open();
+                }
+                ListView {
+                    id: listView
+                    flickDeceleration: 1494
+                    width: 0.99*parent.width
+                    height: 0.9*parent.height
+                    //visible: false
+                    model: showerMap.lstModel
+                    delegate:Component {
+
+
+                        LineSearch{
+                            id: titi
+                        }
+                    }
+                }
+                ListView{
+                    id: listViewSType
+                    flickDeceleration: 1494
+                    width: 0.99*parent.width
+                    height: 0.9*parent.height
+                    visible: false
+                    model: sTypeModel
+                    delegate:Component {
+
+
+                        LineSType{
+                            id: toge
+                        }
+                    }
                 }
             }
 
-            ListView {
-                id: listView
-                anchors.bottomMargin: 89
-                anchors.topMargin: 128
-                flickDeceleration: 1494
-                //visible: false
-                anchors.fill: parent
-                model: showerMap.lstModel//searchModel
-                //Component.onCompleted: cymBdd.toto();
-                delegate: Component {
 
 
-                    LineSearch{
-                        id: titi
-                    }
-                }
-            }
+
+
         }
-
     }
-
 }
 
 /*##^## Designer {

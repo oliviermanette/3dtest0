@@ -28,5 +28,6 @@
         <file>AddNewStructType.qml</file>
         <file>img/png.png</file>
         <file>img/stl.png</file>
+        <file>LineSType.qml</file>
     </qresource>
 </RCC>

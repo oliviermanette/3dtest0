@@ -33,6 +33,7 @@ public:
     Q_INVOKABLE bool addNewRecording(unsigned int uintSensorRefID, QString strDateTime, unsigned int uintDuration, double fltFreqMoy, double fltPuissMoy); //YYYY-MM-DD HH:mm:SS.
 
     Q_INVOKABLE unsigned int addNewStructType(QString strName, QString strDescription);
+    Q_INVOKABLE bool addNewStruct(QString strName, QString lintX, QString lintY, QString strSType, int intSiteID);
 
     Q_INVOKABLE unsigned int getNbSites(unsigned int intOwner=0);
     Q_INVOKABLE unsigned int getNbSTypes();
