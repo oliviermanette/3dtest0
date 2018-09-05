@@ -25,6 +25,7 @@ Rectangle{
             source: "img/png.png"
             height: parent.height - 2* parent.padding
             width: height
+
         }
         Column{
             id:clnSearchedPlace

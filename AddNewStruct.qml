@@ -154,6 +154,8 @@ Rectangle{
                         onEntered: btnSelectStructType.font.bold = true;
                         onExited: btnSelectStructType.font.bold = false;
                         onClicked: {
+                            //TEST isFileExist(QString strFilename)
+                            console.log("Voici le retour de isFileExist : ",cymBdd.isFileExist("Makefile"));
                             cymBdd.updateSType();
                             var lintNbSites = cymBdd.getNbSTypes();
                             console.log(lintNbSites);

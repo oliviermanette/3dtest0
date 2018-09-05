@@ -69,7 +69,7 @@ Column{
                 }
                 Image {
                     id: name
-                    //source: "img/73225988_s.jpg"
+                    source: "https://storage.cloud.google.com/cymbalum_files/structuretypes/icon/1.png" //"img/73225988_s.jpg"
                     anchors.fill: parent
                 }
             }

@@ -684,6 +684,16 @@ int CymBDD::sendFileToCloud(QString strfilename, QString strDestination, int int
     return 0;
 }
 
+bool CymBDD::isFileExist(QString strFilename)
+{
+    QDir filename;
+    QString lstrChemin = filename.currentPath();
+    lstrChemin.remove("Cymbalum.app/Contents/MacOS"); //Spécifique MacOS
+    qDebug() << lstrChemin;
+    lstrChemin += strFilename;
+    return filename.exists(lstrChemin);
+}
+
 unsigned int CymBDD::getSiteSizeX(int intIndex)
 {
     //SELECT ST_AsText(geometrie) from sites where idsites=16;

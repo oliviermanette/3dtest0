@@ -11,6 +11,7 @@
 #include <QDebug>
 
 #include <QProcess>
+#include <QDir>
 
 #include <qtconcurrentrun.h>
 #include <QThread>
@@ -50,6 +51,7 @@ public:
     Q_INVOKABLE unsigned int getSiteScale(int intIndex);
 
     Q_INVOKABLE int sendFileToCloud(QString strfilename, QString strDestination, int intIndex);
+    Q_INVOKABLE bool isFileExist(QString strFilename); //i.e: exist locally
 
     Q_INVOKABLE unsigned int getSiteSizeX(int intIndex);
     Q_INVOKABLE unsigned int getSiteSizeY(int intIndex);
