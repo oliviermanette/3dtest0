@@ -12,11 +12,14 @@ Column{
     property int intScale: 0
     property int lintWidth: 0
     property var name: formNewStruct
+    property string strLocalPath: ""
     function getBestFit()
     {
        /*
          Prend le maximum entre txtSizeX et txtSizeY
          */
+        if (strLocalPath=="")
+            strLocalPath = cymBdd.getLocalPath();
         if (txtSizeX>txtSizeY)
             lintWidth = 0.8 * parent.width/txtSizeX;
         else
@@ -69,7 +72,7 @@ Column{
                 }
                 Image {
                     id: name
-                    source: "https://storage.cloud.google.com/cymbalum_files/structuretypes/icon/1.png" //"img/73225988_s.jpg"
+                    source: "" //"file://"+strLocalPath+"structuretypes/icon/1" //"img/73225988_s.jpg"
                     anchors.fill: parent
                 }
             }

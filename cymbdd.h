@@ -51,7 +51,9 @@ public:
     Q_INVOKABLE unsigned int getSiteScale(int intIndex);
 
     Q_INVOKABLE int sendFileToCloud(QString strfilename, QString strDestination, int intIndex);
+    Q_INVOKABLE bool downloadFileFromCloud(QString strPath, QString strFilename);
     Q_INVOKABLE bool isFileExist(QString strFilename); //i.e: exist locally
+    Q_INVOKABLE QString getLocalPath();
 
     Q_INVOKABLE unsigned int getSiteSizeX(int intIndex);
     Q_INVOKABLE unsigned int getSiteSizeY(int intIndex);
@@ -68,6 +70,8 @@ public:
 
     Q_INVOKABLE void toto();
 
+    Q_INVOKABLE bool checkCachesFolders();
+
 signals:
     void loginRequired();
 
@@ -83,6 +87,8 @@ private:
     bool OpenCloudDB();
     bool OpenLocaleDB();
     bool UpdateSitesFromCloud(QString strSearchKey="");
+
+
 
     unsigned int uintSiteOwner;
 

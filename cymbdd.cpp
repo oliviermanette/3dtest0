@@ -79,6 +79,31 @@ bool CymBDD::UpdateSitesFromCloud(QString strSearchKey)
         return false;
 }
 
+bool CymBDD::checkCachesFolders()
+{
+    //Vérifie l'existence des folders
+    QDir filename;
+    QString lstrChemin = filename.currentPath();
+    lstrChemin.remove("Cymbalum.app/Contents/MacOS"); //Spécifique MacOS
+    filename.setCurrent(lstrChemin); //working directory
+    if (!filename.exists("structuretypes")){
+        if (!filename.mkdir("structuretypes"))
+            return false;
+    }
+    filename.setCurrent(lstrChemin+"/structuretypes");
+    if (!filename.exists("icon")){
+        if (!filename.mkdir("icon"))
+            return false;
+    }
+    if (!filename.exists("stl")){
+        if (!filename.mkdir("stl"))
+            return false;
+    }
+    filename.setCurrent(lstrChemin);
+
+    return true;
+}
+
 bool CymBDD::updateStructList(int intSiteID)
 {
     QString lstQuery = "SELECT nom, ST_AsText(position_ref), type FROM Cymbalum_demo.surfaces where site="+QString::number(intSiteID);
@@ -684,14 +709,46 @@ int CymBDD::sendFileToCloud(QString strfilename, QString strDestination, int int
     return 0;
 }
 
+bool CymBDD::downloadFileFromCloud(QString strPath, QString strFilename)
+{
+    QProcess process;
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    //GOOGLE_CLOUD_PROJECT="psyched-bee-204709"
+    env.insert("GOOGLE_CLOUD_PROJECT", "psyched-bee-204709"); // Add an environment variable
+    //GOOGLE_APPLICATION_CREDENTIALS="/Users/oliviermanette/Downloads/Cymbalum-iot-26e6a1b6a592.json"
+    env.insert("GOOGLE_APPLICATION_CREDENTIALS", "/Users/oliviermanette/Downloads/Cymbalum-iot-26e6a1b6a592.json");
+    process.setProcessEnvironment(env);
+    //./bucketucl -o=cymbalum_files/structuretypes/icon:1 read >structuretypes/icon/1
+    process.setProgram("bucketucl");
+    QStringList arguments;
+    arguments << "-o=cymbalum_files/"+strPath+":"+strFilename <<"read" << strPath+"/" +strFilename;
+    process.setArguments(arguments);
+    process.startDetached();
+
+    process.waitForFinished(-1);
+    QString output(process.readAllStandardOutput());
+    qDebug()<<output;
+    return false;
+}
+
 bool CymBDD::isFileExist(QString strFilename)
 {
     QDir filename;
     QString lstrChemin = filename.currentPath();
     lstrChemin.remove("Cymbalum.app/Contents/MacOS"); //Spécifique MacOS
-    qDebug() << lstrChemin;
+    lstrChemin.remove("structuretypes"); //au cas où il s'y trouve à cause du cache
+    //qDebug() << lstrChemin;
     lstrChemin += strFilename;
+    qDebug() << lstrChemin;
     return filename.exists(lstrChemin);
+}
+
+QString CymBDD::getLocalPath()
+{
+    QDir filename;
+    QString lstrChemin = filename.currentPath();
+    lstrChemin.remove("Cymbalum.app/Contents/MacOS");
+    return  lstrChemin;
 }
 
 unsigned int CymBDD::getSiteSizeX(int intIndex)

@@ -2,6 +2,10 @@ import QtQuick 2.11
 
 Rectangle{
     id:rectangle
+    function getPath()
+    {
+        return cymBdd.getLocalPath();
+    }
     width: parent.width - 0.015*parent.width
     height: 64
     color: "#d0d1e6"
@@ -22,7 +26,7 @@ Rectangle{
         anchors.fill: parent
         Image {
             id: imgSType
-            source: "img/png.png"
+            source: "file://"+getPath()+"/structuretypes/icon/"+sTypeID
             height: parent.height - 2* parent.padding
             width: height
 
