@@ -5,8 +5,22 @@ import Qt3D.Core 2.0
 import Qt3D.Extras 2.0
 import Qt3D.Input 2.0
 import Qt3D.Render 2.0
-
+Rectangle{
+    id: scene
+    property string strFilename: "value"
+    width: 500
+    height: 500
+    color: "#e1eef3"
+    radius: 4
+    border.color: "#2e2e3a"
+    border.width: 1
     Scene3D {
+        function getPath()
+        {
+            var strPath = cymBdd.getLocalPath();
+            console.log("file://"+strPath+"/structuretypes/stl/1");
+            return strPath;
+        }
         anchors.fill: parent
         anchors.margins: 10
         focus: true
@@ -39,7 +53,10 @@ import Qt3D.Render 2.0
 
             Mesh {
                 id: stlMesh
-                source: "https://storage.googleapis.com/cymbalum_files/table1.stl"
+                source: strFilename
+                    //"file:///Users/oliviermanette/QtApps/build-3dtest0-5_11_1-Debug/structuretypes/stl/1.stl"
+                    //"file://"+getPath()+"/structuretypes/stl/1"
+                    //"https://storage.googleapis.com/cymbalum_files/table1.stl"
             }
             Transform {
                 id: stlTransform
@@ -68,3 +85,4 @@ import Qt3D.Render 2.0
             }
         }
     }
+}

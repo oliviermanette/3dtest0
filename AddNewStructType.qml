@@ -8,7 +8,18 @@ nom
 description
   */
 
+
 Rectangle {
+    Popup{
+        id:popopop
+        StlShow{
+            strFilename: lstrSTLFile
+        }
+    }
+    function getPath()
+    {
+        return cymBdd.getLocalPath();
+    }
     color: "#eeeef7"
     radius: 4
     property double ldblWidthRatio: 0.4
@@ -26,13 +37,19 @@ Rectangle {
                     if (lblIconOrSTL){
                         //STL Selected
                         lstrSTLFile = fileDialog.fileUrl.toString();
-                        lstrSTLFile = lstrSTLFile.replace("file://","");
+                        //lstrSTLFile = lstrSTLFile.replace("file://","");
+                        lbl3D.text = cymBdd.fileNameFromPath(lstrSTLFile.replace("file://",""));
+                        lbl3D.font.underline = true;
+                        lbl3D.color = "blue";
+                        mouseASTL.visible = true;
+
                     }
                     else{
                         //Icon selected
                         lstrIconFile = fileDialog.fileUrl.toString();
                         imgIconType.source = lstrIconFile;
                         lstrIconFile = lstrIconFile.replace("file://","");
+                        lblIcon.text = cymBdd.fileNameFromPath(lstrIconFile);
                     }
                 }
                 onRejected: {
@@ -124,10 +141,19 @@ Rectangle {
 
 
             }
+
+
             Column{
                 Label {
                     id: lbl3D
                     text: qsTr("Select 3D File")
+
+                    MouseArea{
+                        id:mouseASTL
+                        anchors.fill: parent
+                        visible: false
+                        onClicked: popopop.open()
+                    }
                 }
                 Image {
                     id: imgStl

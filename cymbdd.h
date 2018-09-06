@@ -12,6 +12,7 @@
 
 #include <QProcess>
 #include <QDir>
+#include <QFileInfo>
 
 #include <qtconcurrentrun.h>
 #include <QThread>
@@ -54,6 +55,7 @@ public:
     Q_INVOKABLE bool downloadFileFromCloud(QString strPath, QString strFilename);
     Q_INVOKABLE bool isFileExist(QString strFilename); //i.e: exist locally
     Q_INVOKABLE QString getLocalPath();
+    Q_INVOKABLE QString fileNameFromPath(const QString & filePath);
 
     Q_INVOKABLE unsigned int getSiteSizeX(int intIndex);
     Q_INVOKABLE unsigned int getSiteSizeY(int intIndex);

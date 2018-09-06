@@ -751,6 +751,11 @@ QString CymBDD::getLocalPath()
     return  lstrChemin;
 }
 
+QString CymBDD::fileNameFromPath(const QString &filePath)
+{
+    return QFileInfo(filePath).fileName();
+}
+
 unsigned int CymBDD::getSiteSizeX(int intIndex)
 {
     //SELECT ST_AsText(geometrie) from sites where idsites=16;
