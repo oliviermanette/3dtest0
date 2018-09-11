@@ -34,8 +34,6 @@ Column{
     padding: 10
     spacing: 20
 
-
-
     Text {
         id: lblSiteNameOpen
         text: qsTr(txtSiteNameOpen)
@@ -89,6 +87,16 @@ Column{
                         loops: Animation.Infinite
                         id:focusOnStruct
                     }
+                    ScaleAnimator{
+                        target: imgStruct
+                        from: 1.1
+                        to:0
+                        duration: 600
+                        running: false
+                        //loops: Animation.Infinite
+                        id:deleteStructAnim
+                    }
+
                     Connections{
                         target: cymBdd
                         onStructOpened:{
@@ -97,6 +105,17 @@ Column{
                             }
                             else
                                 focusOnStruct.start();
+                        }
+                        onStructDeleted:{
+                            if (uinStructID!==cymBdd.getStructIDFromPos((index/txtSizeX-Math.floor(index/txtSizeX))*txtSizeX, Math.floor(index/txtSizeX))){
+                                deleteStructAnim.stop();
+                            }
+                            else{
+                                console.log("Try to execute animation here");
+                                console.log(uinStructID);
+                                focusOnStruct.stop();
+                                deleteStructAnim.start();
+                            }
                         }
                     }
                     //width: 80

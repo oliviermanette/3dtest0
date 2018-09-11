@@ -187,7 +187,7 @@ Item {
                             target: showerMap;
                             from: 1;
                             to: 2;
-                            duration: 500
+                            duration: 300
                             running: false
                             onStopped: {
                                 showerMap.visible = false;

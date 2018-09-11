@@ -81,16 +81,19 @@ public:
     Q_INVOKABLE void toto();
 
     Q_INVOKABLE bool checkCachesFolders();
-    Q_INVOKABLE void pleaseEmitSiteOpened(int lintSiteID);
+    Q_INVOKABLE void pleaseEmitSiteOpened(uint lintSiteID);
     Q_INVOKABLE void pleaseEmitStructOpened(QString lstrName);
+    Q_INVOKABLE void pleaseEmitStructDeleted(uint luinStructID);
 
     Q_INVOKABLE int getStructIconFromIndex(int lintPosX, int lintPosY);
     Q_INVOKABLE QString getStructNameFromIndex(int lintPosX, int lintPosY);
+    Q_INVOKABLE uint getStructIDFromPos(int lintPosX, int lintPosY);
 
 signals:
     void loginRequired();
-    void siteOpened(int lintSiteID);
+    void siteOpened(uint lintSiteID);
     void structOpened(QString lstrName);
+    void structDeleted(uint uinStructID);
 
 public slots:
 

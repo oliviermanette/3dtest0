@@ -104,7 +104,7 @@ bool CymBDD::checkCachesFolders()
     return true;
 }
 
-void CymBDD::pleaseEmitSiteOpened(int lintSiteID)
+void CymBDD::pleaseEmitSiteOpened(uint lintSiteID)
 {
     //qDebug()<<"Je vais émettre le signal depuis C++";
     //qDebug()<<lintSiteID;
@@ -115,6 +115,11 @@ void CymBDD::pleaseEmitSiteOpened(int lintSiteID)
 void CymBDD::pleaseEmitStructOpened(QString lstrName)
 {
     emit structOpened(lstrName);
+}
+
+void CymBDD::pleaseEmitStructDeleted(uint uinStructID)
+{
+    emit structDeleted(uinStructID);
 }
 
 int CymBDD::getStructIconFromIndex(int lintPosX, int lintPosY)
@@ -136,6 +141,16 @@ QString CymBDD::getStructNameFromIndex(int lintPosX, int lintPosY)
                 return dataStructures[i].strName;
     }
     return "";
+}
+
+uint CymBDD::getStructIDFromPos(int lintPosX, int lintPosY)
+{
+    for (uint i=0; i<guintNbStructures;i++){
+        if (dataStructures[i].intPosX == lintPosX)
+            if (dataStructures[i].intPosY == lintPosY)
+                return dataStructures[i].uintStructID;
+    }
+    return 0;
 }
 
 bool CymBDD::updateStructList(uint intSiteID)
@@ -324,7 +339,7 @@ bool CymBDD::delStructure(uint luinStructID)
         QSqlQuery nquery(cloudDb);
         if (nquery.exec(lstQuery)){
             qDebug()<<"request delete Structure correctly executed on cloud";
-            //updateStructList();
+            emit structDeleted(luinStructID);
             return true;
         }
         else{
