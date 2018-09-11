@@ -34,6 +34,8 @@ Column{
     padding: 10
     spacing: 20
 
+
+
     Text {
         id: lblSiteNameOpen
         text: qsTr(txtSiteNameOpen)
@@ -78,6 +80,27 @@ Column{
                     id: imgStruct
                     source: "" //"file://"+strLocalPath+"structuretypes/icon/1" //"img/73225988_s.jpg"
                     anchors.fill: parent
+                    ScaleAnimator{
+                        target: imgStruct
+                        from: 0.9
+                        to:1.2
+                        duration: 500
+                        running: false
+                        loops: Animation.Infinite
+                        id:focusOnStruct
+                    }
+                    Connections{
+                        target: cymBdd
+                        onStructOpened:{
+                            if (lstrName!==cymBdd.getStructNameFromIndex((index/txtSizeX-Math.floor(index/txtSizeX))*txtSizeX, Math.floor(index/txtSizeX))){
+                                focusOnStruct.stop();
+                            }
+                            else
+                                focusOnStruct.start();
+                        }
+                    }
+                    //width: 80
+                    //height: 80 On peut placer les images par rapport à la grille comme on veut, donc ce sera bien pour placer les élémeents d'une usine
 
                 }
                 Component.onCompleted:  {

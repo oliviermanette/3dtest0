@@ -98,13 +98,15 @@ Item {
                                 if (lintSiteID==siteID){
                                     chListStruct.model = structModel;//structModel;
                                     var lintNbStructures = cymBdd.getNbStructures();
-                                    var lclChaine = {"sTypeID": 0, "name":"Pizza", "posX":0, "posY":0, "siteID":0};
+                                    var lclChaine = {"sTypeID": 0, "name":"Pizza", "posX":0, "posY":0, "siteID":0, "structID":0};
                                     structModel.clear();
                                     for (var i=0;i<lintNbStructures;i++){
                                         lclChaine.sTypeID = cymBdd.getStructureStypeID(i);
                                         lclChaine.name = cymBdd.getStructureName(i);
                                         lclChaine.posX = cymBdd.getStructurePosX(i);
                                         lclChaine.posY = cymBdd.getStructurePosY(i);
+                                        lclChaine.structID = cymBdd.getStructureID(i);
+                                        lclChaine.siteID = cymBdd.getStructureSiteID(i);
                                         structModel.append(lclChaine);
                                     }
                                 }

@@ -112,6 +112,11 @@ void CymBDD::pleaseEmitSiteOpened(int lintSiteID)
     emit siteOpened(lintSiteID);
 }
 
+void CymBDD::pleaseEmitStructOpened(QString lstrName)
+{
+    emit structOpened(lstrName);
+}
+
 int CymBDD::getStructIconFromIndex(int lintPosX, int lintPosY)
 {
     for (uint i=0; i<guintNbStructures;i++){
@@ -123,9 +128,19 @@ int CymBDD::getStructIconFromIndex(int lintPosX, int lintPosY)
     return 0;
 }
 
-bool CymBDD::updateStructList(int intSiteID)
+QString CymBDD::getStructNameFromIndex(int lintPosX, int lintPosY)
 {
-    QString lstQuery = "SELECT nom, ST_AsText(position_ref), type FROM Cymbalum_demo.surfaces where site="+QString::number(intSiteID);
+    for (uint i=0; i<guintNbStructures;i++){
+        if (dataStructures[i].intPosX == lintPosX)
+            if (dataStructures[i].intPosY == lintPosY)
+                return dataStructures[i].strName;
+    }
+    return "";
+}
+
+bool CymBDD::updateStructList(uint intSiteID)
+{
+    QString lstQuery = "SELECT nom, ST_AsText(position_ref), type, idSurface FROM Cymbalum_demo.surfaces where site="+QString::number(intSiteID);
     if (isCloudDbOpened){
         QSqlQuery nquery(cloudDb);
         if (nquery.exec(lstQuery)){
@@ -145,6 +160,8 @@ bool CymBDD::updateStructList(int intSiteID)
                 qDebug()<<lstQuery;
                 dataStructures[lintCurrentValue].intPosY = lstQuery.split(" ")[1].toInt();
                 qDebug()<<dataStructures[lintCurrentValue].intPosY;
+                dataStructures[lintCurrentValue].uintStructID = nquery.value(3).toUInt();
+                dataStructures[lintCurrentValue].intSiteID = intSiteID;
                 lintCurrentValue++;
             }
             guintNbStructures = lintCurrentValue;
@@ -284,6 +301,41 @@ bool CymBDD::delSite(unsigned int unintSiteRefID)
     }
     else
         return false;
+}
+
+bool CymBDD::delStructure(uint luinStructID)
+{
+    /*
+    DELETE surfaces FROM surfaces INNER JOIN sites ON surfaces.site=sites.idsites WHERE sites.owner=1 AND surfaces.idSurface=10 */
+    QString lstQuery = "DELETE surfaces FROM surfaces INNER JOIN sites ON surfaces.site=sites.idsites WHERE sites.owner="+QString::number(uintSiteOwner)
+            + " AND surfaces.idSurface="+QString::number(luinStructID);
+    if ((!isCloudDbOpened)&&isLocalDbOpened){
+        QSqlQuery nquery(localDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"request delStructure correctly executed locally";
+            return true;
+        }
+        else{
+            qDebug()<<"an error occured while executing the request";
+            return false;
+        }
+    }
+    else if (isCloudDbOpened){
+        QSqlQuery nquery(cloudDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"request delete Structure correctly executed on cloud";
+            //updateStructList();
+            return true;
+        }
+        else{
+            qDebug()<<"an error occured while executing the request";
+            qDebug()<<lstQuery;
+            return false;
+        }
+    }
+    else
+        return false;
+
 }
 
 bool CymBDD::addNewSurface(QString strNom, unsigned int uintSiteRefID, QString strPosition)
@@ -554,6 +606,16 @@ int CymBDD::getStructurePosY(unsigned int luintIndex)
 int CymBDD::getStructurePosX(unsigned int luintIndex)
 {
     return dataStructures[luintIndex].intPosX;
+}
+
+uint CymBDD::getStructureID(unsigned int luintIndex)
+{
+    return dataStructures[luintIndex].uintStructID;
+}
+
+uint CymBDD::getStructureSiteID(unsigned int luintIndex)
+{
+    return dataStructures[luintIndex].intSiteID;
 }
 
 QString CymBDD::getStructureName(unsigned int luintIndex)

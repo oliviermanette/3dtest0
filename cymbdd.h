@@ -28,6 +28,7 @@ public:
     Q_INVOKABLE bool addNewSite(QString strNom, double dblLatitude, double dblLongitude, QString strCommentaire);
     //Q_INVOKABLE
     Q_INVOKABLE bool delSite(unsigned int unintSiteRefID);
+    Q_INVOKABLE bool delStructure(uint luinStructID);
     //;https://flodnode.visualstudio.com/_git/untitled?path=%2Fgetaccinfo.cpp&version=GBmint_1_parme&line=380&lineStyle=plain&lineEnd=380&lineStartColumn=41&lineEndColumn=46
     Q_INVOKABLE bool addNewSurface(QString strNom,unsigned int uintSiteRefID, QString strPosition); //ID, nom, site,position_ref
     Q_INVOKABLE bool addNewSensor(QString strPosition,QString strSerialNo,unsigned int uintSurfRefID); //position, SN, surface
@@ -43,6 +44,8 @@ public:
     Q_INVOKABLE int getStructureStypeID(unsigned int luintIndex);
     Q_INVOKABLE int getStructurePosY(unsigned int luintIndex);
     Q_INVOKABLE int getStructurePosX(unsigned int luintIndex);
+    Q_INVOKABLE uint getStructureID(unsigned int luintIndex);
+    Q_INVOKABLE uint getStructureSiteID(unsigned int luintIndex);
     Q_INVOKABLE QString getStructureName(unsigned int luintIndex);
     Q_INVOKABLE QString getSiteName(int intIndex, unsigned int intOwner=0);
 
@@ -79,12 +82,15 @@ public:
 
     Q_INVOKABLE bool checkCachesFolders();
     Q_INVOKABLE void pleaseEmitSiteOpened(int lintSiteID);
+    Q_INVOKABLE void pleaseEmitStructOpened(QString lstrName);
 
     Q_INVOKABLE int getStructIconFromIndex(int lintPosX, int lintPosY);
+    Q_INVOKABLE QString getStructNameFromIndex(int lintPosX, int lintPosY);
 
 signals:
     void loginRequired();
     void siteOpened(int lintSiteID);
+    void structOpened(QString lstrName);
 
 public slots:
 
@@ -120,14 +126,15 @@ private:
     stcSType dataSType[MAXSITES_LM];
     unsigned int guintNbSType;
 
-    bool updateStructList(int intSiteID);
+    bool updateStructList(uint intSiteID);
 
     struct stcStructures{
         QString strName;
         int intPosX;
         int intPosY;
         int intSTypeID;
-        int intSiteID;
+        uint intSiteID;
+        uint uintStructID;
     };
     stcStructures dataStructures[MAXSITES_LM];
     unsigned int guintNbStructures;
