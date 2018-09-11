@@ -2,6 +2,10 @@ import QtQuick 2.11
 
 ListView {
     id: canvas
+    function getPath()
+    {
+        return cymBdd.getLocalPath();
+    }
     clip: true
     interactive: false
     //model: sTypeModel
@@ -16,6 +20,14 @@ ListView {
             //image.height + label.paintedHeight
             Row{
                 anchors.fill: parent
+                Image {
+                    id: imgSType
+                    source: "file://"+getPath()+"/structuretypes/icon/"+sTypeID
+                    height: parent.height - 2* parent.padding
+                    width: height
+
+
+                }
                 Text {
                     id: lblName
                     text: qsTr(name)

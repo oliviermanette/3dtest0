@@ -80,6 +80,8 @@ public:
     Q_INVOKABLE bool checkCachesFolders();
     Q_INVOKABLE void pleaseEmitSiteOpened(int lintSiteID);
 
+    Q_INVOKABLE int getStructIconFromIndex(int lintPosX, int lintPosY);
+
 signals:
     void loginRequired();
     void siteOpened(int lintSiteID);

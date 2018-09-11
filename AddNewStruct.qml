@@ -155,7 +155,7 @@ Rectangle{
                         onExited: btnSelectStructType.font.bold = false;
                         onClicked: {
                             //TEST isFileExist(QString strFilename)
-                            console.log("Voici le retour de isFileExist : ",cymBdd.isFileExist("Makefile"));
+                            //console.log("Voici le retour de isFileExist : ",cymBdd.isFileExist("Makefile"));
                             if (cymBdd.checkCachesFolders())
                                 console.log("cache folders succesfully created");
 
@@ -208,6 +208,7 @@ Rectangle{
                         formNewStruct.visible = false
                         gridSite.visible = true;
                         // TODO : Mettre à jour la liste des structures pour l'afficher dans la grille
+                        cymBdd.pleaseEmitSiteOpened(siteID);
 
                     }
                     else

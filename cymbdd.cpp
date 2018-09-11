@@ -112,6 +112,17 @@ void CymBDD::pleaseEmitSiteOpened(int lintSiteID)
     emit siteOpened(lintSiteID);
 }
 
+int CymBDD::getStructIconFromIndex(int lintPosX, int lintPosY)
+{
+    for (uint i=0; i<guintNbStructures;i++){
+        if (dataStructures[i].intPosX == lintPosX)
+            if (dataStructures[i].intPosY == lintPosY)
+                return dataStructures[i].intSTypeID;
+    }
+
+    return 0;
+}
+
 bool CymBDD::updateStructList(int intSiteID)
 {
     QString lstQuery = "SELECT nom, ST_AsText(position_ref), type FROM Cymbalum_demo.surfaces where site="+QString::number(intSiteID);

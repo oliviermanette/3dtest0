@@ -26,6 +26,10 @@ Column{
             lintWidth = 0.8 * parent.width/txtSizeY;
         return lintWidth;
     }
+    function getPath()
+    {
+        return cymBdd.getLocalPath();
+    }
 
     padding: 10
     spacing: 20
@@ -71,9 +75,15 @@ Column{
                     }
                 }
                 Image {
-                    id: name
+                    id: imgStruct
                     source: "" //"file://"+strLocalPath+"structuretypes/icon/1" //"img/73225988_s.jpg"
                     anchors.fill: parent
+
+                }
+                Component.onCompleted:  {
+                    var lintIndexSType = cymBdd.getStructIconFromIndex((index/txtSizeX-Math.floor(index/txtSizeX))*txtSizeX, Math.floor(index/txtSizeX))
+                    if (lintIndexSType)
+                        imgStruct.source = "file://"+getPath()+"/structuretypes/icon/"+lintIndexSType;
                 }
             }
         }
