@@ -39,6 +39,11 @@ public:
 
     Q_INVOKABLE unsigned int getNbSites(unsigned int intOwner=0);
     Q_INVOKABLE unsigned int getNbSTypes();
+    Q_INVOKABLE unsigned int getNbStructures();
+    Q_INVOKABLE int getStructureStypeID(unsigned int luintIndex);
+    Q_INVOKABLE int getStructurePosY(unsigned int luintIndex);
+    Q_INVOKABLE int getStructurePosX(unsigned int luintIndex);
+    Q_INVOKABLE QString getStructureName(unsigned int luintIndex);
     Q_INVOKABLE QString getSiteName(int intIndex, unsigned int intOwner=0);
 
     Q_INVOKABLE bool updateSType(QString strSearchKey="");
@@ -73,9 +78,11 @@ public:
     Q_INVOKABLE void toto();
 
     Q_INVOKABLE bool checkCachesFolders();
+    Q_INVOKABLE void pleaseEmitSiteOpened(int lintSiteID);
 
 signals:
     void loginRequired();
+    void siteOpened(int lintSiteID);
 
 public slots:
 
@@ -89,8 +96,6 @@ private:
     bool OpenCloudDB();
     bool OpenLocaleDB();
     bool UpdateSitesFromCloud(QString strSearchKey="");
-
-
 
     unsigned int uintSiteOwner;
 

@@ -104,6 +104,14 @@ bool CymBDD::checkCachesFolders()
     return true;
 }
 
+void CymBDD::pleaseEmitSiteOpened(int lintSiteID)
+{
+    //qDebug()<<"Je vais émettre le signal depuis C++";
+    //qDebug()<<lintSiteID;
+    updateStructList(lintSiteID);
+    emit siteOpened(lintSiteID);
+}
+
 bool CymBDD::updateStructList(int intSiteID)
 {
     QString lstQuery = "SELECT nom, ST_AsText(position_ref), type FROM Cymbalum_demo.surfaces where site="+QString::number(intSiteID);
@@ -515,6 +523,31 @@ unsigned int CymBDD::getNbSTypes()
         }
     }
     return 0;
+}
+
+unsigned int CymBDD::getNbStructures()
+{
+    return guintNbStructures;
+}
+
+int CymBDD::getStructureStypeID(unsigned int luintIndex)
+{
+    return dataStructures[luintIndex].intSTypeID;
+}
+
+int CymBDD::getStructurePosY(unsigned int luintIndex)
+{
+    return dataStructures[luintIndex].intPosY;
+}
+
+int CymBDD::getStructurePosX(unsigned int luintIndex)
+{
+    return dataStructures[luintIndex].intPosX;
+}
+
+QString CymBDD::getStructureName(unsigned int luintIndex)
+{
+    return dataStructures[luintIndex].strName;
 }
 
 QString CymBDD::getSiteName(int intIndex, unsigned int intOwner)

@@ -29,5 +29,6 @@
         <file>img/png.png</file>
         <file>img/stl.png</file>
         <file>LineSType.qml</file>
+        <file>ListViewStruct.qml</file>
     </qresource>
 </RCC>

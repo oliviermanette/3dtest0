@@ -52,6 +52,10 @@ Item {
         ListModel{
             id:sTypeModel
         }
+        ListModel{
+            id:structModel
+        }
+
         Rectangle{
             id: rctTreeView
             width: 0.18*parent.width

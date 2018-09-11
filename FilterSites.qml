@@ -33,6 +33,7 @@ Rectangle{
                     for (var i=0;i<lintNbSites;i++){
                         lclChaine.siteIntegrity = "100%";
                         lclChaine.siteName = cymBdd.getSiteName(i);//"Hambourg";
+                        lclChaine.siteID = cymBdd.getSiteID(i);
                         lclChaine.SiteLatitude = cymBdd.getSiteLatitude(i);
                         lclChaine.SiteLongitude = cymBdd.getSiteLongitude(i);
                         lclChaine.siteDescription = cymBdd.getSiteDescription(i);
