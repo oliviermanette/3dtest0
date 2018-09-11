@@ -31,5 +31,6 @@
         <file>LineSType.qml</file>
         <file>ListViewStruct.qml</file>
         <file>img/delete-1-icon.png</file>
+        <file>EditStruct.qml</file>
     </qresource>
 </RCC>

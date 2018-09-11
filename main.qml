@@ -109,6 +109,11 @@ Item {
                         popup.open();
                     }
                 }
+                EditStruct{
+                    id:editStruct1
+                    visible: false
+                }
+
                 EditSites {
                     id: editSites
                     visible: false
@@ -256,6 +261,8 @@ Item {
                             siteModel.clear();
 
                             editSites.visible = false;
+                            editStruct1.visible = false;
+                            EditSiteSize.visible = false;
 
                             btnSignIn.text = "Sign In";
                         }

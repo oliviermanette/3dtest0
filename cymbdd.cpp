@@ -964,7 +964,7 @@ bool CymBDD::setSiteSize(int intIndex, QString lintX, QString lintY, QString lin
     QString lstQuery = "UPDATE sites SET geometrie=ST_GeomFromText('POINT("+lintX+" "+lintY+
             ")'), scale="+lintScale
             +" WHERE idsites="+QString::number(intIndex)+" AND owner="+QString::number(uintSiteOwner);
-    qDebug()<<lstQuery;
+
     if ((!isCloudDbOpened)&&isLocalDbOpened){
         QSqlQuery nquery(localDb);
         if (nquery.exec(lstQuery)){
@@ -973,6 +973,44 @@ bool CymBDD::setSiteSize(int intIndex, QString lintX, QString lintY, QString lin
         }
         else {
             qDebug()<<"an error occured while executing the request locally";
+            qDebug()<<lstQuery;
+            return false;
+        }
+    }
+    else if (isCloudDbOpened){
+        QSqlQuery nquery(cloudDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"update site correctly executed on cloud";
+            qDebug()<<lstQuery;
+            UpdateSitesFromCloud();
+            return true;
+        }
+        else {
+            qDebug()<<"an error occured while executing the request on the cloud";
+            qDebug()<<lstQuery;
+        }
+    }
+    return false;
+}
+
+bool CymBDD::setUpdateStruct(uint uintStructID, uint uintSiteID, uint uintPosX, uint uintPosY, QString strName, uint uintSTypeID)
+{
+    //UPDATE surfaces SET position_ref=ST_GeomFromText('POINT(0 0)'), nom="toto" WHERE idSurface=11 AND site=11
+    QString lstQuery = "UPDATE surfaces SET position_ref=ST_GeomFromText('POINT("+QString::number(uintPosX) +" "+
+            QString::number(uintPosY)+")'), nom='"+ strName+"' ";
+    if (uintSTypeID)
+        lstQuery+=", type="+QString::number(uintSTypeID);
+    lstQuery+=" WHERE idSurface="+QString::number(uintStructID)+" AND site="+QString::number(uintSiteID);
+
+    if ((!isCloudDbOpened)&&isLocalDbOpened){
+        QSqlQuery nquery(localDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"update site correctly executed locally";
+            return true;
+        }
+        else {
+            qDebug()<<"an error occured while executing the request locally";
+            qDebug()<<lstQuery;
             return false;
         }
     }

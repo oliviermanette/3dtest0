@@ -69,7 +69,8 @@ public:
     Q_INVOKABLE unsigned int getSiteSizeY(int intIndex);
 
     Q_INVOKABLE bool setSiteSize(int intIndex, QString lintX, QString lintY, QString lintScale);
-
+    Q_INVOKABLE bool setUpdateStruct(uint uintStructID, uint uintSiteID, uint uintPosX, uint uintPosY, QString strName, uint uintSTypeID=0);
+//var lclChaine = {"sTypeID": 0, "name":"Pizza", "posX":0, "posY":0, "siteID":0, "structID":0};
     Q_INVOKABLE bool setUpdateSite(unsigned int uintSiteID, QString strName, QString strDescription, QString dblLatitude, QString dblLongitude);
 
     Q_INVOKABLE bool filterSitesByND(QString strToken);

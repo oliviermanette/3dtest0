@@ -66,6 +66,16 @@ ListView {
 
                         onExited: {
                             lblStructOpen.font.bold = false}
+                        onClicked: {
+                            editSites.visible = false;
+                            editStruct1.visible = true;
+                            //var lclChaine = {"sTypeID": 0, "name":"Pizza", "posX":0, "posY":0, "siteID":0, "structID":0};
+                            editStruct1.intPosX = posX;
+                            editStruct1.intPosY= posY;
+                            editStruct1.strStructName = name;
+                            editStruct1.siteID =  siteID;
+                            editStruct1.structID = structID;
+                        }
                     }
                 }
 
@@ -80,7 +90,7 @@ ListView {
                     MouseArea{
                         anchors.fill: parent
                         onClicked: {
-                            console.log("Going to delete that structure")
+                            //console.log("Going to delete that structure")
                             cymBdd.delStructure(structID);
                             cymBdd.pleaseEmitSiteOpened(siteID);
                         }
