@@ -56,6 +56,9 @@ Column{
                 id:rctArea
                 width: getBestFit()//4*77/txtSizeY
                 height: getBestFit()//4*77/txtSizeY
+                property int lintPosX: 0
+                property int lintPosY: 0
+
                 //anchors.fill: parent
                 color: "#2E3561"
                 border.color: "#eceecd"
@@ -66,8 +69,12 @@ Column{
                     onEntered: rctArea.color="#0cea08";
                     onExited: rctArea.color="#2E3561"//"#0cea08";
                     onClicked: {
-                        formNewStruct.intPosY = Math.floor(index/txtSizeX);
-                        formNewStruct.intPosX = (index/txtSizeX-Math.floor(index/txtSizeX))*txtSizeX;
+                        //console.log("index = ",index);
+                        //console.log("sizeX = ", txtSizeX);
+                        console.log("intPosY = ", rctArea.lintPosY);
+                        console.log("intPosX = ", rctArea.lintPosX);
+                        formNewStruct.intPosY = rctArea.lintPosY;
+                        formNewStruct.intPosX = rctArea.lintPosX;
                         formNewStruct.visible=true;
                         formNewStruct.siteID = siteID
 
@@ -100,14 +107,15 @@ Column{
                     Connections{
                         target: cymBdd
                         onStructOpened:{
-                            if (lstrName!==cymBdd.getStructNameFromIndex((index/txtSizeX-Math.floor(index/txtSizeX))*txtSizeX, Math.floor(index/txtSizeX))){
+                            if (lstrName!==cymBdd.getStructNameFromIndex(rctArea.lintPosX, rctArea.lintPosY)){
                                 focusOnStruct.stop();
                             }
-                            else
+                            else{
                                 focusOnStruct.start();
+                            }
                         }
                         onStructDeleted:{
-                            if (uinStructID!==cymBdd.getStructIDFromPos((index/txtSizeX-Math.floor(index/txtSizeX))*txtSizeX, Math.floor(index/txtSizeX))){
+                            if (uinStructID!==cymBdd.getStructIDFromPos(rctArea.lintPosX, rctArea.lintPosY)){
                                 deleteStructAnim.stop();
                             }
                             else{
@@ -117,13 +125,22 @@ Column{
                                 deleteStructAnim.start();
                             }
                         }
+                        onSiteOpened: {
+                            var lintIndexSType = cymBdd.getStructIconFromIndex(rctArea.lintPosX, rctArea.lintPosY);
+                            if (lintIndexSType)
+                                imgStruct.source = "file://"+getPath()+"/structuretypes/icon/"+lintIndexSType;
+                            else
+                                imgStruct.source ="";
+                        }
                     }
                     //width: 80
                     //height: 80 On peut placer les images par rapport à la grille comme on veut, donc ce sera bien pour placer les élémeents d'une usine
 
                 }
                 Component.onCompleted:  {
-                    var lintIndexSType = cymBdd.getStructIconFromIndex((index/txtSizeX-Math.floor(index/txtSizeX))*txtSizeX, Math.floor(index/txtSizeX))
+                    lintPosX = Math.round((index/txtSizeX-Math.floor(index/txtSizeX))*txtSizeX);
+                    lintPosY = Math.floor(index/txtSizeX);
+                    var lintIndexSType = cymBdd.getStructIconFromIndex(rctArea.lintPosX, rctArea.lintPosY);
                     if (lintIndexSType)
                         imgStruct.source = "file://"+getPath()+"/structuretypes/icon/"+lintIndexSType;
                 }

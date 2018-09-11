@@ -74,6 +74,8 @@ Item {
                         flat: true
                         onClicked: {
                             cymBdd.pleaseEmitSiteOpened(siteID);
+                            editSites.visible = true;
+                            editStruct1.visible = false;
                             showerMap.mapCenter = QtPositioning.coordinate(SiteLatitude, SiteLongitude);
                             showDetailSite();
                             zoomInAnimation.start();

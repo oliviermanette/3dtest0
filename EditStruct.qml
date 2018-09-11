@@ -119,6 +119,7 @@ Item {
                     font.pointSize: 16
                     onClicked: {
                         cymBdd.setUpdateStruct(Number(structID), Number(siteID),Number(txtEdtStrucPosX.text), Number(txtEdtStrucPosY.text), txtEdtStructName.text);
+                        cymBdd.pleaseEmitSiteOpened(siteID);
                     }
                 }
             }
