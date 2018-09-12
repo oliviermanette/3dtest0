@@ -52,19 +52,9 @@ Item {
 
                 if (cymBdd.getOwnerID()){
                     popAskLogin.close();
-                    var lclChaine = {"siteIntegrity": 5.95, "siteName":"Pizza", "SiteLatitude":48, "SiteLongitude":1.5, "siteDescription":"My Description", "siteID":0};
-                    var lintNbSites = cymBdd.getNbSites();
-                    console.log(lintNbSites);
-                    siteModel.clear();
-                    for (var i=0;i<lintNbSites;i++){
-                        lclChaine.siteIntegrity = "100%";
-                        lclChaine.siteName = cymBdd.getSiteName(i);//"Hambourg";
-                        lclChaine.SiteLatitude = cymBdd.getSiteLatitude(i);
-                        lclChaine.SiteLongitude = cymBdd.getSiteLongitude(i);
-                        lclChaine.siteDescription = cymBdd.getSiteDescription(i);
-                        lclChaine.siteID = cymBdd.getSiteID(i);
-                        siteModel.append(lclChaine);
-                    }
+
+                    fctUpdateSitesList();
+
                     btnSignIn.text = "Sign Out";
                     editSites.visible = true;
                 }

@@ -43,13 +43,16 @@ bool CymBDD::OpenLocaleDB()
 
 bool CymBDD::UpdateSitesFromCloud(QString strSearchKey)
 {
+    if (!uintSiteOwner){
+        qDebug()<<"login Required !"; //uintSiteOwner
+        emit loginRequired();
+        return false;
+    }
     // Charge tous les sites de la base de donnée dans la limite de MAXSITES_LM
-    QString lstQuery = "";
-    if (strSearchKey.length()==0)
-        lstQuery = "SELECT idsites, nom, latitude, longitude, description FROM sites where sites.owner="+QString::number(uintSiteOwner);
-    else
-        lstQuery = "SELECT idsites, nom, latitude, longitude, description FROM sites where sites.owner="+QString::number(uintSiteOwner) +
-                " and (description like '%"+strSearchKey+"%' or nom like '%"+strSearchKey+"%')";
+    QString lstQuery = "SELECT idsites, nom, latitude, longitude, description, multisites, linkstruct FROM sites where sites.owner="+QString::number(uintSiteOwner);
+    if (strSearchKey.length()>0)
+        lstQuery += " and (description like '%"+strSearchKey+"%' or nom like '%"+strSearchKey+"%')";
+    lstQuery += " LIMIT "+QString::number(MAXSITES_LM);
     if (isCloudDbOpened){
         QSqlQuery nquery(cloudDb);
         if (nquery.exec(lstQuery)){
@@ -64,6 +67,8 @@ bool CymBDD::UpdateSitesFromCloud(QString strSearchKey)
                 dataSite[lintCurrentValue].m_dblLongitude = nquery.value(3).toDouble();
                 dataSite[lintCurrentValue].m_strDescription = nquery.value(4).toString();
                 dataSite[lintCurrentValue].m_strNomSite = nquery.value(1).toString();
+                dataSite[lintCurrentValue].multisites = nquery.value(5).toUInt();
+                dataSite[lintCurrentValue].linkstruct = nquery.value(6).toUInt();
                 lintCurrentValue++;
             }
             uintGNbSites = lintCurrentValue;
@@ -251,8 +256,14 @@ CymBDD::~CymBDD()
 
 bool CymBDD::addNewSite(QString strNom, double dblLatitude, double dblLongitude, QString strCommentaire)
 {
-    QString lstQuery = "INSERT INTO sites (sites.nom,sites.latitude,sites.longitude,sites.description) VALUES ('"+
-            strNom+"', '"+ QString::number(dblLatitude)+"', '"+QString::number(dblLongitude)+"', '"+strCommentaire+"')";
+    if (!uintSiteOwner){
+        qDebug()<<"login Required !"; //uintSiteOwner
+        emit loginRequired();
+        return false;
+    }
+
+    QString lstQuery = "INSERT INTO sites (sites.nom,sites.latitude,sites.longitude,sites.description, sites.owner) VALUES ('"+
+            strNom+"', '"+ QString::number(dblLatitude)+"', '"+QString::number(dblLongitude)+"', '"+strCommentaire+"', '"+QString::number(uintSiteOwner)+"')";
     qDebug() << lstQuery;
     if ((!isCloudDbOpened)&&isLocalDbOpened){
         QSqlQuery nquery(localDb);

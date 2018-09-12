@@ -123,7 +123,7 @@ Item {
                     height: parent.height
                     color: "transparent"
                     Button {
-                        text: "+ Struct."
+                        text: "+ Link"
                         flat: true
                     }
                 }

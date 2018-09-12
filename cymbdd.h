@@ -116,6 +116,8 @@ private:
         double m_dblLatitude;
         double m_dblLongitude;
         unsigned int m_uintIdSite;
+        uint multisites;
+        uint linkstruct;
         QString m_strNomSite;
         QString m_strDescription;
     };
