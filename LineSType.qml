@@ -43,6 +43,7 @@ Rectangle{
         onClicked: {
             searchSTypeName.color="brown";
             siteOpen1.name.strSelectedSType = name;
+            cymBdd.pleaseEmitSTypeSelected(sTypeID,name);
 
             /*showerMap.mapCenter = place.location.coordinate;
             showerMap.visible = true;

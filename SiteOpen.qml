@@ -13,7 +13,7 @@ Column{
     property int lintWidth: 0
     property var name: formNewStruct
     property string strLocalPath: ""
-    function getBestFit()
+    function getBestFit(valuedWidth)
     {
        /*
          Prend le maximum entre txtSizeX et txtSizeY
@@ -21,9 +21,9 @@ Column{
         if (strLocalPath=="")
             strLocalPath = cymBdd.getLocalPath();
         if (txtSizeX>txtSizeY)
-            lintWidth = 0.8 * parent.width/txtSizeX;
+            lintWidth = 0.8 * valuedWidth/txtSizeX;
         else
-            lintWidth = 0.8 * parent.width/txtSizeY;
+            lintWidth = 0.8 * valuedWidth/txtSizeY;
         return lintWidth;
     }
     function getPath()
@@ -54,8 +54,8 @@ Column{
             model: txtSizeX*txtSizeY
             Rectangle{
                 id:rctArea
-                width: getBestFit()//4*77/txtSizeY
-                height: getBestFit()//4*77/txtSizeY
+                width: getBestFit(parent.width)//4*77/txtSizeY
+                height: getBestFit(parent.width)//4*77/txtSizeY
                 property int lintPosX: 0
                 property int lintPosY: 0
 

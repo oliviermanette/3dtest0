@@ -74,7 +74,7 @@ public:
     Q_INVOKABLE bool setUpdateStruct(uint uintStructID, uint uintSiteID, uint uintPosX, uint uintPosY, QString strName, uint uintSTypeID=0);
 //var lclChaine = {"sTypeID": 0, "name":"Pizza", "posX":0, "posY":0, "siteID":0, "structID":0};
     Q_INVOKABLE bool setUpdateSite(unsigned int uintSiteID, QString strName, QString strDescription, QString dblLatitude, QString dblLongitude);
-
+    Q_INVOKABLE bool addLinkToSites(uint uinSiteID1, uint uinSiteID2, uint uintSTypeID=0);
     Q_INVOKABLE bool filterSitesByND(QString strToken);
 
     Q_INVOKABLE unsigned int getOwnerIDByLogin(QString strLoginOrEMail, QString strPasswd);
@@ -87,6 +87,7 @@ public:
     Q_INVOKABLE void pleaseEmitSiteOpened(uint lintSiteID);
     Q_INVOKABLE void pleaseEmitStructOpened(QString lstrName);
     Q_INVOKABLE void pleaseEmitStructDeleted(uint luinStructID);
+    Q_INVOKABLE void pleaseEmitSTypeSelected(uint uinSTypeID, QString strSTypeName="");
 
     Q_INVOKABLE int getStructIconFromIndex(int lintPosX, int lintPosY);
     Q_INVOKABLE QString getStructNameFromIndex(int lintPosX, int lintPosY);
@@ -97,6 +98,7 @@ signals:
     void siteOpened(uint lintSiteID);
     void structOpened(QString lstrName);
     void structDeleted(uint uinStructID);
+    void sTypeSelected(uint uinSTypeID, QString strSTypeName);
 
 public slots:
 

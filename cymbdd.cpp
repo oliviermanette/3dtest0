@@ -127,6 +127,11 @@ void CymBDD::pleaseEmitStructDeleted(uint uinStructID)
     emit structDeleted(uinStructID);
 }
 
+void CymBDD::pleaseEmitSTypeSelected(uint uinSTypeID, QString strSTypeName)
+{
+    emit sTypeSelected(uinSTypeID,strSTypeName);
+}
+
 int CymBDD::getStructIconFromIndex(int lintPosX, int lintPosY)
 {
     for (uint i=0; i<guintNbStructures;i++){
@@ -1128,6 +1133,40 @@ bool CymBDD::setUpdateSite(unsigned int uintSiteID, QString strName, QString str
             qDebug()<<lstQuery;
         }
 
+    }
+    return false;
+}
+
+bool CymBDD::addLinkToSites(uint uinSiteID1, uint uinSiteID2, uint uintSTypeID)
+{
+    QString lstQuery = "UPDATE `Cymbalum_demo`.`sites` SET multisites="+ QString::number(uinSiteID2);
+    if (uintSTypeID)
+        lstQuery += ", linkstruct="+ QString::number(uintSTypeID);
+    lstQuery +=" WHERE idsites="+ QString::number(uinSiteID1)+ " AND owner="+QString::number(uintSiteOwner);
+
+    if ((!isCloudDbOpened)&&isLocalDbOpened){
+        QSqlQuery nquery(localDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"update site correctly executed locally";
+            return true;
+        }
+        else {
+            qDebug()<<"an error occured while executing the request locally";
+            return false;
+        }
+    }
+    else if (isCloudDbOpened){
+        QSqlQuery nquery(cloudDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"update site correctly executed on cloud";
+            qDebug()<<lstQuery;
+            UpdateSitesFromCloud();
+            return true;
+        }
+        else {
+            qDebug()<<"an error occured while executing the request on the cloud";
+            qDebug()<<lstQuery;
+        }
     }
     return false;
 }

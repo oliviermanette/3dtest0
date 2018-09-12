@@ -7,8 +7,8 @@ Item {
     function fctUpdateSitesList()
     {
         var lclChaine = {
-            "siteIntegrity": 5.95,
             "siteName":"Pizza",
+            "siteIntegrity": 5.95,
             "SiteLatitude":48,
             "SiteLongitude":1.5,
             "siteDescription":"My Description",
@@ -31,6 +31,28 @@ Item {
             siteModel.append(lclChaine);
         }
     }
+
+    function fctUpdateSType(){
+        if (cymBdd.checkCachesFolders())
+            console.log("cache folders succesfully created");
+        var lintNbSTypes = cymBdd.getNbSTypes();
+        var lclChaine = {
+            "sTypeID": 1,
+            "name":"Pizza",
+            "description":"My Description"
+        };
+        sTypeModel.clear();
+        for (var i=0;i<lintNbSTypes;i++){
+            lclChaine.sTypeID = cymBdd.getSTypeID(i);
+            if (!cymBdd.isFileExist("/structuretypes/icon/"+Number(lclChaine.sTypeID).toString())){
+                cymBdd.downloadFileFromCloud("structuretypes/icon", Number(lclChaine.sTypeID).toString());
+            }
+            lclChaine.name = cymBdd.getSTypeName(i);
+            lclChaine.description = cymBdd.getSTypeDescription(i);
+            sTypeModel.append(lclChaine);
+        }
+    }
+
 
     //property alias popAddNewSite: popAddNewSite
     anchors.fill: parent
@@ -148,6 +170,10 @@ Item {
                 }
                 EditSiteSize{
                     id: edtSiteSize
+                    visible: false
+                }
+                LinkingSites{
+                    id: edtLnkSites
                     visible: false
                 }
             }
@@ -315,11 +341,13 @@ Item {
                 }
                 ListView{
                     id: listViewSType
+
                     flickDeceleration: 1494
                     width: 0.99*parent.width
                     height: 0.9*parent.height
                     visible: false
                     model: sTypeModel
+
                     delegate:Component {
 
 

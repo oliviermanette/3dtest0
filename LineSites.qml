@@ -126,6 +126,10 @@ Item {
                         id:btnLink
                         text: "+ Link"
                         flat: true
+                        onClicked: {
+                            edtLnkSites.fctSelectSite(index);
+                            edtLnkSites.visible = true;
+                        }
                     }
                     Component.onCompleted: {
                         if (siteLink!=0)

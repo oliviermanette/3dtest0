@@ -154,27 +154,9 @@ Rectangle{
                         onEntered: btnSelectStructType.font.bold = true;
                         onExited: btnSelectStructType.font.bold = false;
                         onClicked: {
-                            //TEST isFileExist(QString strFilename)
-                            //console.log("Voici le retour de isFileExist : ",cymBdd.isFileExist("Makefile"));
-                            if (cymBdd.checkCachesFolders())
-                                console.log("cache folders succesfully created");
-
                             cymBdd.updateSType();
-                            var lintNbSTypes = cymBdd.getNbSTypes();
-                            var lclChaine = {"sTypeID": 1, "name":"Pizza", "description":"My Description"};
-                            sTypeModel.clear();
-                            for (var i=0;i<lintNbSTypes;i++){
-                                lclChaine.sTypeID = cymBdd.getSTypeID(i);
-                                if (!cymBdd.isFileExist("/structuretypes/icon/"+Number(lclChaine.sTypeID).toString())){
-                                    //console.log("télécharge l'icone " + Number(lclChaine.sTypeID).toString());
-                                    cymBdd.downloadFileFromCloud("structuretypes/icon", Number(lclChaine.sTypeID).toString());
-                                }
-                                lclChaine.name = cymBdd.getSTypeName(i);
-                                lclChaine.description = cymBdd.getSTypeDescription(i);
-                                sTypeModel.append(lclChaine);
-                            }
-                            listViewSType.model = sTypeModel;
-                            listView.visible = false//sTypeModel;
+                            fctUpdateSType();
+                            listView.visible = false;
                             listViewSType.visible = true
 
                         }

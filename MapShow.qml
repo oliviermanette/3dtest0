@@ -9,6 +9,7 @@ Rectangle {
     property string strSearchField: ""
     property var lstModel: searchModel//siteModel
     property var mapCenter: QtPositioning.coordinate(48.856614, 2.3522219)
+    property double mapZoom: 14
 
     Location {
         id:startLocation
@@ -64,7 +65,7 @@ Rectangle {
         anchors.fill: parent
         plugin: myPlugin;
         center: mapCenter//QtPositioning.coordinate(48.856614, 2.3522219)
-        zoomLevel: 13
+        zoomLevel: mapZoom
 
         MouseArea {
             id: selectSiteMouseArea
