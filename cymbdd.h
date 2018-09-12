@@ -56,6 +56,8 @@ public:
     Q_INVOKABLE QString getSiteDescription(int intIndex, unsigned int intOwner=0);
     Q_INVOKABLE double getSiteLatitude(int intIndex, unsigned int intOwner=0);
     Q_INVOKABLE unsigned int getSiteID(int intIndex, unsigned int intOwner=0);
+    Q_INVOKABLE unsigned int getSiteLinked(int intIndex, unsigned int intOwner=0);
+    Q_INVOKABLE unsigned int getSiteLinkStruct(int intIndex, unsigned int intOwner=0);
     Q_INVOKABLE double getSiteLongitude(int intIndex, unsigned int intOwner=0);
     Q_INVOKABLE unsigned int getSiteScale(int intIndex);
 

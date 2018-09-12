@@ -123,8 +123,13 @@ Item {
                     height: parent.height
                     color: "transparent"
                     Button {
+                        id:btnLink
                         text: "+ Link"
                         flat: true
+                    }
+                    Component.onCompleted: {
+                        if (siteLink!=0)
+                            btnLink.visible = false;
                     }
                 }
             }

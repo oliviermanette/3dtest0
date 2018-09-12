@@ -759,8 +759,57 @@ unsigned int CymBDD::getSiteID(int intIndex, unsigned int intOwner)
             return dataSite[intIndex].m_uintIdSite;
     }
     return false;
-
 }
+
+unsigned int CymBDD::getSiteLinked(int intIndex, unsigned int intOwner)
+{
+    QString lstQuery = "SELECT multisites FROM sites where sites.owner="+QString::number(intOwner)+" limit "+QString::number(intIndex)+",1";
+    if ((!isCloudDbOpened)&&isLocalDbOpened){
+        QSqlQuery nquery(localDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"request getSiteLatitude correctly executed locally";
+            if (nquery.first())
+            {
+                return nquery.value(0).toUInt();
+            }
+        }
+        else {
+            qDebug()<<"an error occured while executing the request";
+            return false;
+        }
+    }
+    else if (isCloudDbOpened){
+        if (uintGNbSites)
+            return dataSite[intIndex].multisites;
+    }
+    return false;
+}
+
+unsigned int CymBDD::getSiteLinkStruct(int intIndex, unsigned int intOwner)
+{
+    QString lstQuery = "SELECT linkstruct FROM sites where sites.owner="+QString::number(intOwner)+" limit "+QString::number(intIndex)+",1";
+    if ((!isCloudDbOpened)&&isLocalDbOpened){
+        QSqlQuery nquery(localDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"request getSiteLatitude correctly executed locally";
+            if (nquery.first())
+            {
+                return nquery.value(0).toUInt();
+            }
+        }
+        else {
+            qDebug()<<"an error occured while executing the request";
+            return false;
+        }
+    }
+    else if (isCloudDbOpened){
+        if (uintGNbSites)
+            return dataSite[intIndex].linkstruct;
+    }
+    return false;
+}
+
+
 
 double CymBDD::getSiteLongitude(int intIndex, unsigned int intOwner)
 {

@@ -12,6 +12,8 @@ Item {
             "SiteLatitude":48,
             "SiteLongitude":1.5,
             "siteDescription":"My Description",
+            "siteLink":0,
+            "siteLinkStruct":0,
             "siteID":0
         };
         var lintNbSites = cymBdd.getNbSites();
@@ -24,6 +26,8 @@ Item {
             lclChaine.SiteLongitude = cymBdd.getSiteLongitude(i);
             lclChaine.siteDescription = cymBdd.getSiteDescription(i);
             lclChaine.siteID = cymBdd.getSiteID(i);
+            lclChaine.siteLink = cymBdd.getSiteLinked(i);
+            lclChaine.siteLinkStruct = cymBdd.getSiteLinkStruct(i);
             siteModel.append(lclChaine);
         }
     }
