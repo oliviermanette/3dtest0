@@ -39,3 +39,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     cymbdd.h
+
+DISTFILES += \
+    componentCreation.js

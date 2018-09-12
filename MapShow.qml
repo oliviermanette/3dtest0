@@ -7,9 +7,13 @@ Rectangle {
     border.width: 4
 
     property string strSearchField: ""
-    property var lstModel: searchModel//siteModel
-    property var mapCenter: QtPositioning.coordinate(48.856614, 2.3522219)
+    property var lstModel: searchModel
+    property var mapCenter: QtPositioning.coordinate(48.8591, 2.37135);
     property double mapZoom: 14
+    property var getMap: map
+    property var composant
+    property var sprite:[]
+    property int nbSprite: 0
 
     Location {
         id:startLocation
@@ -39,8 +43,6 @@ Rectangle {
         }
         onStatusChanged: {
             if (searchModel.count>0){
-
-
                 //console.log(PlaceSearchModel.Plac);//searchModel.count);
             }
         }
@@ -57,14 +59,11 @@ Rectangle {
         }
     }
 
-    //Rectangle{
-
-        //anchors.fill: parent
     Map {
         id: map
         anchors.fill: parent
         plugin: myPlugin;
-        center: mapCenter//QtPositioning.coordinate(48.856614, 2.3522219)
+        center: mapCenter
         zoomLevel: mapZoom
 
         MouseArea {

@@ -8,12 +8,34 @@ Rectangle {
     property double ldblWidthRatio: 0.4
     property int intTxtFldHeight: 25
     property int intSelectedSType: 0
+    property var composant
+    property var sprite
     function fctSelectSite(selectedSiteIdx){
         if (!blSelected1){
             cmbBoxSite1.currentIndex = selectedSiteIdx;
         }
         else{
             cmbBoxSite2.currentIndex = selectedSiteIdx;
+        }
+    }
+
+    function createSpriteObjects(lat1,long1,lat2,long2) {
+        if ((sprite !== null)&&(typeof sprite !== "undefined"))
+            sprite.destroy();
+        composant = Qt.createComponent("Pipeline.qml");
+        sprite = composant.createObject(showerMap.getMap,{"path": [
+                                            { latitude: lat1, longitude: long1 },
+                                            { latitude: lat2, longitude: long2 }]});
+        sprite.line.width=8;
+
+
+        if (sprite === null) {
+            // Error Handling
+            console.log("Error creating object");
+        }
+        else{
+            showerMap.getMap.addMapItem(sprite);
+            console.log("Add Object to map");
         }
     }
 
@@ -85,7 +107,7 @@ Rectangle {
                 onCurrentIndexChanged: {
                     //au milieu des 2
                     var lfltLat = siteModel.get(currentIndex).SiteLatitude + siteModel.get(cmbBoxSite1.currentIndex).SiteLatitude;
-                    var lfltLong = siteModel.get(currentIndex).SiteLongitude + siteModel.get(cmbBoxSite1.currentIndex).SiteLongitude
+                    var lfltLong = siteModel.get(currentIndex).SiteLongitude + siteModel.get(cmbBoxSite1.currentIndex).SiteLongitude;
                     var lfltLatitude = lfltLat/2;
                     var lfltLongitude = lfltLong/2;
                     lfltLat = siteModel.get(currentIndex).SiteLatitude - siteModel.get(cmbBoxSite1.currentIndex).SiteLatitude;
@@ -96,6 +118,10 @@ Rectangle {
                     showerMap.mapCenter = QtPositioning.coordinate(lfltLatitude, lfltLongitude);
                     //Ok mais il faut dézoomer pour voir les 2
                     showerMap.mapZoom = (-0.34) * lfltDistance + 9.8;
+                    createSpriteObjects(siteModel.get(cmbBoxSite1.currentIndex).SiteLatitude,
+                                        siteModel.get(cmbBoxSite1.currentIndex).SiteLongitude,
+                                        siteModel.get(currentIndex).SiteLatitude,
+                                        siteModel.get(currentIndex).SiteLongitude);
                     /*Pour trouver les chiffres ci-dessus j'ai résolu le système d'équation suivant:
                       16x+y=4;
                       1,2x+y=9;
@@ -192,6 +218,8 @@ Rectangle {
                 onClicked: {
                     blSelected1 =false;
                     edtLnkSites.visible = false;
+                    if ((sprite !== null)&&(typeof sprite !== "undefined"))
+                        sprite.destroy();
                 }
             }
             Button{
@@ -209,6 +237,8 @@ Rectangle {
                         strSelectedSType = " Select Type ";
                         intSelectedSType = 0;
                         fctUpdateSitesList();
+                        if ((sprite !== null)&&(typeof sprite !== "undefined"))
+                            sprite.destroy();
                     }
                     else
                         btnAddNewLink.text = "ERROR"

@@ -33,5 +33,6 @@
         <file>img/delete-1-icon.png</file>
         <file>EditStruct.qml</file>
         <file>LinkingSites.qml</file>
+        <file>Pipeline.qml</file>
     </qresource>
 </RCC>
