@@ -77,10 +77,13 @@ ListView {
                             editStruct1.structID = structID;
 
                             // Il faut faire apparaitre StlShow dans l'affichage main
+                            stlViewer.visible =true;
+                            siteOpen1.visible = false;
+                            cymBdd.addFileExtension(getPath()+"structuretypes/stl/"+sTypeID);
+                            stlViewer.strFilename = "file://"+getPath()+"structuretypes/stl/"+sTypeID+".stl";
                         }
                     }
                 }
-
 
                 Image {
                     id: structDeleteIcon
@@ -136,6 +139,8 @@ ListView {
                     editStruct1.strStructName = name;
                     editStruct1.siteID =  siteID;
                     editStruct1.structID = structID;
+
+                    cymBdd.removeFileExtension(stlViewer.strFilename.replace("file://",""));
                 }
             }
         }

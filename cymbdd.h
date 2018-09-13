@@ -104,6 +104,9 @@ public:
 
     Q_INVOKABLE bool delPipeline(int lintIndex);
 
+    Q_INVOKABLE bool addFileExtension(QString filename);
+    Q_INVOKABLE bool removeFileExtension(QString filename);
+
 signals:
     void loginRequired();
     void siteOpened(uint lintSiteID);

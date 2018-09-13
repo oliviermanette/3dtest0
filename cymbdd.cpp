@@ -278,6 +278,20 @@ bool CymBDD::delPipeline(int lintIndex)
     return false;
 }
 
+bool CymBDD::addFileExtension(QString filename)
+{
+    QFile toto(filename);
+    return toto.rename(filename+".stl");
+}
+
+bool CymBDD::removeFileExtension(QString filename)
+{
+    QFile toto(filename);
+    QString lstrTemp = filename.split(".")[0];
+    qDebug()<<lstrTemp;
+    return toto.rename(lstrTemp);
+}
+
 bool CymBDD::updateStructList(uint intSiteID)
 {
     QString lstQuery = "SELECT nom, ST_AsText(position_ref), type, idSurface FROM Cymbalum_demo.surfaces where site="+QString::number(intSiteID);

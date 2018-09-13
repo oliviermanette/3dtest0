@@ -20,12 +20,12 @@ Item {
         gradient: Gradient {
             GradientStop {
                 position: 0
-                color: "#33333f"
+                color: "#f9b7b7"
             }
 
             GradientStop {
                 position: 1
-                color: "#515160"
+                color: "#b9a7a7"
             }
         }
         Column{
@@ -39,7 +39,7 @@ Item {
                 font.family: "Verdana"
                 font.bold: false
                 font.pixelSize: 19
-                color: "#f8f9f4"
+
             }
             Row{
                 padding: 8
@@ -50,7 +50,7 @@ Item {
                     width: lblWidthRatio * parent.width
                     text: qsTr("Name :")
                     font.pixelSize: 17
-                    color: "#f8f9f4"
+
                 }
                 TextField {
                     id: txtEdtStructName
@@ -69,7 +69,7 @@ Item {
                     width: lblWidthRatio * parent.width
                     text: qsTr("Pos. Col.# :")
                     font.pixelSize: 17
-                    color: "#f8f9f4"
+
                 }
                 TextField {
                     id: txtEdtStrucPosX
@@ -88,7 +88,7 @@ Item {
                     text: qsTr("Pos. Row# :")
                     font.pixelSize: 17
                     width: lblWidthRatio * parent.width
-                    color: "#f8f9f4"
+
                 }
                 TextField {
                     id: txtEdtStrucPosY

@@ -54,6 +54,10 @@ Rectangle{
             Mesh {
                 id: stlMesh
                 source: strFilename
+
+
+                    //"file:///Users/oliviermanette/QtApps/build-3dtest0-5_11_1-Debug/structuretypes/stl/1.stl"
+                    //
                     //"file:///Users/oliviermanette/QtApps/build-3dtest0-5_11_1-Debug/structuretypes/stl/1.stl"
                     //"file://"+getPath()+"/structuretypes/stl/1"
                     //"https://storage.googleapis.com/cymbalum_files/table1.stl"

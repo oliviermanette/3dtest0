@@ -4,7 +4,6 @@ import QtQuick.Controls 2.2
 //import QtQml 2.11
 
 Item {
-
     width: parent.width - 0.02*parent.width
     height:lstRectangle.height + chListStruct.height
     function showDetailSite()
@@ -30,8 +29,6 @@ Item {
             radius: 4
             border.color: "#d8d9d4"
             Row{
-
-
                 id:clnListSites
                 anchors.fill: parent
                 spacing: 1

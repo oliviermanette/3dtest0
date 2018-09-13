@@ -314,6 +314,18 @@ Item {
                     visible: false
                     width: parent.width-2*parent.padding
                     height: 0.95*parent.height
+                    onVisibleChanged: {
+                        if (visible==true) {
+                            showerMap.visible = false;
+                            stlViewer.visible=false;
+                        }
+                    }
+                }
+                StlShow{
+                    id:stlViewer
+                    visible: false
+                    width: parent.width-2*parent.padding
+                    height: 0.95*parent.height
                 }
             }
         }
