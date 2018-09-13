@@ -161,13 +161,6 @@ Rectangle {
                 }
             }
             Row{
-                Connections{
-                    target: cymBdd
-                    onSTypeSelected:{
-                        intSelectedSType = uinSTypeID;
-                        btnSelectStructType.text = strSTypeName;
-                    }
-                }
                 width: parent.width - 2* parent.padding
                 spacing: 8
                 Button{
@@ -189,6 +182,13 @@ Rectangle {
 
                         }
 
+                    }
+                }
+                Connections{
+                    target: cymBdd
+                    onSTypeSelected:{
+                        intSelectedSType = uinSTypeID;
+                        btnSelectStructType.text = strSTypeName;
                     }
                 }
                 Button{

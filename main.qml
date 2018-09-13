@@ -8,6 +8,11 @@ Item {
     property var sprite:[];
     property int currentPipe:0;
 
+    function fctGetPath()
+    {
+        return cymBdd.getLocalPath();
+    }
+
     function fctUpdateSitesList()
     {
         var lclChaine = {
@@ -279,6 +284,8 @@ Item {
 
                         onClicked: {
                             showerMap.strSearchField = searchTextField.text;
+                            listView.visible = true;
+                            listViewSType.visible = false;
                         }
                     }
 

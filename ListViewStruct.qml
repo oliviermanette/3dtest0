@@ -2,10 +2,7 @@ import QtQuick 2.11
 
 ListView {
     id: canvas
-    function getPath()
-    {
-        return cymBdd.getLocalPath();
-    }
+
     clip: true
     interactive: false
     //model: sTypeModel
@@ -26,7 +23,7 @@ ListView {
                 columns: 5
                 Image {
                     id: imgSType
-                    source: "file://"+getPath()+"/structuretypes/icon/"+sTypeID
+                    source: "file://"+fctGetPath()+"/structuretypes/icon/"+sTypeID
                     height: parent.height - 2* parent.padding
                     fillMode: Image.PreserveAspectFit
                     width: height
@@ -79,8 +76,8 @@ ListView {
                             // Il faut faire apparaitre StlShow dans l'affichage main
                             stlViewer.visible =true;
                             siteOpen1.visible = false;
-                            cymBdd.addFileExtension(getPath()+"structuretypes/stl/"+sTypeID);
-                            stlViewer.strFilename = "file://"+getPath()+"structuretypes/stl/"+sTypeID+".stl";
+                            cymBdd.addFileExtension(fctGetPath()+"structuretypes/stl/"+sTypeID);
+                            stlViewer.strFilename = "file://"+fctGetPath()+"structuretypes/stl/"+sTypeID+".stl";
                         }
                     }
                 }
@@ -139,6 +136,7 @@ ListView {
                     editStruct1.strStructName = name;
                     editStruct1.siteID =  siteID;
                     editStruct1.structID = structID;
+                    editStruct1.sTypeID = sTypeID;
 
                     cymBdd.removeFileExtension(stlViewer.strFilename.replace("file://",""));
                 }

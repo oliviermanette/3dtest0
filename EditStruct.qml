@@ -8,14 +8,16 @@ Item {
     property string strStructName: "noname"
     property int siteID: 0
     property int structID: 0
+    property int sTypeID: 0
+    property string strSelectedSType: "Select Struct."
     property double lblWidthRatio: 0.4
     property double ldblHeight: 24
     width: parent.width-0.02*parent.width
-    height: 0.25 * parent.height
+    height: 0.33 * parent.height
     Rectangle {
         id: rectangle
         radius: 8
-        border.width: 0
+        border.width: 1
         anchors.fill: parent
         gradient: Gradient {
             GradientStop {
@@ -102,6 +104,48 @@ Item {
                 padding: 8
                 spacing: 16
                 width: parent.width
+                Image {
+                    id: imgSType
+                    source: "file://"+fctGetPath()+"/structuretypes/icon/"+sTypeID
+                    height: parent.height - 2* parent.padding
+                    fillMode: Image.PreserveAspectFit
+                    width: height
+                }
+                Connections{
+                    target: cymBdd
+                    onSTypeSelected:{
+                        sTypeID = uinSTypeID;
+                        btnSelectStructType.text = strSTypeName;
+                    }
+                }
+                Button{
+                    id:btnSelectStructType
+                    flat: true
+                    text: strSelectedSType
+                    font.underline: true
+                    font.capitalization: Font.MixedCase
+                    font.bold: false
+                    width: lblWidthRatio * parent.width
+                    onTextChanged: font.bold=true;
+                    MouseArea{
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        onEntered: btnSelectStructType.font.bold = true;
+                        onExited: btnSelectStructType.font.bold = false;
+                        onClicked: {
+                            cymBdd.updateSType();
+                            fctUpdateSType();
+                            listView.visible = false;
+                            listViewSType.visible = true;
+                        }
+                    }
+                }
+            }
+
+            Row{
+                padding: 8
+                spacing: 16
+                width: parent.width
                 Rectangle{
                     width: lblWidthRatio * parent.width
                     height: ldblHeight
@@ -109,7 +153,7 @@ Item {
                 }
 
                 Button {
-                    id: btnUpdateSiteSize
+                    id: btnUpdateStruct
                     width: lblWidthRatio * parent.width
                     height: ldblHeight
                     text: qsTr("Update")
@@ -118,7 +162,7 @@ Item {
                     font.bold: true
                     font.pointSize: 16
                     onClicked: {
-                        cymBdd.setUpdateStruct(Number(structID), Number(siteID),Number(txtEdtStrucPosX.text), Number(txtEdtStrucPosY.text), txtEdtStructName.text);
+                        cymBdd.setUpdateStruct(Number(structID), Number(siteID),Number(txtEdtStrucPosX.text), Number(txtEdtStrucPosY.text), txtEdtStructName.text,sTypeID);
                         cymBdd.pleaseEmitSiteOpened(siteID);
                     }
                 }
