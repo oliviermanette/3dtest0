@@ -54,6 +54,7 @@ Item {
                     popAskLogin.close();
 
                     fctUpdateSitesList();
+                    fctUpdatePipelines();
 
                     btnSignIn.text = "Sign Out";
                     editSites.visible = true;

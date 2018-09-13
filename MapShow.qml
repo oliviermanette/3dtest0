@@ -66,6 +66,11 @@ Rectangle {
         center: mapCenter
         zoomLevel: mapZoom
 
+        Component.onCompleted: {
+            cymBdd.updatePipelineList();
+            // TODO : check how to get the coordinate on the top left corner and on the right bottom corner
+        }
+
         MouseArea {
             id: selectSiteMouseArea
             anchors.fill: parent

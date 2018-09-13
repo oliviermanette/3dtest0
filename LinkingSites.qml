@@ -8,8 +8,9 @@ Rectangle {
     property double ldblWidthRatio: 0.4
     property int intTxtFldHeight: 25
     property int intSelectedSType: 0
-    property var composant
-    property var sprite
+    property var lvrComponent;
+    property var lvrSprite;
+
     function fctSelectSite(selectedSiteIdx){
         if (!blSelected1){
             cmbBoxSite1.currentIndex = selectedSiteIdx;
@@ -19,23 +20,29 @@ Rectangle {
         }
     }
 
-    function createSpriteObjects(lat1,long1,lat2,long2) {
-        if ((sprite !== null)&&(typeof sprite !== "undefined"))
-            sprite.destroy();
-        composant = Qt.createComponent("Pipeline.qml");
-        sprite = composant.createObject(showerMap.getMap,{"path": [
+    function deleteTempSprite(){
+        if ((lvrSprite !== null)&&(typeof lvrSprite !== "undefined"))
+            lvrSprite.destroy();
+    }
+
+    function createTempSpriteObjects(lat1,long1,lat2,long2) {
+        deleteTempSprite();
+        lvrComponent = Qt.createComponent("Pipeline.qml");
+        lvrSprite = lvrComponent.createObject(showerMap.getMap,{"path": [
                                             { latitude: lat1, longitude: long1 },
                                             { latitude: lat2, longitude: long2 }]});
-        sprite.line.width=8;
+        lvrSprite.line.width=5;
+        lvrSprite.line.color="black";
 
 
-        if (sprite === null) {
+        if (lvrSprite === null) {
             // Error Handling
             console.log("Error creating object");
         }
         else{
-            showerMap.getMap.addMapItem(sprite);
-            console.log("Add Object to map");
+            showerMap.getMap.addMapItem(lvrSprite);
+            currentPipe++;
+            console.log("Add Temporary object to map");
         }
     }
 
@@ -106,6 +113,7 @@ Rectangle {
                 textRole: "siteName"
                 onCurrentIndexChanged: {
                     //au milieu des 2
+                    blSelected1 =false;
                     var lfltLat = siteModel.get(currentIndex).SiteLatitude + siteModel.get(cmbBoxSite1.currentIndex).SiteLatitude;
                     var lfltLong = siteModel.get(currentIndex).SiteLongitude + siteModel.get(cmbBoxSite1.currentIndex).SiteLongitude;
                     var lfltLatitude = lfltLat/2;
@@ -118,7 +126,7 @@ Rectangle {
                     showerMap.mapCenter = QtPositioning.coordinate(lfltLatitude, lfltLongitude);
                     //Ok mais il faut dézoomer pour voir les 2
                     showerMap.mapZoom = (-0.34) * lfltDistance + 9.8;
-                    createSpriteObjects(siteModel.get(cmbBoxSite1.currentIndex).SiteLatitude,
+                    createTempSpriteObjects(siteModel.get(cmbBoxSite1.currentIndex).SiteLatitude,
                                         siteModel.get(cmbBoxSite1.currentIndex).SiteLongitude,
                                         siteModel.get(currentIndex).SiteLatitude,
                                         siteModel.get(currentIndex).SiteLongitude);
@@ -133,7 +141,7 @@ Rectangle {
                       ça ne change rien pour x mais ça change y
                       */
                     console.log(showerMap.mapZoom);
-                    blSelected1 =false;
+
                 }
             }
         }
@@ -218,8 +226,7 @@ Rectangle {
                 onClicked: {
                     blSelected1 =false;
                     edtLnkSites.visible = false;
-                    if ((sprite !== null)&&(typeof sprite !== "undefined"))
-                        sprite.destroy();
+                    deleteTempSprite();
                 }
             }
             Button{
@@ -231,14 +238,15 @@ Rectangle {
                 font.bold: true
                 height: intTxtFldHeight
                 onClicked: {
-                    if (cymBdd.addLinkToSites(siteModel.get(cmbBoxSite1.currentIndex).siteID, siteModel.get(cmbBoxSite2.currentIndex).siteID, intSelectedSType)){
+                    if (cymBdd.addLinkToSites(siteModel.get(cmbBoxSite1.currentIndex).siteID,
+                                              siteModel.get(cmbBoxSite2.currentIndex).siteID, intSelectedSType)){
                         blSelected1 =false;
                         edtLnkSites.visible = false;
                         strSelectedSType = " Select Type ";
                         intSelectedSType = 0;
                         fctUpdateSitesList();
-                        if ((sprite !== null)&&(typeof sprite !== "undefined"))
-                            sprite.destroy();
+                        deleteTempSprite();
+                        fctUpdatePipelines();
                     }
                     else
                         btnAddNewLink.text = "ERROR"

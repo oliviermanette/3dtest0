@@ -11,7 +11,7 @@ bool CymBDD::OpenCloudDB()
         qDebug()<<"Google Cloud Database Opened!";
         isCloudDbOpened = true;
         // uintSiteOwner = getOwnerIDByLogin("FLOD","Finger1nZeNose");
-        uintSiteOwner = 0; // initialize at 0 ==> no user
+        guintSiteOwner = 0; // initialize at 0 ==> no user
         //qDebug()<<"should emit the signal just here";
         emit loginRequired();
         // UpdateSitesFromCloud(); // TODO just after user signed in
@@ -43,13 +43,13 @@ bool CymBDD::OpenLocaleDB()
 
 bool CymBDD::UpdateSitesFromCloud(QString strSearchKey)
 {
-    if (!uintSiteOwner){
+    if (!guintSiteOwner){
         qDebug()<<"login Required !"; //uintSiteOwner
         emit loginRequired();
         return false;
     }
     // Charge tous les sites de la base de donnée dans la limite de MAXSITES_LM
-    QString lstQuery = "SELECT idsites, nom, latitude, longitude, description, multisites, linkstruct FROM sites where sites.owner="+QString::number(uintSiteOwner);
+    QString lstQuery = "SELECT idsites, nom, latitude, longitude, description, multisites, linkstruct FROM sites where sites.owner="+QString::number(guintSiteOwner);
     if (strSearchKey.length()>0)
         lstQuery += " and (description like '%"+strSearchKey+"%' or nom like '%"+strSearchKey+"%')";
     lstQuery += " LIMIT "+QString::number(MAXSITES_LM);
@@ -163,6 +163,121 @@ uint CymBDD::getStructIDFromPos(int lintPosX, int lintPosY)
     return 0;
 }
 
+uint CymBDD::updatePipelineList(/*double ldblLat1, double ldblLong1, double ldblLat2, double ldblLong2*/)
+{
+    /*SELECT
+     * T1.idsites as id1, T2.idsites as id2, T1.latitude AS lat1, T1.longitude AS long1, T2.latitude AS lat2, T2.longitude AS long2
+     * FROM
+     * sites AS T1, sites AS T2
+     * WHERE T1.multisites=T2.idsites AND T1.owner=1
+     *
+     */
+    if (!guintSiteOwner){
+        qDebug()<<"login Required !"; //uintSiteOwner
+        emit loginRequired();
+        return false;
+    }
+    uint luintNbPipeline = 0;
+    QString lstrQuery = "SELECT T1.idsites as id1, T2.idsites as id2, T1.latitude AS lat1, T1.longitude AS long1, T2.latitude AS lat2, T2.longitude AS long2 FROM sites AS T1, sites AS T2 WHERE T1.multisites=T2.idsites";
+    lstrQuery += " AND T1.owner="+QString::number(guintSiteOwner);
+
+    if (isCloudDbOpened){
+        QSqlQuery nquery(cloudDb);
+        if (nquery.exec(lstrQuery)){
+            qDebug()<<"request 'updateStructList' correctly executed on cloud";
+            while ((nquery.next())  && (luintNbPipeline<MAXSITES_LM))
+            {
+                dataPipelines[luintNbPipeline].SiteID1 = nquery.value(0).toUInt();
+                dataPipelines[luintNbPipeline].SiteID2 =nquery.value(1).toUInt();
+                dataPipelines[luintNbPipeline].dblLat1 = nquery.value(2).toDouble();
+                dataPipelines[luintNbPipeline].dblLong1 = nquery.value(3).toDouble();
+                dataPipelines[luintNbPipeline].dblLat2 = nquery.value(4).toDouble();
+                dataPipelines[luintNbPipeline].dblLong2 = nquery.value(5).toDouble();
+                luintNbPipeline++;
+            }
+        }
+    }
+
+    guintNbPipelines = luintNbPipeline;
+    return guintNbPipelines;
+}
+
+uint CymBDD::getPipelineNb()
+{
+    return guintNbPipelines;
+}
+
+uint CymBDD::getLineSiteID1(int lintIndex)
+{
+    return  dataPipelines[lintIndex].SiteID1;
+}
+
+uint CymBDD::getLineSiteID2(int lintIndex)
+{
+    return  dataPipelines[lintIndex].SiteID2;
+}
+
+double CymBDD::getLineSiteLat1(int lintIndex)
+{
+    return  dataPipelines[lintIndex].dblLat1;
+}
+
+double CymBDD::getLineSiteLat2(int lintIndex)
+{
+    return  dataPipelines[lintIndex].dblLat2;
+}
+
+double CymBDD::getLineSiteLong1(int lintIndex)
+{
+    return  dataPipelines[lintIndex].dblLong1;
+}
+
+double CymBDD::getLineSiteLong2(int lintIndex)
+{
+    return  dataPipelines[lintIndex].dblLong2;
+}
+
+bool CymBDD::delPipeline(int lintIndex)
+{
+    //UPDATE `Cymbalum_demo`.`sites` SET `multisites`='' WHERE `idsites`='15';
+    if (!guintSiteOwner){
+        qDebug()<<"login Required !"; //uintSiteOwner
+        emit loginRequired();
+        return false;
+    }
+    QString lstQuery = "UPDATE sites SET multisites=NULL WHERE idsites="+QString::number(dataPipelines[lintIndex].SiteID1)
+            + " AND multisites="+QString::number(dataPipelines[lintIndex].SiteID2)
+            +" AND owner="+QString::number(guintSiteOwner);
+
+    if ((!isCloudDbOpened)&&isLocalDbOpened){
+        QSqlQuery nquery(localDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"update site correctly executed locally";
+            return true;
+        }
+        else {
+            qDebug()<<"an error occured while executing the request locally";
+            qDebug()<<lstQuery;
+            return false;
+        }
+    }
+    else if (isCloudDbOpened){
+        QSqlQuery nquery(cloudDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"delete pipeline correctly executed on cloud";
+            qDebug()<<lstQuery;
+            updatePipelineList();
+            UpdateSitesFromCloud();
+            return true;
+        }
+        else {
+            qDebug()<<"an error occured while executing the request on the cloud";
+            qDebug()<<lstQuery;
+        }
+    }
+    return false;
+}
+
 bool CymBDD::updateStructList(uint intSiteID)
 {
     QString lstQuery = "SELECT nom, ST_AsText(position_ref), type, idSurface FROM Cymbalum_demo.surfaces where site="+QString::number(intSiteID);
@@ -204,7 +319,7 @@ bool CymBDD::updateStructList(uint intSiteID)
 
 bool CymBDD::updateSType(QString strSearchKey)
 {
-    QString lstQuery = "SELECT idstype, typename, description FROM structuretypes where structuretypes.owner="+QString::number(uintSiteOwner);
+    QString lstQuery = "SELECT idstype, typename, description FROM structuretypes where structuretypes.owner="+QString::number(guintSiteOwner);
     if (strSearchKey.length()>0)
         lstQuery = lstQuery +" and (description like '%"+strSearchKey+"%' or typename like '%"+strSearchKey+"%')";
     if (isCloudDbOpened){
@@ -261,14 +376,14 @@ CymBDD::~CymBDD()
 
 bool CymBDD::addNewSite(QString strNom, double dblLatitude, double dblLongitude, QString strCommentaire)
 {
-    if (!uintSiteOwner){
+    if (!guintSiteOwner){
         qDebug()<<"login Required !"; //uintSiteOwner
         emit loginRequired();
         return false;
     }
 
     QString lstQuery = "INSERT INTO sites (sites.nom,sites.latitude,sites.longitude,sites.description, sites.owner) VALUES ('"+
-            strNom+"', '"+ QString::number(dblLatitude)+"', '"+QString::number(dblLongitude)+"', '"+strCommentaire+"', '"+QString::number(uintSiteOwner)+"')";
+            strNom+"', '"+ QString::number(dblLatitude)+"', '"+QString::number(dblLongitude)+"', '"+strCommentaire+"', '"+QString::number(guintSiteOwner)+"')";
     qDebug() << lstQuery;
     if ((!isCloudDbOpened)&&isLocalDbOpened){
         QSqlQuery nquery(localDb);
@@ -305,7 +420,7 @@ bool CymBDD::addNewSite(QString strNom, double dblLatitude, double dblLongitude,
 bool CymBDD::delSite(unsigned int unintSiteRefID)
 {
     //DELETE FROM sites WHERE idsite=unintSiteRefID;
-    QString lstQuery = "DELETE FROM sites WHERE idsites="+ QString::number(unintSiteRefID)+ " AND owner="+QString::number(uintSiteOwner);
+    QString lstQuery = "DELETE FROM sites WHERE idsites="+ QString::number(unintSiteRefID)+ " AND owner="+QString::number(guintSiteOwner);
     if ((!isCloudDbOpened)&&isLocalDbOpened){
         QSqlQuery nquery(localDb);
         if (nquery.exec(lstQuery)){
@@ -338,7 +453,7 @@ bool CymBDD::delStructure(uint luinStructID)
 {
     /*
     DELETE surfaces FROM surfaces INNER JOIN sites ON surfaces.site=sites.idsites WHERE sites.owner=1 AND surfaces.idSurface=10 */
-    QString lstQuery = "DELETE surfaces FROM surfaces INNER JOIN sites ON surfaces.site=sites.idsites WHERE sites.owner="+QString::number(uintSiteOwner)
+    QString lstQuery = "DELETE surfaces FROM surfaces INNER JOIN sites ON surfaces.site=sites.idsites WHERE sites.owner="+QString::number(guintSiteOwner)
             + " AND surfaces.idSurface="+QString::number(luinStructID);
     if ((!isCloudDbOpened)&&isLocalDbOpened){
         QSqlQuery nquery(localDb);
@@ -471,17 +586,17 @@ unsigned int CymBDD::addNewStructType(QString strName, QString strDescription)
 {
     //INSERT INTO structuretypes (typename,description,owner) values ('test2','oui oui oui')
     //SELECT idstype FROM structuretypes WHERE typename=$var and owner=$uintSiteOwner
-        if (!uintSiteOwner){
+        if (!guintSiteOwner){
             emit loginRequired();
             return 0;
         }
 
-    QString lstQuery = "INSERT INTO structuretypes (typename,description,owner) values ('"+strName+"','"+strDescription+"',"+QString::number(uintSiteOwner)+")";
+    QString lstQuery = "INSERT INTO structuretypes (typename,description,owner) values ('"+strName+"','"+strDescription+"',"+QString::number(guintSiteOwner)+")";
     if ((!isCloudDbOpened)&&isLocalDbOpened){
         QSqlQuery nquery(localDb);
         if (nquery.exec(lstQuery)){
             qDebug()<<"request 'addNewStructType' correctly executed locally";
-            lstQuery="SELECT idstype FROM structuretypes WHERE typename='"+strName+"' and owner="+QString::number(uintSiteOwner);
+            lstQuery="SELECT idstype FROM structuretypes WHERE typename='"+strName+"' and owner="+QString::number(guintSiteOwner);
             if(nquery.exec(lstQuery)){
                 qDebug()<<"request 'get type ID' correctly executed on cloud";
                 if (nquery.first())
@@ -500,7 +615,7 @@ unsigned int CymBDD::addNewStructType(QString strName, QString strDescription)
         QSqlQuery nquery(cloudDb);
         if (nquery.exec(lstQuery)){
             qDebug()<<"request 'addNewStructType' correctly executed on cloud";
-            lstQuery="SELECT idstype FROM structuretypes WHERE typename='"+strName+"' and owner="+QString::number(uintSiteOwner);
+            lstQuery="SELECT idstype FROM structuretypes WHERE typename='"+strName+"' and owner="+QString::number(guintSiteOwner);
             if(nquery.exec(lstQuery)){
                 qDebug()<<"request 'get type ID' correctly executed on cloud";
                 if (nquery.first())
@@ -522,14 +637,14 @@ unsigned int CymBDD::addNewStructType(QString strName, QString strDescription)
 
 bool CymBDD::addNewStruct(QString strName, QString lintX, QString lintY, QString strSType, int intSiteID)
 {
-    if (!uintSiteOwner){
+    if (!guintSiteOwner){
         emit loginRequired();
         return 0;
     }
     //INSERT INTO surfaces(nom,site) VALUES('toto',(SELECT idstype from structuretypes WHERE typename='Cuicui'));
     QString lstQuery = "INSERT INTO surfaces(nom,site,position_ref,type) VALUES('"+
             strName+"',"+QString::number(intSiteID)+", ST_GeomFromText('POINT("+lintX+" "+lintY+")')"
-            +", (SELECT idstype from structuretypes WHERE typename='"+strSType+"' and owner="+QString::number(uintSiteOwner)+"))";
+            +", (SELECT idstype from structuretypes WHERE typename='"+strSType+"' and owner="+QString::number(guintSiteOwner)+"))";
     if (isCloudDbOpened){
         QSqlQuery nquery(cloudDb);
         if (nquery.exec(lstQuery)){
@@ -548,7 +663,7 @@ bool CymBDD::addNewStruct(QString strName, QString lintX, QString lintY, QString
 
 unsigned int CymBDD::getNbSites(unsigned int intOwner)
 {
-    intOwner = uintSiteOwner;
+    intOwner = guintSiteOwner;
     if (!intOwner){
         qDebug()<<"emit here again !"; //uintSiteOwner
         emit loginRequired();
@@ -579,11 +694,11 @@ unsigned int CymBDD::getNbSites(unsigned int intOwner)
 
 unsigned int CymBDD::getNbSTypes()
 {
-    if (!uintSiteOwner){
+    if (!guintSiteOwner){
         emit loginRequired();
         return 0;
     }
-    QString lstQuery = "SELECT count(*) FROM Cymbalum_demo.structuretypes where owner="+QString::number(uintSiteOwner);
+    QString lstQuery = "SELECT count(*) FROM Cymbalum_demo.structuretypes where owner="+QString::number(guintSiteOwner);
     if ((!isCloudDbOpened)&&isLocalDbOpened){
         QSqlQuery nquery(localDb);
         if (nquery.exec(lstQuery)){
@@ -842,7 +957,7 @@ double CymBDD::getSiteLongitude(int intIndex, unsigned int intOwner)
 
 unsigned int CymBDD::getSiteScale(int intIndex)
 {
-    QString lstQuery = "SELECT scale FROM sites where sites.owner="+QString::number(uintSiteOwner)+" AND idsites="+QString::number(intIndex);
+    QString lstQuery = "SELECT scale FROM sites where sites.owner="+QString::number(guintSiteOwner)+" AND idsites="+QString::number(intIndex);
     if ((!isCloudDbOpened)&&isLocalDbOpened){
         QSqlQuery nquery(localDb);
         if (nquery.exec(lstQuery)){
@@ -946,7 +1061,7 @@ unsigned int CymBDD::getSiteSizeX(int intIndex)
 {
     //SELECT ST_AsText(geometrie) from sites where idsites=16;
     QString lstQuery = "SELECT ST_AsText(geometrie) from sites where idsites="+QString::number(intIndex)+
-            " AND owner="+QString::number(uintSiteOwner);
+            " AND owner="+QString::number(guintSiteOwner);
     if ((!isCloudDbOpened)&&isLocalDbOpened){
         QSqlQuery nquery(localDb);
         if (nquery.exec(lstQuery)){
@@ -986,7 +1101,7 @@ unsigned int CymBDD::getSiteSizeY(int intIndex)
 {
     //SELECT ST_AsText(geometrie) from sites where idsites=16;
     QString lstQuery = "SELECT ST_AsText(geometrie) from sites where idsites="+QString::number(intIndex)+
-            " AND owner="+QString::number(uintSiteOwner);
+            " AND owner="+QString::number(guintSiteOwner);
     if ((!isCloudDbOpened)&&isLocalDbOpened){
         QSqlQuery nquery(localDb);
         if (nquery.exec(lstQuery)){
@@ -1028,7 +1143,7 @@ bool CymBDD::setSiteSize(int intIndex, QString lintX, QString lintY, QString lin
     //UPDATE sites SET geometrie=ST_GeomFromText('POINT(3 5)') WHERE idsites=15
     QString lstQuery = "UPDATE sites SET geometrie=ST_GeomFromText('POINT("+lintX+" "+lintY+
             ")'), scale="+lintScale
-            +" WHERE idsites="+QString::number(intIndex)+" AND owner="+QString::number(uintSiteOwner);
+            +" WHERE idsites="+QString::number(intIndex)+" AND owner="+QString::number(guintSiteOwner);
 
     if ((!isCloudDbOpened)&&isLocalDbOpened){
         QSqlQuery nquery(localDb);
@@ -1108,7 +1223,7 @@ bool CymBDD::setUpdateSite(unsigned int uintSiteID, QString strName, QString str
             dblLongitude +
             " WHERE idsites="+
             QString::number(uintSiteID)+
-            " AND owner="+QString::number(uintSiteOwner);
+            " AND owner="+QString::number(guintSiteOwner);
     if ((!isCloudDbOpened)&&isLocalDbOpened){
         QSqlQuery nquery(localDb);
         if (nquery.exec(lstQuery)){
@@ -1142,7 +1257,7 @@ bool CymBDD::addLinkToSites(uint uinSiteID1, uint uinSiteID2, uint uintSTypeID)
     QString lstQuery = "UPDATE `Cymbalum_demo`.`sites` SET multisites="+ QString::number(uinSiteID2);
     if (uintSTypeID)
         lstQuery += ", linkstruct="+ QString::number(uintSTypeID);
-    lstQuery +=" WHERE idsites="+ QString::number(uinSiteID1)+ " AND owner="+QString::number(uintSiteOwner);
+    lstQuery +=" WHERE idsites="+ QString::number(uinSiteID1)+ " AND owner="+QString::number(guintSiteOwner);
 
     if ((!isCloudDbOpened)&&isLocalDbOpened){
         QSqlQuery nquery(localDb);
@@ -1161,6 +1276,7 @@ bool CymBDD::addLinkToSites(uint uinSiteID1, uint uinSiteID2, uint uintSTypeID)
             qDebug()<<"update site correctly executed on cloud";
             qDebug()<<lstQuery;
             UpdateSitesFromCloud();
+            updatePipelineList();
             return true;
         }
         else {
@@ -1185,9 +1301,10 @@ unsigned int CymBDD::getOwnerIDByLogin(QString strLoginOrEMail, QString strPassw
         if (nquery.exec(lstQuery)){
             qDebug()<<"request 'login' correctly executed on cloud";
             if (nquery.first()){
-                uintSiteOwner = nquery.value(0).toUInt();
+                guintSiteOwner = nquery.value(0).toUInt();
                 UpdateSitesFromCloud();
-                return uintSiteOwner;
+                updatePipelineList();
+                return guintSiteOwner;
             }
         }
         else{
@@ -1200,12 +1317,12 @@ unsigned int CymBDD::getOwnerIDByLogin(QString strLoginOrEMail, QString strPassw
 
 unsigned int CymBDD::getOwnerID()
 {
-    return uintSiteOwner;
+    return guintSiteOwner;
 }
 
 bool CymBDD::signOut()
 {
-    uintSiteOwner = 0;
+    guintSiteOwner = 0;
     return true;
 }
 

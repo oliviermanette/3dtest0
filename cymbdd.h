@@ -93,6 +93,17 @@ public:
     Q_INVOKABLE QString getStructNameFromIndex(int lintPosX, int lintPosY);
     Q_INVOKABLE uint getStructIDFromPos(int lintPosX, int lintPosY);
 
+    Q_INVOKABLE uint updatePipelineList(/*double ldblLat1=0, double ldblLong1=0, double ldblLat2=0, double ldblLong2=0*/);
+    Q_INVOKABLE uint getPipelineNb();
+    Q_INVOKABLE uint getLineSiteID1(int lintIndex);
+    Q_INVOKABLE uint getLineSiteID2(int lintIndex);
+    Q_INVOKABLE double getLineSiteLat1(int lintIndex);
+    Q_INVOKABLE double getLineSiteLat2(int lintIndex);
+    Q_INVOKABLE double getLineSiteLong1(int lintIndex);
+    Q_INVOKABLE double getLineSiteLong2(int lintIndex);
+
+    Q_INVOKABLE bool delPipeline(int lintIndex);
+
 signals:
     void loginRequired();
     void siteOpened(uint lintSiteID);
@@ -113,7 +124,7 @@ private:
     bool OpenLocaleDB();
     bool UpdateSitesFromCloud(QString strSearchKey="");
 
-    unsigned int uintSiteOwner;
+    unsigned int guintSiteOwner;
 
     //Structure pour éviter de faire trop de requêtes sql et réseaux compte tenu du cloud
     struct strDataSite {
@@ -148,6 +159,17 @@ private:
     };
     stcStructures dataStructures[MAXSITES_LM];
     unsigned int guintNbStructures;
+
+    struct stcPipelines{
+        uint SiteID1;
+        uint SiteID2;
+        double dblLat1;
+        double dblLong1;
+        double dblLat2;
+        double dblLong2;
+    };
+    stcPipelines dataPipelines[MAXSITES_LM];
+    uint guintNbPipelines;
 };
 
 

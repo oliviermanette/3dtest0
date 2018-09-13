@@ -4,6 +4,10 @@ import QtQuick.Controls 2.2
 import QtPositioning 5.8
 
 Item {
+    property var composant;
+    property var sprite:[];
+    property int currentPipe:0;
+
     function fctUpdateSitesList()
     {
         var lclChaine = {
@@ -50,6 +54,48 @@ Item {
             lclChaine.name = cymBdd.getSTypeName(i);
             lclChaine.description = cymBdd.getSTypeDescription(i);
             sTypeModel.append(lclChaine);
+        }
+    }
+    function delPipeline(lintIndex){
+        if ((sprite[lintIndex] !== null)&&(typeof sprite[lintIndex] !== "undefined"))
+            sprite[lintIndex].destroy();
+        cymBdd.delPipeline(lintIndex);
+        fctUpdatePipelines();
+        fctUpdateSitesList();
+    }
+
+    function createSpriteObjects(lat1,long1,lat2,long2) {
+        if ((sprite[currentPipe] !== null)&&(typeof sprite[currentPipe] !== "undefined"))
+            sprite[currentPipe].destroy();
+        composant = Qt.createComponent("Pipeline.qml");
+        sprite[currentPipe] = composant.createObject(showerMap.getMap,{"path": [
+                                            { latitude: lat1, longitude: long1 },
+                                            { latitude: lat2, longitude: long2 }]});
+        sprite[currentPipe].line.width=8;
+        sprite[currentPipe].index = currentPipe;
+        sprite[currentPipe].fctDelete = delPipeline;
+
+        if (sprite[currentPipe] === null) {
+            // Error Handling
+            console.log("Error creating object");
+        }
+        else{
+            showerMap.getMap.addMapItem(sprite[currentPipe]);
+            currentPipe++;
+            console.log("Add Object to map :",currentPipe);
+        }
+    }
+
+    function fctUpdatePipelines(){
+        var lnbPipes = cymBdd.getPipelineNb();
+        currentPipe = 0;
+
+        for (var i=0;i<lnbPipes;i++)
+        {
+            createSpriteObjects(cymBdd.getLineSiteLat1(i),
+                                cymBdd.getLineSiteLong1(i),
+                                cymBdd.getLineSiteLat2(i),
+                                cymBdd.getLineSiteLong2(i));
         }
     }
 
