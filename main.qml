@@ -328,12 +328,56 @@ Item {
                         }
                     }
                 }
-                StlShow{
-                    id:stlViewer
-                    visible: false
+                Column{
                     width: parent.width-2*parent.padding
                     height: 0.95*parent.height
+                    Row{
+                        Rectangle{
+                            width: 30
+                            height: 30
+                            color: "red"
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked: {
+                                    stlViewer.intPosX += 25;
+
+                                }
+                            }
+                        }
+                        Rectangle{
+                            width: 30
+                            height: 30
+                            color: "blue"
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked: {
+                                    stlViewer.intPosX -= 25;
+                                }
+                            }
+                        }
+                        Rectangle{
+                            width: 20
+                            height: 20
+                            color: "green"
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked: {
+                                    stlViewer.intTorX -= 25;
+                                }
+                            }
+                        }
+                    }
+
+
+                    StlShow{
+                        id:stlViewer
+                        visible: false
+                        width: parent.width-2*parent.padding
+                        height: 0.95*parent.height
+                    }
                 }
+
+
             }
         }
 /*

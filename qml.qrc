@@ -34,5 +34,6 @@
         <file>EditStruct.qml</file>
         <file>LinkingSites.qml</file>
         <file>Pipeline.qml</file>
+        <file>CapteurP.qml</file>
     </qresource>
 </RCC>
