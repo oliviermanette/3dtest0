@@ -162,6 +162,7 @@ Item {
             width: 0.18*parent.width
             height: parent.height
             color: "#b0afb9"
+            objectName: "rect"
             radius: 4
             border.color: "#2e2e3a"
             border.width: 1

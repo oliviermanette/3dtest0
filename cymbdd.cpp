@@ -292,6 +292,22 @@ bool CymBDD::removeFileExtension(QString filename)
     return toto.rename(lstrTemp);
 }
 
+void CymBDD::setMesh3D(Qt3DRender::QMesh * lmesh_ptr)
+{
+    mesh3D = lmesh_ptr;
+    connect(mesh3D,&Qt3DRender::QMesh::sourceChanged,this,&CymBDD::getChangedMesh);
+}
+
+void CymBDD::setObjectContext(QObject * object)
+{
+    gCtxObject = object;
+}
+
+void CymBDD::getChangedMesh(const QUrl &source)
+{
+    qDebug()<<"New mesh with #vertex : "<<mesh3D->vertexCount()<<"; source: "<<source;
+}
+
 bool CymBDD::updateStructList(uint intSiteID)
 {
     QString lstQuery = "SELECT nom, ST_AsText(position_ref), type, idSurface FROM Cymbalum_demo.surfaces where site="+QString::number(intSiteID);
@@ -364,6 +380,8 @@ bool CymBDD::updateSType(QString strSearchKey)
 
 CymBDD::CymBDD(QObject *parent) : QObject(parent)
 {
+    mesh3D = nullptr;
+    gCtxObject = nullptr;
     isCloudDbOpened = false;
     isLocalDbOpened = false;
     guintNbSType = 0;
@@ -1342,7 +1360,31 @@ bool CymBDD::signOut()
 
 void CymBDD::toto()
 {
-    emit loginRequired();
+
+    Qt3DRender::QMesh * lmesh = new Qt3DRender::QMesh();
+
+    lmesh->setMeshName("FlyingWedge");
+    lmesh->setSource( QUrl("qrc:/stl/1.stl") );
+
+
+    // now i print some of properties.
+    qDebug() << lmesh->geometry() << ", children nodes=" << lmesh->childNodes().count();
+    // ... children... primitiveCount... and so on. I see only empty values.
+    qDebug()<<"local mesh status : "<<lmesh->status();
+    qDebug()<<lmesh->vertexCount();
+    delete lmesh;
+/*
+    if (gCtxObject!=nullptr)
+        mesh3D = gCtxObject->findChild<Qt3DRender::QMesh*>("skeletonStruct");
+    if (mesh3D != nullptr){
+        qDebug()<<"New mesh with #vertex : "<<mesh3D->vertexCount();
+
+        //mesh3D->setSource((QUrl("file:///Users/oliviermanette/Downloads/OpenSCAD_3D_Surface_Plotter/3dplot-cos-absx-absy.stl")));
+        //qDebug()<<"#vertex asked again : "<<mesh3D->vertexCount();
+    }
+*/
+    //emit loginRequired();
+    //
 }
 
 

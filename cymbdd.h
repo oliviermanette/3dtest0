@@ -16,6 +16,8 @@
 
 #include <qtconcurrentrun.h>
 #include <QThread>
+#include <Qt3DRender/QMesh>
+#include <QEntity>
 
 class CymBDD : public QObject
 {
@@ -106,6 +108,9 @@ public:
 
     Q_INVOKABLE bool addFileExtension(QString filename);
     Q_INVOKABLE bool removeFileExtension(QString filename);
+    void setMesh3D(Qt3DRender::QMesh*);
+    void setObjectContext(QObject*);
+
 
 signals:
     void loginRequired();
@@ -115,6 +120,7 @@ signals:
     void sTypeSelected(uint uinSTypeID, QString strSTypeName);
 
 public slots:
+    void getChangedMesh(const QUrl &source);
 
 private:
     QSqlDatabase cloudDb = QSqlDatabase::addDatabase("QMYSQL", "psyched-bee-204709:europe-west2:flod-cymbalum");
@@ -128,6 +134,8 @@ private:
     bool UpdateSitesFromCloud(QString strSearchKey="");
 
     unsigned int guintSiteOwner;
+    Qt3DRender::QMesh* mesh3D;
+    QObject* gCtxObject;
 
     //Structure pour éviter de faire trop de requêtes sql et réseaux compte tenu du cloud
     struct strDataSite {

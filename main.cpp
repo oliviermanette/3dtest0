@@ -10,7 +10,9 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QDebug>
-#include <QQuickView>
+#include <QtQuick>
+#include <Qt3DRender/QMesh>
+
 
 #include "cymbdd.h"
 
@@ -34,6 +36,16 @@ int main(int argc, char *argv[])
     view.setResizeMode(QQuickView::SizeRootObjectToView);
     view.setSource(QUrl("qrc:/main.qml"));
     view.show();
+
+    QObject* object = view.rootObject();
+    cymBdd->setObjectContext(object);
+    Qt3DRender::QMesh *rect = object->findChild<Qt3DRender::QMesh*>("skeletonStruct");
+    if (rect){
+        qDebug()<<"Found QML object";
+        cymBdd->setMesh3D(rect);
+        qDebug()<<rect->vertexCount();
+        //rect->setProperty("color", "red");
+    }
 /*
     if (engine.rootObjects().isEmpty())
         return -1;

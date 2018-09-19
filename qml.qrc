@@ -35,5 +35,6 @@
         <file>LinkingSites.qml</file>
         <file>Pipeline.qml</file>
         <file>CapteurP.qml</file>
+        <file>stl/1.stl</file>
     </qresource>
 </RCC>

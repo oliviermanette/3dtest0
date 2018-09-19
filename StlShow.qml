@@ -60,6 +60,23 @@ Rectangle{
                 Mesh {
                     id: stlMesh
                     source: strFilename
+                    objectName: "skeletonStruct"
+                    //enabled: false
+                    onVertexCountChanged:{
+                        console.log("vertext count : ",vertexCount);
+
+                    }
+
+                    //Component.onCompleted: cymBdd.toto(stlMesh.geometry);
+
+
+                    onSourceChanged: {
+                        console.log("the source of my stl is :",source);
+                        console.log("here I can see the source has changed,",stlMesh.status," I'm going to call toto...");
+                        //if (stlMesh.status===2) stlMesh.enabled = false;
+                        console.log("vertext count : ",vertexCount);
+                        cymBdd.toto();
+                    }
                 }
 
                 Transform {
