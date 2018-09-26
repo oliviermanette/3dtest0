@@ -9,11 +9,9 @@
 #include <QSqlDatabase>
 #include <QString>
 #include <QDebug>
-
 #include <QProcess>
 #include <QDir>
 #include <QFileInfo>
-
 #include <qtconcurrentrun.h>
 #include <QThread>
 #include <Qt3DRender/QMesh>
@@ -108,6 +106,8 @@ public:
 
     Q_INVOKABLE bool addFileExtension(QString filename);
     Q_INVOKABLE bool removeFileExtension(QString filename);
+
+    Q_INVOKABLE void parseOBJFile(QString lstrFilename);
     void setMesh3D(Qt3DRender::QMesh*);
     void setObjectContext(QObject*);
 

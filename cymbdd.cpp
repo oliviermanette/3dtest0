@@ -292,6 +292,13 @@ bool CymBDD::removeFileExtension(QString filename)
     return toto.rename(lstrTemp);
 }
 
+void CymBDD::parseOBJFile(QString lstrFilename)
+{
+    QFile lFileObf(lstrFilename);
+
+
+}
+
 void CymBDD::setMesh3D(Qt3DRender::QMesh * lmesh_ptr)
 {
     mesh3D = lmesh_ptr;
@@ -383,7 +390,7 @@ CymBDD::CymBDD(QObject *parent) : QObject(parent)
     mesh3D = nullptr;
     gCtxObject = nullptr;
     isCloudDbOpened = false;
-    isLocalDbOpened = false;
+    isLocalDbOpened = true;
     guintNbSType = 0;
     uintGNbSites = 0;
 #ifndef QT_NO_CONCURRENT
@@ -1363,15 +1370,16 @@ void CymBDD::toto()
 
     Qt3DRender::QMesh * lmesh = new Qt3DRender::QMesh();
 
-    lmesh->setMeshName("FlyingWedge");
-    lmesh->setSource( QUrl("qrc:/stl/1.stl") );
-
+    //lmesh->setMeshName("FlyingWedge");
+    //lmesh->setSource(QUrl::fromLocalFile("/Users/oliviermanette/Downloads/OpenSCAD_3D_Surface_Plotter/3dplot-cos-absx-absy.stl"));
+    //qDebug()<<"local mesh status / : "<<lmesh->source();
+    //lmesh->setSource( QUrl("qrc:/stl/1.stl") );
 
     // now i print some of properties.
-    qDebug() << lmesh->geometry() << ", children nodes=" << lmesh->childNodes().count();
+    //qDebug() << lmesh->geometry()->childNodes().count() << ", children nodes=" << lmesh->geometryFactory();
     // ... children... primitiveCount... and so on. I see only empty values.
-    qDebug()<<"local mesh status : "<<lmesh->status();
-    qDebug()<<lmesh->vertexCount();
+    //qDebug()<<"local mesh status real : "<<lmesh->status();
+    //qDebug()<<lmesh->vertexCount();
     delete lmesh;
 /*
     if (gCtxObject!=nullptr)

@@ -20,7 +20,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-    cymbdd.cpp
+    cymbdd.cpp \
+    flodvec3.cpp
 
 RESOURCES += qml.qrc
 
@@ -38,6 +39,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    cymbdd.h
+    cymbdd.h \
+    flodvec3.h
 
 DISTFILES +=
