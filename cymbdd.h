@@ -16,6 +16,7 @@
 #include <QThread>
 #include <Qt3DRender/QMesh>
 #include <QEntity>
+#include <flod3d.h>
 
 class CymBDD : public QObject
 {

@@ -1370,6 +1370,11 @@ void CymBDD::toto()
 
     Qt3DRender::QMesh * lmesh = new Qt3DRender::QMesh();
 
+    //flod3D testFlod3D("/Users/oliviermanette/Downloads/OpenSCAD_3D_Surface_Plotter/3dplot-cos-absx-absy.stl");
+    flod3D testFlod3D("/Users/oliviermanette/QtApps/build-3dtest0-5_11_1-Debug/structuretypes/stl/6.stl");
+    testFlod3D.detectFileType();
+    testFlod3D.readSTLB();
+
     //lmesh->setMeshName("FlyingWedge");
     //lmesh->setSource(QUrl::fromLocalFile("/Users/oliviermanette/Downloads/OpenSCAD_3D_Surface_Plotter/3dplot-cos-absx-absy.stl"));
     //qDebug()<<"local mesh status / : "<<lmesh->source();

@@ -9,6 +9,7 @@ class flodVec3 : public QVector3D
     Q_OBJECT
 public:
     flodVec3(char* facet);
+    flodVec3();
 
 signals:
 
