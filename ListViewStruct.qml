@@ -12,7 +12,7 @@ ListView {
             anchors.right: parent.right
             width: canvas.width *0.85;
             height: 30
-            color: "#b9a7a7"
+            color: "#B3B3B3"
             border.color: "#4b4747"
             radius: 3
             //image.height + label.paintedHeight
@@ -45,7 +45,7 @@ ListView {
                     height: parent.height - 2* parent.padding
                     width: lblStructOpen.width
                     visible: false
-                    color: "#f9b7b7"
+                    color: "#6EABFF"
                     border.color: "#4b4747"
                     Text {
                         id: lblStructOpen
@@ -109,7 +109,7 @@ ListView {
                 target: cymBdd
                 onStructOpened:{
                     if (lstrName!=name){
-                        rootListItem.color = "#b9a7a7";
+                        rootListItem.color = "#B3B3B3";
                         structDeleteIcon.visible = false;
                         mouseSelectionStruct.visible = true;
                         rctLblStructOpen.visible = false;
@@ -123,7 +123,7 @@ ListView {
                 onClicked: {
                    // ici on fait changer la couleur pour montrer qu'elle est sélectionnée
                     cymBdd.pleaseEmitStructOpened(name);
-                    rootListItem.color = "#f9b7b7";
+                    rootListItem.color = "#6EABFF";
                     structDeleteIcon.visible = true;
                     mouseSelectionStruct.visible = false;
                     rctLblStructOpen.visible = true;

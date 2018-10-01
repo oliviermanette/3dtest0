@@ -20,7 +20,7 @@ Rectangle {
     {
         return cymBdd.getLocalPath();
     }
-    color: "#eeeef7"
+    color: "#F0F0F0"
     radius: 4
     property double ldblWidthRatio: 0.4
     property int intTxtFldHeight: 25

@@ -4,15 +4,15 @@ Rectangle{
     id:rectangle
     width: parent.width - 0.015*parent.width
     height: 64//0.08*parent.height
-    color: "#d0d1e6"
+    color: "#D1D1D1"
     gradient: Gradient {
         GradientStop {
             position: 0.00;
-            color: "#d0d1e6";
+            color: "#D1D1D1";
         }
         GradientStop {
             position: 1.00;
-            color: "#ffffff";
+            color: "#B3B3B3";
         }
     }
     radius: 4
@@ -44,8 +44,8 @@ Rectangle{
         }
         hoverEnabled: true
         onEntered: {
-            searchAdd.color="red";
-            searchTitle.color="red";}
+            searchAdd.color="#6EABFF";
+            searchTitle.color="#6EABFF";}
 
         onExited: {
             searchAdd.color="black";

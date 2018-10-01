@@ -19,7 +19,7 @@ Rectangle{
     property double ldblWidthRatio: 0.4
     property int intTxtFldHeight: 25
     property string strSelectedSType: " Select Type "
-    color: "#eeeef7"
+    color: "#F0F0F0"
     //anchors.fill: parent
     radius: 4
     Column {

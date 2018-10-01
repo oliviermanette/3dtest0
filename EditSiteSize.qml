@@ -19,12 +19,12 @@ Item {
         gradient: Gradient {
             GradientStop {
                 position: 0
-                color: "#33333f"
+                color: "#5B5B5B"
             }
 
             GradientStop {
                 position: 1
-                color: "#515160"
+                color: "#3F3F3F"
             }
         }
         Column{

@@ -40,7 +40,7 @@ Column{
         width: parent.width
         font.bold: true
         font.underline: true
-        color: "#ebeec3"
+        color: "#273C59"
         font.pointSize: 24
     }
     Grid{
@@ -60,14 +60,14 @@ Column{
                 property int lintPosY: 0
 
                 //anchors.fill: parent
-                color: "#2E3561"
-                border.color: "#eceecd"
+                color: "#2A4161"
+                border.color: "#5D90D6"
                 border.width: 1
                 MouseArea{
                     anchors.fill: parent
                     hoverEnabled: true
-                    onEntered: rctArea.color="#0cea08";
-                    onExited: rctArea.color="#2E3561"//"#0cea08";
+                    onEntered: rctArea.color="#6EABFF";
+                    onExited: rctArea.color="#2A4161"//"#0cea08";
                     onClicked: {
                         //console.log("index = ",index);
                         //console.log("sizeX = ", txtSizeX);

@@ -161,10 +161,10 @@ Item {
             id: rctTreeView
             width: 0.18*parent.width
             height: parent.height
-            color: "#b0afb9"
+            color: "#B3B3B3"
             objectName: "rect"
             radius: 4
-            border.color: "#2e2e3a"
+            border.color: "#2A4161"
             border.width: 1
             Column{
                 anchors.fill: parent
@@ -193,9 +193,9 @@ Item {
             id:rctEditInfo
             width: 0.18*parent.width
             height: parent.height
-            color: "#b0afb9"
+            color: "#B3B3B3"
             radius: 4
-            border.color: "#2e2e3a"
+            border.color: "#2A4161"
             border.width: 1
             Column{
                 anchors.fill: parent
@@ -236,19 +236,19 @@ Item {
             id: mapArea
             width: 0.46*parent.width
             height: parent.height
-            color: "#2e2e3a"
+            color: "#2A4161"
             gradient: Gradient {
                 GradientStop {
                     position: 0.00;
-                    color: "#2e2e3a";
+                    color: "#F0F0F0";
                 }
                 GradientStop {
                     position: 1.00;
-                    color: "#f9f2f2";
+                    color: "#B3B3B3";
                 }
             }
             radius: 4
-            border.color: "#2e2e3a"
+            border.color: "#2A4161"
             border.width: 1
 
             Column{
@@ -391,7 +391,7 @@ Item {
             height: parent.height
             color: "#e1eef3"
             radius: 4
-            border.color: "#2e2e3a"
+            border.color: "#2A4161"
             border.width: 1
         }*/
 
@@ -399,8 +399,8 @@ Item {
             id: rctContextInfo
             width: 0.18*parent.width
             height: parent.height
-            color: "#b0afb9"
-            border.color: "#2e2e3a"
+            color: "#B3B3B3"
+            border.color: "#2A4161"
             border.width: 1
             radius: 4
             Column{

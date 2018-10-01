@@ -1367,18 +1367,18 @@ bool CymBDD::signOut()
 
 void CymBDD::toto()
 {
-    //flod3D testFlod3D("/Users/oliviermanette/Downloads/OpenSCAD_3D_Surface_Plotter/3dplot-cos-absx-absy.stl");
-    //flod3D testFlod3D("/Users/oliviermanette/QtApps/build-3dtest0-5_11_1-Debug/structuretypes/stl/6.stl");
+//    flod3D testFlod3D("/Users/oliviermanette/Downloads/OpenSCAD_3D_Surface_Plotter/3dplot-cos-absx-absy.stl");
+//    flod3D testFlod3D("/Users/oliviermanette/QtApps/build-3dtest0-5_11_1-Debug/structuretypes/stl/6.stl");
 //    flod3D testFlod3D("/Users/oliviermanette/Downloads/Sphericon.stl");
-    flod3D testFlod3D("/Users/oliviermanette/QtApps/3dtest1/3dtest1.stl");
+//    flod3D testFlod3D("/Users/oliviermanette/QtApps/3dtest1/3dtest1.stl");
 
-    testFlod3D.detectFileType();
-    testFlod3D.readSTL();
-    qDebug()<<"FLOD3D : NUMBER OF VERTEX : "<<testFlod3D.getNbVertex();
-    QVector3D lvec3 = testFlod3D.getVertexPos(1);
-    qDebug()<<"Position vector 1 x: "<<lvec3.x();
-    qDebug()<<"Position vector 1 y: "<<lvec3.y();
-    qDebug()<<"Position vector 1 z: "<<lvec3.z();
+//    testFlod3D.detectFileType();
+//    testFlod3D.readSTL();
+//    qDebug()<<"FLOD3D : NUMBER OF VERTEX : "<<testFlod3D.getNbVertex();
+//    QVector3D lvec3 = testFlod3D.getVertexPos(1);
+//    qDebug()<<"Position vector 1 x: "<<lvec3.x();
+//    qDebug()<<"Position vector 1 y: "<<lvec3.y();
+//    qDebug()<<"Position vector 1 z: "<<lvec3.z();
 
 }
 

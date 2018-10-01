@@ -25,9 +25,9 @@ Item {
                 right: parent.right
             }
             height: 38
-            color: "#d0d1e6"
+            color: "#D1D1D1"
             radius: 4
-            border.color: "#d8d9d4"
+            border.color: "#2A4161"
             Row{
                 id:clnListSites
                 anchors.fill: parent
@@ -48,7 +48,7 @@ Item {
                         MouseArea{
                             anchors.fill: parent
                             hoverEnabled: true
-                            onEntered: txtListSiteName.color="#0cea08";
+                            onEntered: txtListSiteName.color="#5D90D6";
                             onExited: txtListSiteName.color="black"
                             onClicked: {
                                 showerMap.visible = true;

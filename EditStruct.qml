@@ -16,19 +16,21 @@ Item {
     height: 0.33 * parent.height
     Rectangle {
         id: rectangle
+        color: "#385782"
         radius: 8
-        border.width: 1
-        anchors.fill: parent
         gradient: Gradient {
             GradientStop {
-                position: 0
-                color: "#f9b7b7"
+                position: 0.00;
+                color: "#D1D1D1";
             }
             GradientStop {
-                position: 1
-                color: "#b9a7a7"
+                position: 1.00;
+                color: "#B3B3B3";
             }
         }
+        border.width: 1
+        border.color: "#2A4161"
+        anchors.fill: parent
         Column{
             anchors.fill: parent
             Text {
