@@ -21,6 +21,8 @@ public:
     enum FILEFORMAT {STLA, STLB, NONE};
     FILEFORMAT detectFileType();
     uint readSTLB();
+    uint readSTLA();
+    uint readSTL();
     void initBaseColor();
 
     QVector3D getVertexPos(uint i);
@@ -39,7 +41,7 @@ private:
     Qt3DRender::QGeometryRenderer* gOGLGeomRenderer;
 
     float gBaseColor[3];
-    uint guintSize;
+    uint guintSize; //nb de vertices
     uint gByteStride;
 
 signals:

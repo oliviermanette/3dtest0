@@ -17,6 +17,7 @@ bool flod3D::readFile(QString strFilename)
     if (!file.open(QIODevice::ReadOnly))
         return false;
     gbaBuffer = file.readAll();
+    normBuffer.resize(0);
     file.close();
     if (gbaBuffer.size())
         return true;
@@ -41,7 +42,7 @@ uint flod3D::readSTLB()
 {
     if (gFormat!=STLB)
         return 0;
-    guintSize = *reinterpret_cast<uint*>((gbaBuffer.data()+80));
+    guintSize = *reinterpret_cast<uint*>((gbaBuffer.data()+80)); 
 
     for (int i=0;i<static_cast<int>(guintSize);i++){
         normBuffer.append(gbaBuffer.mid(i*9* static_cast<int>(sizeof (float)),3*static_cast<int>(sizeof(float))));
@@ -54,6 +55,58 @@ uint flod3D::readSTLB()
 
     gByteStride = 6*sizeof (float);
     return guintSize;
+}
+
+uint flod3D::readSTLA()
+{
+    if (gFormat!=STLA)
+        return 0;
+    QList<QByteArray> lListLines = gbaBuffer.split('\n');
+    //qDebug()<<"Number of Lines : V+N : "<<lListLines.size();
+    gbaBuffer.resize(0);
+    normBuffer.resize(0);
+    int lintSize = lListLines.size();
+    uint luintNbVertex=0, luinNbFacets=0;
+    QList<QByteArray> lwords;
+    float lfltTemp=0.0f;
+    for (int i=0;i<lintSize;i++){
+         lwords = lListLines[i].split(' ');
+         if (lwords.size()>5){
+             if (lwords[1]=="facet"){
+                 for (int j=3;j<6;j++){
+                     lfltTemp = lwords[j].toFloat();
+                     normBuffer.append(reinterpret_cast<char*>(&lfltTemp));
+                 }
+                 luinNbFacets++;
+             }
+             else if (lwords[3]=="vertex") {
+                 luintNbVertex++;
+                 for (int j=4;j<7;j++){
+                     lfltTemp = lwords[j].toFloat();
+                     gbaBuffer.append(reinterpret_cast<char*>(&lfltTemp));
+                 }
+                 gbaBuffer.append(reinterpret_cast<char*>(&gBaseColor),3*static_cast<int>(sizeof(float)));
+             }
+         }
+    }
+
+    //lListLines
+    guintSize = normBuffer.size();
+    qDebug()<<"size of normBuffer (3*4*1682/7) : "<<normBuffer.size();
+    qDebug()<<"FLOD3D: number of facet "<<luinNbFacets;
+    qDebug()<<"FLOD3D: number of vertex "<<luintNbVertex;
+    qDebug()<<"FLOD3D: size of buffer "<<gbaBuffer.size();
+    return guintSize;
+}
+
+uint flod3D::readSTL()
+{
+    if (gFormat==STLA)
+        return readSTLA();
+    else if (gFormat==STLB)
+        return readSTLB();
+    else
+        return 0;
 }
 
 void flod3D::initBaseColor()

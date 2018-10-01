@@ -1371,9 +1371,11 @@ void CymBDD::toto()
     Qt3DRender::QMesh * lmesh = new Qt3DRender::QMesh();
 
     //flod3D testFlod3D("/Users/oliviermanette/Downloads/OpenSCAD_3D_Surface_Plotter/3dplot-cos-absx-absy.stl");
-    flod3D testFlod3D("/Users/oliviermanette/QtApps/build-3dtest0-5_11_1-Debug/structuretypes/stl/6.stl");
+    //flod3D testFlod3D("/Users/oliviermanette/QtApps/build-3dtest0-5_11_1-Debug/structuretypes/stl/6.stl");
+    flod3D testFlod3D("/Users/oliviermanette/Downloads/Sphericon.stl");
+
     testFlod3D.detectFileType();
-    testFlod3D.readSTLB();
+    testFlod3D.readSTL();
 
     //lmesh->setMeshName("FlyingWedge");
     //lmesh->setSource(QUrl::fromLocalFile("/Users/oliviermanette/Downloads/OpenSCAD_3D_Surface_Plotter/3dplot-cos-absx-absy.stl"));
