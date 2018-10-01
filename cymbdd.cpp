@@ -1367,39 +1367,19 @@ bool CymBDD::signOut()
 
 void CymBDD::toto()
 {
-
-    Qt3DRender::QMesh * lmesh = new Qt3DRender::QMesh();
-
     //flod3D testFlod3D("/Users/oliviermanette/Downloads/OpenSCAD_3D_Surface_Plotter/3dplot-cos-absx-absy.stl");
     //flod3D testFlod3D("/Users/oliviermanette/QtApps/build-3dtest0-5_11_1-Debug/structuretypes/stl/6.stl");
-    flod3D testFlod3D("/Users/oliviermanette/Downloads/Sphericon.stl");
+//    flod3D testFlod3D("/Users/oliviermanette/Downloads/Sphericon.stl");
+    flod3D testFlod3D("/Users/oliviermanette/QtApps/3dtest1/3dtest1.stl");
 
     testFlod3D.detectFileType();
     testFlod3D.readSTL();
+    qDebug()<<"FLOD3D : NUMBER OF VERTEX : "<<testFlod3D.getNbVertex();
+    QVector3D lvec3 = testFlod3D.getVertexPos(1);
+    qDebug()<<"Position vector 1 x: "<<lvec3.x();
+    qDebug()<<"Position vector 1 y: "<<lvec3.y();
+    qDebug()<<"Position vector 1 z: "<<lvec3.z();
 
-    //lmesh->setMeshName("FlyingWedge");
-    //lmesh->setSource(QUrl::fromLocalFile("/Users/oliviermanette/Downloads/OpenSCAD_3D_Surface_Plotter/3dplot-cos-absx-absy.stl"));
-    //qDebug()<<"local mesh status / : "<<lmesh->source();
-    //lmesh->setSource( QUrl("qrc:/stl/1.stl") );
-
-    // now i print some of properties.
-    //qDebug() << lmesh->geometry()->childNodes().count() << ", children nodes=" << lmesh->geometryFactory();
-    // ... children... primitiveCount... and so on. I see only empty values.
-    //qDebug()<<"local mesh status real : "<<lmesh->status();
-    //qDebug()<<lmesh->vertexCount();
-    delete lmesh;
-/*
-    if (gCtxObject!=nullptr)
-        mesh3D = gCtxObject->findChild<Qt3DRender::QMesh*>("skeletonStruct");
-    if (mesh3D != nullptr){
-        qDebug()<<"New mesh with #vertex : "<<mesh3D->vertexCount();
-
-        //mesh3D->setSource((QUrl("file:///Users/oliviermanette/Downloads/OpenSCAD_3D_Surface_Plotter/3dplot-cos-absx-absy.stl")));
-        //qDebug()<<"#vertex asked again : "<<mesh3D->vertexCount();
-    }
-*/
-    //emit loginRequired();
-    //
 }
 
 

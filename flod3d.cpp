@@ -43,7 +43,7 @@ uint flod3D::readSTLB()
     if (gFormat!=STLB)
         return 0;
     guintSize = *reinterpret_cast<uint*>((gbaBuffer.data()+80)); 
-
+    gbaBuffer.remove(0,84);
     for (int i=0;i<static_cast<int>(guintSize);i++){
         normBuffer.append(gbaBuffer.mid(i*9* static_cast<int>(sizeof (float)),3*static_cast<int>(sizeof(float))));
         gbaBuffer.remove(i*(9*static_cast<int>(sizeof (float))),3*static_cast<int>(sizeof (float)));
@@ -75,7 +75,7 @@ uint flod3D::readSTLA()
              if (lwords[1]=="facet"){
                  for (int j=3;j<6;j++){
                      lfltTemp = lwords[j].toFloat();
-                     normBuffer.append(reinterpret_cast<char*>(&lfltTemp));
+                     normBuffer.append(reinterpret_cast<char*>(&lfltTemp),sizeof (float));
                  }
                  luinNbFacets++;
              }
@@ -83,19 +83,20 @@ uint flod3D::readSTLA()
                  luintNbVertex++;
                  for (int j=4;j<7;j++){
                      lfltTemp = lwords[j].toFloat();
-                     gbaBuffer.append(reinterpret_cast<char*>(&lfltTemp));
+                     gbaBuffer.append(reinterpret_cast<char*>(&lfltTemp),sizeof (float));
+
                  }
                  gbaBuffer.append(reinterpret_cast<char*>(&gBaseColor),3*static_cast<int>(sizeof(float)));
              }
          }
     }
 
-    //lListLines
-    guintSize = normBuffer.size();
-    qDebug()<<"size of normBuffer (3*4*1682/7) : "<<normBuffer.size();
+    guintSize = luintNbVertex;
+    qDebug()<<"FLOD3D first vertex : "<<*reinterpret_cast<float*>(gbaBuffer.data());
     qDebug()<<"FLOD3D: number of facet "<<luinNbFacets;
     qDebug()<<"FLOD3D: number of vertex "<<luintNbVertex;
     qDebug()<<"FLOD3D: size of buffer "<<gbaBuffer.size();
+    gByteStride = 6*sizeof (float);
     return guintSize;
 }
 
