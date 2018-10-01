@@ -336,24 +336,70 @@ Item {
                         Rectangle{
                             width: 30
                             height: 30
-                            color: "red"
+                            color: "yellow"
                             MouseArea{
                                 anchors.fill: parent
                                 onClicked: {
-                                    stlViewer.intPosX += 25;
+                                    var lclCapteur = {
+                                        "sensorName":"Pizza",
+                                        "sensorPosX": 0,
+                                        "sensorPosY":0,
+                                        "sensorPosZ":0,
+                                        "siteDescription":"My Description",
+                                        "siteLink":0,
+                                        "siteLinkStruct":0,
+                                        "siteID":0
+                                    };
+                                    stlViewer.extSensors.clear();
+                                    cymBdd.loadNewSTLFile(stlViewer.strFilename);
+                                    lclCapteur.sensorPosX = cymBdd.getCurrentVertexX();
+                                    lclCapteur.sensorPosY = cymBdd.getCurrentVertexY();
+                                    lclCapteur.sensorPosZ = cymBdd.getCurrentVertexZ();
 
+                                    console.log(stlViewer.strFilename);
+                                    console.log(lclCapteur.sensorPosX);
+                                    console.log(lclCapteur.sensorPosY);
+                                    console.log(lclCapteur.sensorPosZ);
+                                    stlViewer.extSensors.append(lclCapteur);
                                 }
+                            }
+                        }
+
+                        Rectangle{
+                            width: 30
+                            height: 30
+                            color: "red"
+                            Timer{
+                                id:fastBackward
+                                onTriggered: stlViewer.intPosX += 25;
+                                interval: 77
+                                repeat: true
+                            }
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked: stlViewer.intPosX += 10;
+                                onPressAndHold: fastBackward.start();
+                                onReleased: fastBackward.stop();
                             }
                         }
                         Rectangle{
                             width: 30
                             height: 30
                             color: "blue"
+                            Timer{
+                                id:fastForward
+                                onTriggered: stlViewer.intPosX -= 25;
+                                interval: 77
+                                repeat: true
+                            }
+
+
                             MouseArea{
                                 anchors.fill: parent
-                                onClicked: {
-                                    stlViewer.intPosX -= 25;
-                                }
+                                onClicked: stlViewer.intPosX -= 10;
+                                onPressAndHold: fastForward.start();
+                                onReleased: fastForward.stop();
+
                             }
                         }
                         Rectangle{
@@ -363,8 +409,39 @@ Item {
                             MouseArea{
                                 anchors.fill: parent
                                 onClicked: {
-                                    stlViewer.intTorX -= 25;
+
+                                    var lclCapteur = {
+                                        "sensorName":"Pizza",
+                                        "sensorPosX": 0,
+                                        "sensorPosY":0,
+                                        "sensorPosZ":0,
+                                        "siteDescription":"My Description",
+                                        "siteLink":0,
+                                        "siteLinkStruct":0,
+                                        "siteID":0
+                                    };
+                                    stlViewer.extSensors.clear();
+                                    cymBdd.nextVertex();
+                                    lclCapteur.sensorPosX = cymBdd.getCurrentVertexX();
+                                    lclCapteur.sensorPosY = cymBdd.getCurrentVertexY();
+                                    lclCapteur.sensorPosZ = cymBdd.getCurrentVertexZ();
+
+                                    console.log(stlViewer.strFilename);
+                                    console.log(lclCapteur.sensorPosX);
+                                    console.log(lclCapteur.sensorPosY);
+                                    console.log(lclCapteur.sensorPosZ);
+                                    stlViewer.extSensors.append(lclCapteur);
                                 }
+                            }
+                        }
+                        Rectangle{
+                            width: 30
+                            height: 30
+                            color: "orange"
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked: stlViewer.extRotate.start()
+
                             }
                         }
                     }
@@ -377,23 +454,8 @@ Item {
                         height: 0.95*parent.height
                     }
                 }
-
-
             }
         }
-/*
-        Rectangle {
-            enabled: false
-            visible: false
-
-            id: scene
-            width: 0.46*parent.width
-            height: parent.height
-            color: "#e1eef3"
-            radius: 4
-            border.color: "#2A4161"
-            border.width: 1
-        }*/
 
         Rectangle {
             id: rctContextInfo
@@ -414,12 +476,9 @@ Item {
                     height: 31
                     text: qsTr("Sign In")
 
-
-
                     onClicked: {
                         //popup.open();
                         if (cymBdd.getOwnerID()){
-                            //sign out
                             cymBdd.signOut();
 
                             siteModel.clear();

@@ -12,6 +12,11 @@ Rectangle{
     property string strFilename: "value"
     property int intPosX: 300
     property int intTorX: 300
+    property var extSensors: maxCount
+    property var extRotate: rotateShow
+    ListModel{
+        id:maxCount
+    }
     width: 500
     height: 500
     color: "#e1eef3"
@@ -40,7 +45,7 @@ Rectangle{
                     nearPlane : 0.1
                     farPlane : 3000.0
                     position: Qt.vector3d( 500.0, 500.0, intPosX )
-                    upVector: Qt.vector3d( 0.0, 0.0, 0.0 )
+                    upVector: Qt.vector3d( 0.0, 1.0, 0.0 )
                     viewCenter: Qt.vector3d( 0.0, 0.0, 0.0 )
 
                 }
@@ -61,22 +66,6 @@ Rectangle{
                     id: stlMesh
                     source: strFilename
                     objectName: "skeletonStruct"
-                    //enabled: false
-                    onVertexCountChanged:{
-                        console.log("vertext count : ",vertexCount);
-
-                    }
-
-                    //Component.onCompleted: cymBdd.toto(stlMesh.geometry);
-
-
-                    onSourceChanged: {
-                        console.log("the source of my stl is :",source);
-                        console.log("here I can see the source has changed,",stlMesh.status," I'm going to call toto...");
-                        //if (stlMesh.status===2) stlMesh.enabled = false;
-                        console.log("vertext count : ",vertexCount);
-                        cymBdd.toto();
-                    }
                 }
 
                 Transform {
@@ -87,12 +76,13 @@ Rectangle{
                 }
 
                 NumberAnimation {
+                    id:rotateShow
                     target: stlTransform
                     property: "progressAngle"
                     duration: 10000
                     from: 0
                     to: 360
-                    loops: Animation.Infinite
+                    loops: 1
                     running: true
                 }
 
@@ -107,7 +97,6 @@ Rectangle{
 
                 NodeInstantiator {
                         id: collection
-                        property int maxCount: 3
                         model: maxCount
                         delegate: CapteurP{
                             id: monCapteur

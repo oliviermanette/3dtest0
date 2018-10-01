@@ -49,15 +49,20 @@ Column{
         //anchors.fill: parent
         width: parent.width - 10
         height: 0.8*parent.height
+        transform: [
+                    // Rotation { axis { x: 1; y: 0; z: 0 } angle: 65 }
+                 ]
 
         Repeater{
             model: txtSizeX*txtSizeY
+
             Rectangle{
                 id:rctArea
                 width: getBestFit(parent.width)//4*77/txtSizeY
                 height: getBestFit(parent.width)//4*77/txtSizeY
                 property int lintPosX: 0
                 property int lintPosY: 0
+
 
                 //anchors.fill: parent
                 color: "#2A4161"
@@ -67,7 +72,7 @@ Column{
                     anchors.fill: parent
                     hoverEnabled: true
                     onEntered: rctArea.color="#6EABFF";
-                    onExited: rctArea.color="#2A4161"//"#0cea08";
+                    onExited: rctArea.color="#2A4161";
                     onClicked: {
                         //console.log("index = ",index);
                         //console.log("sizeX = ", txtSizeX);
@@ -84,6 +89,9 @@ Column{
                 Image {
                     id: imgStruct
                     source: "" //"file://"+strLocalPath+"structuretypes/icon/1" //"img/73225988_s.jpg"
+                    transform: [
+                                // Rotation { axis { x: 1; y: 0; z: 0 } angle: -65 }
+                             ]
                     anchors.fill: parent
                     ScaleAnimator{
                         target: imgStruct

@@ -299,6 +299,49 @@ void CymBDD::parseOBJFile(QString lstrFilename)
 
 }
 
+void CymBDD::loadNewSTLFile(QString lstrFilename)
+{
+    gUintCurrentVertex =0;
+    gBlIs3dStlOk = false;
+    lstrFilename.remove("file://");
+    gFLOD3D = new flod3D(lstrFilename);
+    gFLOD3D->detectFileType();
+    if (gFLOD3D->readSTL())
+        gBlIs3dStlOk=true;
+}
+
+float CymBDD::getCurrentVertexX()
+{
+    if (gBlIs3dStlOk)
+        return gFLOD3D->getVertexPos(gUintCurrentVertex).x();
+    else
+        return 0;
+}
+
+float CymBDD::getCurrentVertexY()
+{
+    if (gBlIs3dStlOk)
+        return gFLOD3D->getVertexPos(gUintCurrentVertex).y();
+    else
+        return 0;
+}
+
+float CymBDD::getCurrentVertexZ()
+{
+    if (gBlIs3dStlOk)
+        return gFLOD3D->getVertexPos(gUintCurrentVertex).z();
+    else
+        return 0;
+}
+
+void CymBDD::nextVertex()
+{
+    if (gUintCurrentVertex<(gFLOD3D->getNbVertex()-1))
+        gUintCurrentVertex++;
+    else
+        gUintCurrentVertex=0;
+}
+
 void CymBDD::setMesh3D(Qt3DRender::QMesh * lmesh_ptr)
 {
     mesh3D = lmesh_ptr;

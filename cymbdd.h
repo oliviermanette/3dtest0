@@ -109,6 +109,13 @@ public:
     Q_INVOKABLE bool removeFileExtension(QString filename);
 
     Q_INVOKABLE void parseOBJFile(QString lstrFilename);
+
+    Q_INVOKABLE void loadNewSTLFile(QString lstrFilename);
+    Q_INVOKABLE float getCurrentVertexX();
+    Q_INVOKABLE float getCurrentVertexY();
+    Q_INVOKABLE float getCurrentVertexZ();
+    Q_INVOKABLE void nextVertex();
+
     void setMesh3D(Qt3DRender::QMesh*);
     void setObjectContext(QObject*);
 
@@ -137,6 +144,10 @@ private:
     unsigned int guintSiteOwner;
     Qt3DRender::QMesh* mesh3D;
     QObject* gCtxObject;
+
+    uint gUintCurrentVertex;
+    bool gBlIs3dStlOk;
+    flod3D* gFLOD3D;
 
     //Structure pour éviter de faire trop de requêtes sql et réseaux compte tenu du cloud
     struct strDataSite {
