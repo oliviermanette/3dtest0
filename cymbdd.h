@@ -41,6 +41,7 @@ public:
 
     Q_INVOKABLE unsigned int getNbSites(unsigned int intOwner=0);
     Q_INVOKABLE unsigned int getNbSTypes();
+    Q_INVOKABLE unsigned int getNbSensorTypes();
     Q_INVOKABLE unsigned int getNbStructures();
     Q_INVOKABLE int getStructureStypeID(unsigned int luintIndex);
     Q_INVOKABLE int getStructurePosY(unsigned int luintIndex);
@@ -51,9 +52,14 @@ public:
     Q_INVOKABLE QString getSiteName(int intIndex, unsigned int intOwner=0);
 
     Q_INVOKABLE bool updateSType(QString strSearchKey="");
+    Q_INVOKABLE bool updateSensorType(QString strSearchKey="");
     Q_INVOKABLE QString getSTypeName(int intIndex);
+    Q_INVOKABLE QString getSensorTypeName(int intIndex);
     Q_INVOKABLE QString getSTypeDescription(int intIndex);
+    Q_INVOKABLE QString getSensorTypeDescription(int intIndex);
     Q_INVOKABLE unsigned int getSTypeID(int intIndex);
+    Q_INVOKABLE unsigned int getSensorTypeID(int intIndex);
+
     Q_INVOKABLE QString getSiteDescription(int intIndex, unsigned int intOwner=0);
     Q_INVOKABLE double getSiteLatitude(int intIndex, unsigned int intOwner=0);
     Q_INVOKABLE unsigned int getSiteID(int intIndex, unsigned int intOwner=0);
@@ -89,6 +95,7 @@ public:
     Q_INVOKABLE void pleaseEmitStructOpened(QString lstrName);
     Q_INVOKABLE void pleaseEmitStructDeleted(uint luinStructID);
     Q_INVOKABLE void pleaseEmitSTypeSelected(uint uinSTypeID, QString strSTypeName="");
+    Q_INVOKABLE void pleaseEmitSensorTypeSelected(uint uinSTypeID, QString strSTypeName="");
 
     Q_INVOKABLE int getStructIconFromIndex(int lintPosX, int lintPosY);
     Q_INVOKABLE QString getStructNameFromIndex(int lintPosX, int lintPosY);
@@ -126,6 +133,7 @@ signals:
     void structOpened(QString lstrName);
     void structDeleted(uint uinStructID);
     void sTypeSelected(uint uinSTypeID, QString strSTypeName);
+    void sensorTypeSelected(uint uinSensorTypeID, QString strSTypeName);
 
 public slots:
     void getChangedMesh(const QUrl &source);
@@ -169,6 +177,9 @@ private:
     };
     stcSType dataSType[MAXSITES_LM];
     unsigned int guintNbSType;
+
+    stcSType dataSensorType[MAXSITES_LM];
+    unsigned int guintNbSensorType;
 
     bool updateStructList(uint intSiteID);
 

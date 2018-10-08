@@ -6,12 +6,14 @@ import Qt3D.Extras 2.0
 import Qt3D.Input 2.0
 import Qt3D.Render 2.0
 import Qt3D.Logic 2.0
+import QtGraphicalEffects 1.0
 
 Rectangle{
     id: scene
     property string strFilename: "value"
     property int intPosX: 300
-    property int intTorX: 300
+    property int intPosY: 300
+    property int intPosZ: 500
     property var extSensors: maxCount
     property var extRotate: rotateShow
     ListModel{
@@ -30,7 +32,6 @@ Rectangle{
                 var strPath = cymBdd.getLocalPath();
                 console.log("file://"+strPath+"/structuretypes/stl/1");
                 return strPath;
-
             }
             anchors.fill: parent
             anchors.margins: 10
@@ -44,7 +45,7 @@ Rectangle{
                     fieldOfView: 100
                     nearPlane : 0.1
                     farPlane : 3000.0
-                    position: Qt.vector3d( 500.0, 500.0, intPosX )
+                    position: Qt.vector3d( intPosX, intPosY, intPosZ )
                     upVector: Qt.vector3d( 0.0, 1.0, 0.0 )
                     viewCenter: Qt.vector3d( 0.0, 0.0, 0.0 )
 
@@ -66,6 +67,7 @@ Rectangle{
                     id: stlMesh
                     source: strFilename
                     objectName: "skeletonStruct"
+
                 }
 
                 Transform {
@@ -85,14 +87,22 @@ Rectangle{
                     loops: 1
                     running: true
                 }
-
+                PointLight {
+                    id:redlightDistrict
+                                color: "white"
+                                intensity: 1
+                            }
                 Entity {
                     property Material progressMaterial: PhongMaterial {
-                        ambient: "#f9f9e5"
-                        diffuse: "white"
+
+                        ambient: "#D1D1D1"
+                        diffuse: "#F0F0F0"
+                        shininess : 50.0
+                        //alpha: 0.7
+                        specular: "#385782"
                     }
 
-                    components: [stlMesh, progressMaterial, stlTransform]
+                    components: [stlMesh, progressMaterial, stlTransform,redlightDistrict]
                 }
 
                 NodeInstantiator {

@@ -210,6 +210,7 @@ Rectangle {
                             fctUpdateSType();
                             listView.visible = false;
                             listViewSType.visible = true;
+                            listViewSensorType.visible=false;
                         }
                     }
                 }

@@ -76,8 +76,14 @@ ListView {
                             // Il faut faire apparaitre StlShow dans l'affichage main
                             stlViewer.visible =true;
                             siteOpen1.visible = false;
-                            cymBdd.addFileExtension(fctGetPath()+"structuretypes/stl/"+sTypeID);
-                            stlViewer.strFilename = "file://"+fctGetPath()+"structuretypes/stl/"+sTypeID+".stl";
+                            console.log("Download : /structuretypes/stl/"+sTypeID);
+                            if (!cymBdd.isFileExist("/structuretypes/stl/"+sTypeID)){
+
+                                cymBdd.downloadFileFromCloud("structuretypes/stl", sTypeID);
+
+                            }
+                            cymBdd.addFileExtension(fctGetPath()+"/structuretypes/stl/"+sTypeID);
+                            stlViewer.strFilename = "file://"+fctGetPath()+"/structuretypes/stl/"+sTypeID+".stl";
                         }
                     }
                 }

@@ -56,11 +56,41 @@ Item {
             if (!cymBdd.isFileExist("/structuretypes/icon/"+Number(lclChaine.sTypeID).toString())){
                 cymBdd.downloadFileFromCloud("structuretypes/icon", Number(lclChaine.sTypeID).toString());
             }
+            if (!cymBdd.isFileExist("/structuretypes/stl/"+Number(lclChaine.sTypeID).toString())){
+                cymBdd.downloadFileFromCloud("structuretypes/stl", Number(lclChaine.sTypeID).toString());
+            }
             lclChaine.name = cymBdd.getSTypeName(i);
             lclChaine.description = cymBdd.getSTypeDescription(i);
             sTypeModel.append(lclChaine);
         }
     }
+
+    function fctUpdateSensorType(){
+        if (cymBdd.checkCachesFolders())
+            console.log("cache folders succesfully created");
+        var lintNbSensorTypes = cymBdd.getNbSensorTypes();
+        var lclChaine = {
+            "sensorsTypeID": 1,
+            "name":"Pizza",
+            "description":"My Description"
+        };
+        sensorTypeModel.clear();
+        for (var i=0;i<lintNbSensorTypes;i++){
+            lclChaine.sensorsTypeID = cymBdd.getSensorTypeID(i);
+            if (!cymBdd.isFileExist("/sensortypes/icon/"+Number(lclChaine.sensorsTypeID).toString())){
+                cymBdd.downloadFileFromCloud("sensortypes/icon", Number(lclChaine.sensorsTypeID).toString());
+            }
+            if (!cymBdd.isFileExist("/sensortypes/stl/"+Number(lclChaine.sensorsTypeID).toString())){
+                cymBdd.downloadFileFromCloud("sensortypes/stl", Number(lclChaine.sensorsTypeID).toString());
+            }
+            lclChaine.name = cymBdd.getSensorTypeName(i);
+            console.log("nom sensor:",lclChaine.name);
+            lclChaine.description = cymBdd.getSensorTypeDescription(i);
+            console.log("nom sensor:",lclChaine.description);
+            sensorTypeModel.append(lclChaine);
+        }
+    }
+
     function delPipeline(lintIndex){
         if ((sprite[lintIndex] !== null)&&(typeof sprite[lintIndex] !== "undefined"))
             sprite[lintIndex].destroy();
@@ -155,6 +185,9 @@ Item {
         }
         ListModel{
             id:structModel
+        }
+        ListModel{
+            id:sensorTypeModel
         }
 
         Rectangle{
@@ -287,6 +320,7 @@ Item {
                             showerMap.strSearchField = searchTextField.text;
                             listView.visible = true;
                             listViewSType.visible = false;
+                            listViewSensorType.visible=false;
                         }
                     }
 
@@ -334,33 +368,55 @@ Item {
                     height: 0.95*parent.height
                     Row{
                         Rectangle{
-                            width: 30
+                            id:rctAddSensor
+                            property bool lblAdd: true
+                            width: 100
                             height: 30
                             color: "yellow"
+                            Text {
+                                id: txtAddSensor
+                                text: qsTr("Add Sensor")
+                                anchors.fill: parent
+                            }
                             MouseArea{
                                 anchors.fill: parent
                                 onClicked: {
-                                    var lclCapteur = {
-                                        "sensorName":"Pizza",
-                                        "sensorPosX": 0,
-                                        "sensorPosY":0,
-                                        "sensorPosZ":0,
-                                        "siteDescription":"My Description",
-                                        "siteLink":0,
-                                        "siteLinkStruct":0,
-                                        "siteID":0
-                                    };
-                                    stlViewer.extSensors.clear();
-                                    cymBdd.loadNewSTLFile(stlViewer.strFilename);
-                                    lclCapteur.sensorPosX = cymBdd.getCurrentVertexX();
-                                    lclCapteur.sensorPosY = cymBdd.getCurrentVertexY();
-                                    lclCapteur.sensorPosZ = cymBdd.getCurrentVertexZ();
+                                    if (rctAddSensor.lblAdd){
+                                        cymBdd.updateSensorType();
+                                        fctUpdateSensorType();
+                                        listView.visible = false;
+                                        listViewSType.visible = false;
+                                        listViewSensorType.visible=true;
 
-                                    console.log(stlViewer.strFilename);
-                                    console.log(lclCapteur.sensorPosX);
-                                    console.log(lclCapteur.sensorPosY);
-                                    console.log(lclCapteur.sensorPosZ);
-                                    stlViewer.extSensors.append(lclCapteur);
+                                        var lclCapteur = {
+                                            "sensorName":"Pizza",
+                                            "sensorPosX": 0,
+                                            "sensorPosY":0,
+                                            "sensorPosZ":0,
+                                            "siteDescription":"My Description",
+                                            "siteLink":0,
+                                            "siteLinkStruct":0,
+                                            "siteID":0
+                                        };
+                                        stlViewer.extSensors.clear();
+                                        cymBdd.loadNewSTLFile(stlViewer.strFilename);
+                                        lclCapteur.sensorPosX = cymBdd.getCurrentVertexX();
+                                        lclCapteur.sensorPosY = cymBdd.getCurrentVertexY();
+                                        lclCapteur.sensorPosZ = cymBdd.getCurrentVertexZ();
+
+                                        console.log(stlViewer.strFilename);
+                                        console.log(lclCapteur.sensorPosX);
+                                        console.log(lclCapteur.sensorPosY);
+                                        console.log(lclCapteur.sensorPosZ);
+                                        stlViewer.extSensors.append(lclCapteur);
+                                        rctAddSensor.lblAdd = false;
+                                        txtAddSensor.text ="Save Sensor";
+                                    }
+                                    else{
+                                        //Save sensor in DB
+                                    }
+
+
                                 }
                             }
                         }
@@ -369,20 +425,44 @@ Item {
                             width: 30
                             height: 30
                             color: "red"
+                            id:redRectangle
                             Timer{
                                 id:fastBackward
                                 onTriggered: stlViewer.intPosX += 25;
                                 interval: 77
                                 repeat: true
                             }
+                            Timer{
+                                id:fastUp
+                                onTriggered: stlViewer.intPosY += 25;
+                                interval: 77
+                                repeat: true
+                            }
+                            Timer{
+                                id:fastDown
+                                onTriggered: stlViewer.intPosY -= 25;
+                                interval: 77
+                                repeat: true
+                            }
+                            Keys.onUpPressed: fastUp.start()
+                            Keys.onDownPressed: fastDown.start()
+                            Keys.onReleased: {
+                                fastDown.stop();
+                                fastUp.stop();
+                            }
+
                             MouseArea{
                                 anchors.fill: parent
-                                onClicked: stlViewer.intPosX += 10;
+                                onClicked: {
+                                    redRectangle.focus = true;
+                                    stlViewer.intPosX += 10;
+                                }
                                 onPressAndHold: fastBackward.start();
                                 onReleased: fastBackward.stop();
                             }
                         }
                         Rectangle{
+                            id:bluerectangle
                             width: 30
                             height: 30
                             color: "blue"
@@ -392,13 +472,45 @@ Item {
                                 interval: 77
                                 repeat: true
                             }
+                            Timer{
+                                id:fastRight
+                                onTriggered: stlViewer.intPosZ -= 25;
+                                interval: 77
+                                repeat: true
+                            }
+                            Timer{
+                                id:fastLeft
+                                onTriggered: stlViewer.intPosZ += 25;
+                                interval: 77
+                                repeat: true
+                            }
+                            Keys.onUpPressed: {
+                                fastForward.start()
+
+                            }
+                            Keys.onReleased: {
+                                fastBackward.stop();
+                                fastForward.stop();
+                                fastLeft.stop();
+                                fastRight.stop();
+                            }
+                            Keys.onLeftPressed: fastLeft.start();
+                            Keys.onRightPressed: fastRight.start();
+
+                            Keys.onDownPressed: fastBackward.start();
+
 
 
                             MouseArea{
                                 anchors.fill: parent
-                                onClicked: stlViewer.intPosX -= 10;
+                                onClicked: {
+                                    bluerectangle.focus = true;
+                                    stlViewer.intPosX -= 10;
+                                }
                                 onPressAndHold: fastForward.start();
                                 onReleased: fastForward.stop();
+
+
 
                             }
                         }
@@ -422,6 +534,10 @@ Item {
                                     };
                                     stlViewer.extSensors.clear();
                                     cymBdd.nextVertex();
+                                    cymBdd.nextVertex();
+                                    cymBdd.nextVertex();
+                                    cymBdd.nextVertex();
+                                    cymBdd.nextVertex();
                                     lclCapteur.sensorPosX = cymBdd.getCurrentVertexX();
                                     lclCapteur.sensorPosY = cymBdd.getCurrentVertexY();
                                     lclCapteur.sensorPosZ = cymBdd.getCurrentVertexZ();
@@ -441,7 +557,6 @@ Item {
                             MouseArea{
                                 anchors.fill: parent
                                 onClicked: stlViewer.extRotate.start()
-
                             }
                         }
                     }
@@ -456,7 +571,6 @@ Item {
                 }
             }
         }
-
         Rectangle {
             id: rctContextInfo
             width: 0.18*parent.width
@@ -522,6 +636,23 @@ Item {
 
                         LineSType{
                             id: toge
+                        }
+                    }
+                }
+                ListView{
+                    id: listViewSensorType
+
+                    flickDeceleration: 1494
+                    width: 0.99*parent.width
+                    height: 0.9*parent.height
+                    visible: false
+                    model: sensorTypeModel
+
+                    delegate:Component {
+
+
+                        LineSensorsTypes{
+                            id: sensorType
                         }
                     }
                 }

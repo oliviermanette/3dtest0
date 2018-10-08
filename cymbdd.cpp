@@ -105,6 +105,20 @@ bool CymBDD::checkCachesFolders()
             return false;
     }
     filename.setCurrent(lstrChemin);
+    if (!filename.exists("sensortypes")){
+        if (!filename.mkdir("sensortypes"))
+            return false;
+    }
+    filename.setCurrent(lstrChemin+"/sensortypes");
+    if (!filename.exists("icon")){
+        if (!filename.mkdir("icon"))
+            return false;
+    }
+    if (!filename.exists("stl")){
+        if (!filename.mkdir("stl"))
+            return false;
+    }
+    filename.setCurrent(lstrChemin);
 
     return true;
 }
@@ -130,6 +144,11 @@ void CymBDD::pleaseEmitStructDeleted(uint uinStructID)
 void CymBDD::pleaseEmitSTypeSelected(uint uinSTypeID, QString strSTypeName)
 {
     emit sTypeSelected(uinSTypeID,strSTypeName);
+}
+
+void CymBDD::pleaseEmitSensorTypeSelected(uint uinSTypeID, QString strSTypeName)
+{
+    emit sensorTypeSelected(uinSTypeID,strSTypeName);
 }
 
 int CymBDD::getStructIconFromIndex(int lintPosX, int lintPosY)
@@ -414,8 +433,39 @@ bool CymBDD::updateSType(QString strSearchKey)
                 dataSType[lintCurrentValue].strDescription = nquery.value(2).toString();
                 lintCurrentValue++;
             }
-            uintGNbSites = lintCurrentValue;
+            guintNbSType = lintCurrentValue;
             qDebug()<<QString::number(lintCurrentValue) + " SType found";
+            return true;
+        }
+        else{
+            qDebug()<<"an error occured while executing the request:";
+            qDebug()<<lstQuery;
+            return false;
+        }
+    }
+    else
+        return false;
+}
+
+bool CymBDD::updateSensorType(QString strSearchKey)
+{
+    QString lstQuery = "SELECT idtypesensor, typename, description FROM sensortypes where sensortypes.owner="+QString::number(guintSiteOwner);
+    if (strSearchKey.length()>0)
+        lstQuery = lstQuery +" and (description like '%"+strSearchKey+"%' or typename like '%"+strSearchKey+"%')";
+    if (isCloudDbOpened){
+        QSqlQuery nquery(cloudDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"request 'UpdateSType' correctly executed on cloud";
+            unsigned int lintCurrentValue = 0;
+            while ((nquery.next())  && (lintCurrentValue<MAXSITES_LM))
+            {
+                dataSensorType[lintCurrentValue].uintSTypeID = nquery.value(0).toUInt();
+                dataSensorType[lintCurrentValue].strName = nquery.value(1).toString();
+                dataSensorType[lintCurrentValue].strDescription = nquery.value(2).toString();
+                lintCurrentValue++;
+            }
+            guintNbSensorType = lintCurrentValue;
+            qDebug()<<QString::number(lintCurrentValue) + " Sensors types found";
             return true;
         }
         else{
@@ -816,6 +866,48 @@ unsigned int CymBDD::getNbSTypes()
     return 0;
 }
 
+unsigned int CymBDD::getNbSensorTypes()
+{
+    if (!guintSiteOwner){
+        emit loginRequired();
+        return 0;
+    }
+    QString lstQuery = "SELECT count(*) FROM Cymbalum_demo.sensortypes where owner="+QString::number(guintSiteOwner);
+    if ((!isCloudDbOpened)&&isLocalDbOpened){
+        QSqlQuery nquery(localDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"request 'getNbSensorTypes' correctly executed locally";
+            if (nquery.first())
+            {
+                guintNbSensorType = nquery.value(0).toUInt();
+                return guintNbSensorType;
+            }
+        }
+        else {
+            qDebug()<<"an error occured while executing the request";
+            qDebug()<<lstQuery;
+            return 0;
+        }
+    }
+    else if (isCloudDbOpened){
+        QSqlQuery nquery(cloudDb);
+        if (nquery.exec(lstQuery)){
+            qDebug()<<"request 'getNbSensorTypes' correctly executed on cloud";
+            if (nquery.first())
+            {
+                guintNbSensorType = nquery.value(0).toUInt();
+                return guintNbSensorType;
+            }
+        }
+        else {
+            qDebug()<<"an error occured while executing the request";
+            qDebug()<<lstQuery;
+            return 0;
+        }
+    }
+    return 0;
+}
+
 unsigned int CymBDD::getNbStructures()
 {
     return guintNbStructures;
@@ -881,14 +973,29 @@ QString CymBDD::getSTypeName(int intIndex)
     return dataSType[intIndex].strName;
 }
 
+QString CymBDD::getSensorTypeName(int intIndex)
+{
+    return dataSensorType[intIndex].strName;
+}
+
 QString CymBDD::getSTypeDescription(int intIndex)
 {
     return  dataSType[intIndex].strDescription;
 }
 
+QString CymBDD::getSensorTypeDescription(int intIndex)
+{
+    return  dataSensorType[intIndex].strDescription;
+}
+
 unsigned int CymBDD::getSTypeID(int intIndex)
 {
     return dataSType[intIndex].uintSTypeID;
+}
+
+unsigned int CymBDD::getSensorTypeID(int intIndex)
+{
+    return dataSensorType[intIndex].uintSTypeID;
 }
 
 QString CymBDD::getSiteDescription(int intIndex, unsigned int intOwner)
@@ -1094,23 +1201,37 @@ int CymBDD::sendFileToCloud(QString strfilename, QString strDestination, int int
 
 bool CymBDD::downloadFileFromCloud(QString strPath, QString strFilename)
 {
-    QProcess process;
+    QProcess* process;
+    process = new QProcess();
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     //GOOGLE_CLOUD_PROJECT="psyched-bee-204709"
     env.insert("GOOGLE_CLOUD_PROJECT", "psyched-bee-204709"); // Add an environment variable
     //GOOGLE_APPLICATION_CREDENTIALS="/Users/oliviermanette/Downloads/Cymbalum-iot-26e6a1b6a592.json"
     env.insert("GOOGLE_APPLICATION_CREDENTIALS", "/Users/oliviermanette/Downloads/Cymbalum-iot-26e6a1b6a592.json");
-    process.setProcessEnvironment(env);
+    qDebug()<<"GOOGLE_APPLICATION_CREDENTIALS"<<env.value("GOOGLE_APPLICATION_CREDENTIALS");
+    process->setProcessEnvironment(env);
     //./bucketucl -o=cymbalum_files/structuretypes/icon:1 read >structuretypes/icon/1
-    process.setProgram("bucketucl");
+    qDebug()<<getLocalPath();
+    process->setProgram("bucketucl");
     QStringList arguments;
     arguments << "-o=cymbalum_files/"+strPath+":"+strFilename <<"read" << strPath+"/" +strFilename;
-    process.setArguments(arguments);
-    process.startDetached();
+    process->setArguments(arguments);
 
-    process.waitForFinished(-1);
-    QString output(process.readAllStandardOutput());
+    qDebug()<<"PROCESS STARTED DETACHED:: "<<process->startDetached();
+
+    qDebug()<<"In the downloader function process";
+    qDebug()<<strPath;
+    qDebug()<<strFilename;
+
+    //qDebug()<<process.readAllStandardError();
+    process->waitForFinished(30000);
+    qDebug()<<QDateTime::currentDateTime();
+    QThread::sleep(5);
+    qDebug()<<QDateTime::currentDateTime();
+    qDebug()<<process->arguments();
+    QString output(process->readAllStandardOutput());
     qDebug()<<output;
+    delete process;
     return false;
 }
 
@@ -1122,7 +1243,7 @@ bool CymBDD::isFileExist(QString strFilename)
     lstrChemin.remove("structuretypes"); //au cas où il s'y trouve à cause du cache
     //qDebug() << lstrChemin;
     lstrChemin += strFilename;
-    qDebug() << lstrChemin;
+    //qDebug() << lstrChemin;
     return filename.exists(lstrChemin);
 }
 

@@ -13,10 +13,10 @@ Item {
     property double lblWidthRatio: 0.4
     property double ldblHeight: 24
     width: parent.width-0.02*parent.width
-    height: 0.33 * parent.height
+    height: 0.36 * parent.height
     Rectangle {
         id: rectangle
-        color: "#385782"
+        color: "#d1d1d1"
         radius: 8
         gradient: Gradient {
             GradientStop {
@@ -138,7 +138,22 @@ Item {
                             fctUpdateSType();
                             listView.visible = false;
                             listViewSType.visible = true;
+                            listViewSensorType.visible=false;
                         }
+                    }
+                }
+            }
+            Row{
+                anchors.horizontalCenter: parent.horizontalCenter
+                Text {
+                    color: "#385782"
+                    id: txtDocumentation
+                    text: qsTr("View PDF Documentation")
+                    font.bold: true
+                    MouseArea{
+                        anchors.fill: parent
+                        onEntered: txtDocumentation.color="#4A72AB";
+                        onExited: txtDocumentation.color="#385782";
                     }
                 }
             }

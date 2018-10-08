@@ -36,5 +36,6 @@
         <file>Pipeline.qml</file>
         <file>CapteurP.qml</file>
         <file>stl/1.stl</file>
+        <file>LineSensorsTypes.qml</file>
     </qresource>
 </RCC>

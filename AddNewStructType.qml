@@ -201,6 +201,7 @@ Rectangle {
                         formNewType.visible  = false;
                         listView.visible = false//sTypeModel;
                         listViewSType.visible = true
+                        listViewSensorType.visible=false;
                         //listView.delegate
                         cymBdd.updateSType();
                         var lintNbSites = cymBdd.getNbSTypes();
