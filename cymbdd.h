@@ -140,6 +140,8 @@ public slots:
 
 private:
     QSqlDatabase cloudDb = QSqlDatabase::addDatabase("QMYSQL", "psyched-bee-204709:europe-west2:flod-cymbalum");
+    //QSqlDatabase cloudDb = QSqlDatabase::addDatabase("QMYSQL", "35.189.107.44");
+
     QSqlDatabase localDb = QSqlDatabase::addDatabase("QMYSQL", "localhost");
 
     bool isCloudDbOpened;

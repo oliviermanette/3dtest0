@@ -6,6 +6,7 @@ bool CymBDD::OpenCloudDB()
     cloudDb.setUserName("root");
     cloudDb.setDatabaseName("Cymbalum_demo");
     cloudDb.setPassword("things2care");
+    cloudDb.setConnectOptions("SSL_KEY=/Users/oliviermanette/Downloads/client-key.pem;SSL_CERT=/Users/oliviermanette/Downloads/client-cert.pem;SSL_CA=/Users/oliviermanette/Downloads/server-ca.pem");
 
     if(cloudDb.open()){
         qDebug()<<"Google Cloud Database Opened!";
@@ -19,6 +20,7 @@ bool CymBDD::OpenCloudDB()
     }
     else{
         qDebug() << "ERROR Cannot Open Google Cloud DB";//db.lastError().text();
+        qDebug()<< cloudDb.lastError().text();
         return false;
     }
 }
